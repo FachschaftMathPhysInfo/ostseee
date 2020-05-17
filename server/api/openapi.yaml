@@ -1,0 +1,3092 @@
+openapi: 3.0.2
+info:
+  description: This API descripes the online evaluation service, as accessed by the
+    user and organizers.
+  title: Evaluation
+  version: "1.0"
+servers:
+- url: https://eval.mathphys.info/v1
+paths:
+  /faculties:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Faculty'
+                type: array
+          description: OK
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Faculty'
+        description: Changes possible to a faculty
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Faculty'
+          description: OK
+  /faculties/{facultyId}:
+    get:
+      parameters:
+      - description: ID of the faculty to get
+        explode: false
+        in: path
+        name: facultyId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Faculty'
+          description: OK
+      summary: Get a faculty by ID
+    patch:
+      parameters:
+      - description: ID of the faculty to get
+        explode: false
+        in: path
+        name: facultyId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Faculty'
+        description: Changes possible to a faculty
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Faculty'
+          description: OK
+      summary: Change a faculty by ID
+  /terms:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Term'
+                type: array
+          description: OK
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Term'
+        description: Changes possible to a term
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Term'
+          description: OK
+  /terms/{termId}:
+    get:
+      parameters:
+      - description: ID of the term to get
+        explode: false
+        in: path
+        name: termId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Term'
+          description: OK
+      summary: Get a term by ID
+    patch:
+      parameters:
+      - description: ID of the term to get
+        explode: false
+        in: path
+        name: termId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Term'
+        description: Changes possible to a term
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Term'
+          description: OK
+      summary: Change a term by ID
+  /terms/{termId}/report:
+    get:
+      parameters:
+      - description: ID of the term to get report from
+        explode: false
+        in: path
+        name: termId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TermReport'
+          description: OK
+      summary: Get a term report
+  /modules:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Module'
+                type: array
+          description: OK
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Module'
+        description: Changes possible to a module
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Module'
+          description: OK
+  /modules/{moduleId}:
+    delete:
+      parameters:
+      - description: ID of the module to get
+        explode: false
+        in: path
+        name: moduleId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: OK
+      summary: Deletes a module by ID
+    get:
+      parameters:
+      - description: ID of the module to get
+        explode: false
+        in: path
+        name: moduleId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Module'
+          description: OK
+      summary: Get a module by ID
+    patch:
+      parameters:
+      - description: ID of the module to get
+        explode: false
+        in: path
+        name: moduleId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Module'
+        description: Changes possible to a module
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Module'
+          description: OK
+      summary: Change a module by ID
+  /courses:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Course'
+                type: array
+          description: OK
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course'
+        description: Changes possible to a course
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+          description: OK
+  /courses/{courseId}:
+    delete:
+      parameters:
+      - description: ID of the course to get
+        explode: false
+        in: path
+        name: courseId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: OK
+      summary: Deletes a module by ID
+    get:
+      parameters:
+      - description: ID of the course to get
+        explode: false
+        in: path
+        name: courseId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+          description: OK
+      summary: Get a course by ID
+    patch:
+      parameters:
+      - description: ID of the course to get
+        explode: false
+        in: path
+        name: courseId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course'
+        description: Changes possible to a course
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+          description: OK
+      summary: Change a course by ID
+  /courses/{courseId}/report:
+    get:
+      parameters:
+      - description: ID of the course to generate report
+        explode: false
+        in: path
+        name: courseId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseReport'
+          description: OK
+      summary: Get a course report
+  /profs:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Prof'
+                type: array
+          description: OK
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Prof'
+        description: Changes possible to a prof
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prof'
+          description: OK
+  /profs/{profId}:
+    delete:
+      parameters:
+      - description: ID of the prof to get
+        explode: false
+        in: path
+        name: profId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: OK
+      summary: Deletes a module by ID
+    get:
+      parameters:
+      - description: ID of the prof to get
+        explode: false
+        in: path
+        name: profId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prof'
+          description: OK
+      summary: Get a prof by ID
+    patch:
+      parameters:
+      - description: ID of the prof to get
+        explode: false
+        in: path
+        name: profId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Prof'
+        description: Changes possible to a prof
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prof'
+          description: OK
+      summary: Change a prof by ID
+  /courseprofs:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/CourseProf'
+                type: array
+          description: OK
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseProf'
+        description: Changes possible to a courseprof
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseProf'
+          description: OK
+  /courseprofs/{courseProfId}:
+    delete:
+      parameters:
+      - description: ID of the courseprof to get
+        explode: false
+        in: path
+        name: courseProfId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: OK
+      summary: Deletes a module by ID
+    get:
+      parameters:
+      - description: ID of the courseprof to get
+        explode: false
+        in: path
+        name: courseProfId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseProf'
+          description: OK
+      summary: Get a courseprof by ID
+    patch:
+      parameters:
+      - description: ID of the courseprof to get
+        explode: false
+        in: path
+        name: courseProfId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseProf'
+        description: Changes possible to a courseprof
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseProf'
+          description: OK
+      summary: Change a courseprof by ID
+  /courseprofs/{courseProfId}/report:
+    get:
+      parameters:
+      - description: ID of the courseProf to generate report
+        explode: false
+        in: path
+        name: courseProfId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseProfReport'
+          description: OK
+      summary: Get a courseProf report
+  /courses/{courseId}/tutors:
+    get:
+      parameters:
+      - description: ID of the course to get
+        explode: false
+        in: path
+        name: courseId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Tutor'
+                type: array
+          description: OK
+    post:
+      parameters:
+      - description: ID of the course to get
+        explode: false
+        in: path
+        name: courseId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tutor'
+        description: Changes possible to a tutor
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tutor'
+          description: OK
+  /courses/{courseId}/tutors/{tutorId}:
+    delete:
+      parameters:
+      - description: ID of the course
+        explode: false
+        in: path
+        name: courseId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of the tutor to get
+        explode: false
+        in: path
+        name: tutorId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: OK
+      summary: Deletes a tutor by ID
+    get:
+      parameters:
+      - description: ID of the course
+        explode: false
+        in: path
+        name: courseId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of the tutor to get
+        explode: false
+        in: path
+        name: tutorId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tutor'
+          description: OK
+      summary: Get a tutor by ID
+    patch:
+      parameters:
+      - description: ID of the course
+        explode: false
+        in: path
+        name: courseId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of the tutor to get
+        explode: false
+        in: path
+        name: tutorId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tutor'
+        description: Changes possible to a tutor
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tutor'
+          description: OK
+      summary: Change a tutor by ID
+  /courses/{courseId}/tutors/{tutorId}/report:
+    get:
+      parameters:
+      - description: ID of the course, in which the tutor lives to generate report
+        explode: false
+        in: path
+        name: courseId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of the tutor to generate report
+        explode: false
+        in: path
+        name: tutorId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TutorReport'
+          description: OK
+      summary: Get a tutor report
+  /courses/{courseId}/invitations:
+    get:
+      parameters:
+      - description: ID of the course
+        explode: false
+        in: path
+        name: courseId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Invitation'
+                type: array
+          description: OK
+  /questionaire/{invitationId}:
+    get:
+      parameters:
+      - description: ID of the invitation
+        explode: false
+        in: path
+        name: invitationId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyForm'
+          description: OK
+    post:
+      parameters:
+      - description: ID of the invitation
+        explode: false
+        in: path
+        name: invitationId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Questionaire'
+        description: Upload results into system.
+        required: true
+      responses:
+        "204":
+          description: OK
+  /forms:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Form'
+                type: array
+          description: OK
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Form'
+        description: Changes possible to a form
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Form'
+          description: OK
+  /forms/{formId}:
+    get:
+      parameters:
+      - description: ID of the form to get
+        explode: false
+        in: path
+        name: formId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Form'
+          description: OK
+      summary: Get a form by ID
+    patch:
+      parameters:
+      - description: ID of the form to get
+        explode: false
+        in: path
+        name: formId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Form'
+        description: Changes possible to a form
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Form'
+          description: OK
+      summary: Change a form by ID
+components:
+  schemas:
+    Faculty:
+      example:
+        name: name
+        id: id
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      required:
+      - name
+      type: object
+    Term:
+      example:
+        name: name
+        end: 2000-01-23
+        id: id
+        begin: 2000-01-23
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        begin:
+          format: date
+          type: string
+        end:
+          format: date
+          type: string
+      required:
+      - begin
+      - end
+      - name
+      type: object
+    Module:
+      description: used to keep track of courses over many years.
+      example:
+        facultyId: facultyId
+        name: name
+        description: description
+        id: id
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        facultyId:
+          description: Determines which faculty is in charge.
+          type: string
+      required:
+      - description
+      - facultyId
+      - name
+      type: object
+    Course:
+      example:
+        formId: formId
+        termId: termId
+        thirdPartyKey: thirdPartyKey
+        tutors:
+        - thirdPartyKey: thirdPartyKey
+          name: name
+          censoredDate: 2000-01-23
+          id: id
+          censored: true
+          email: email
+        - thirdPartyKey: thirdPartyKey
+          name: name
+          censoredDate: 2000-01-23
+          id: id
+          censored: true
+          email: email
+        progress: created
+        clearance: clearance
+        location: location
+        language: language
+        id: id
+        moduleId: moduleId
+        numberOfStudents: 0
+      properties:
+        id:
+          type: string
+        moduleId:
+          type: string
+        formId:
+          type: string
+        termId:
+          type: string
+        location:
+          type: string
+        numberOfStudents:
+          type: integer
+        language:
+          type: string
+        thirdPartyKey:
+          description: Third-party Key, that identifies a course
+          type: string
+        progress:
+          description: current status for sent mails for this course
+          enum:
+          - created
+          - announced
+          - inEval
+          - processing
+          - published
+          type: string
+        clearance:
+          description: Describes whether, this course is published to profs and tutors.
+          type: string
+        tutors:
+          items:
+            $ref: '#/components/schemas/Tutor'
+          type: array
+      required:
+      - clearance
+      - formId
+      - language
+      - location
+      - moduleId
+      - numberOfStudents
+      - progress
+      - termId
+      - tutors
+      type: object
+    Prof:
+      example:
+        firstname: firstname
+        censoredDate: 2000-01-23
+        id: id
+        title: title
+        censored: true
+        email: email
+        lastname: lastname
+      properties:
+        id:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        title:
+          type: string
+        censored:
+          description: Determines, whether public reports can include, this persons
+            results.
+          type: boolean
+        censoredDate:
+          description: Date of agreement that results can be published
+          format: date
+          type: string
+        email:
+          description: Used to communicate to prof.
+          format: email
+          type: string
+      required:
+      - censored
+      - censoredDate
+      - email
+      - firstname
+      - lastname
+      - title
+      type: object
+    CourseProf:
+      description: creates a link between courses and prof
+      example:
+        id: id
+        courseId: courseId
+        profId: profId
+      properties:
+        id:
+          type: string
+        courseId:
+          type: string
+        profId:
+          type: string
+      required:
+      - courseId
+      - profId
+      type: object
+    Tutor:
+      description: Subteacher, only sees portions of the results of his course. Currently
+        they are created for every year newly.
+      example:
+        thirdPartyKey: thirdPartyKey
+        name: name
+        censoredDate: 2000-01-23
+        id: id
+        censored: true
+        email: email
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        censored:
+          description: Determines, whether public reports can include, this persons
+            results.
+          type: boolean
+        censoredDate:
+          description: Date of agreement that results can be published
+          format: date
+          type: string
+        thirdPartyKey:
+          description: Third-party Key, that identifies a tutor.
+          type: string
+        email:
+          format: email
+          type: string
+      required:
+      - censored
+      - censoredDate
+      - email
+      - name
+      type: object
+    Invitation:
+      description: Onetime invitation to take a certain evaluation of a course.
+      example:
+        id: id
+        used: true
+        courseId: courseId
+      properties:
+        id:
+          type: string
+        courseId:
+          type: string
+        used:
+          type: boolean
+      required:
+      - courseId
+      type: object
+    EmptyForm:
+      description: Empty Form to be completed by student.
+      example:
+        tutors:
+        - thirdPartyKey: thirdPartyKey
+          name: name
+          censoredDate: 2000-01-23
+          id: id
+          censored: true
+          email: email
+        - thirdPartyKey: thirdPartyKey
+          name: name
+          censoredDate: 2000-01-23
+          id: id
+          censored: true
+          email: email
+        abstractForm:
+          pages:
+          - id: id
+            sections:
+            - questions:
+              - isMulti: false
+                isComment: true
+                hasNotApplicableOption: true
+                options:
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                id: id
+                hasOtherOption: true
+                visualizer: histogram
+                shortcode: shortcode
+                title:
+                  key: title
+                regards: course
+              - isMulti: false
+                isComment: true
+                hasNotApplicableOption: true
+                options:
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                id: id
+                hasOtherOption: true
+                visualizer: histogram
+                shortcode: shortcode
+                title:
+                  key: title
+                regards: course
+              id: id
+              title:
+                key: title
+            - questions:
+              - isMulti: false
+                isComment: true
+                hasNotApplicableOption: true
+                options:
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                id: id
+                hasOtherOption: true
+                visualizer: histogram
+                shortcode: shortcode
+                title:
+                  key: title
+                regards: course
+              - isMulti: false
+                isComment: true
+                hasNotApplicableOption: true
+                options:
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                id: id
+                hasOtherOption: true
+                visualizer: histogram
+                shortcode: shortcode
+                title:
+                  key: title
+                regards: course
+              id: id
+              title:
+                key: title
+          - id: id
+            sections:
+            - questions:
+              - isMulti: false
+                isComment: true
+                hasNotApplicableOption: true
+                options:
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                id: id
+                hasOtherOption: true
+                visualizer: histogram
+                shortcode: shortcode
+                title:
+                  key: title
+                regards: course
+              - isMulti: false
+                isComment: true
+                hasNotApplicableOption: true
+                options:
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                id: id
+                hasOtherOption: true
+                visualizer: histogram
+                shortcode: shortcode
+                title:
+                  key: title
+                regards: course
+              id: id
+              title:
+                key: title
+            - questions:
+              - isMulti: false
+                isComment: true
+                hasNotApplicableOption: true
+                options:
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                id: id
+                hasOtherOption: true
+                visualizer: histogram
+                shortcode: shortcode
+                title:
+                  key: title
+                regards: course
+              - isMulti: false
+                isComment: true
+                hasNotApplicableOption: true
+                options:
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                id: id
+                hasOtherOption: true
+                visualizer: histogram
+                shortcode: shortcode
+                title:
+                  key: title
+                regards: course
+              id: id
+              title:
+                key: title
+          id: id
+        profs:
+        - firstname: firstname
+          censoredDate: 2000-01-23
+          id: id
+          title: title
+          censored: true
+          email: email
+          lastname: lastname
+        - firstname: firstname
+          censoredDate: 2000-01-23
+          id: id
+          title: title
+          censored: true
+          email: email
+          lastname: lastname
+        course:
+          formId: formId
+          termId: termId
+          thirdPartyKey: thirdPartyKey
+          tutors:
+          - thirdPartyKey: thirdPartyKey
+            name: name
+            censoredDate: 2000-01-23
+            id: id
+            censored: true
+            email: email
+          - thirdPartyKey: thirdPartyKey
+            name: name
+            censoredDate: 2000-01-23
+            id: id
+            censored: true
+            email: email
+          progress: created
+          clearance: clearance
+          location: location
+          language: language
+          id: id
+          moduleId: moduleId
+          numberOfStudents: 0
+        id: id
+      properties:
+        id:
+          type: string
+        profs:
+          items:
+            $ref: '#/components/schemas/Prof'
+          type: array
+        tutors:
+          items:
+            $ref: '#/components/schemas/Tutor'
+          type: array
+        abstractForm:
+          $ref: '#/components/schemas/AbstractForm'
+        course:
+          $ref: '#/components/schemas/Course'
+      type: object
+    LocalizedString:
+      additionalProperties:
+        type: string
+      description: Map of translations for a given string. A string might contain
+        markdown code.
+      type: object
+    AbstractForm:
+      description: Describes an abstract form
+      example:
+        pages:
+        - id: id
+          sections:
+          - questions:
+            - isMulti: false
+              isComment: true
+              hasNotApplicableOption: true
+              options:
+              - id: id
+                label:
+                  key: label
+                value: 0
+              - id: id
+                label:
+                  key: label
+                value: 0
+              id: id
+              hasOtherOption: true
+              visualizer: histogram
+              shortcode: shortcode
+              title:
+                key: title
+              regards: course
+            - isMulti: false
+              isComment: true
+              hasNotApplicableOption: true
+              options:
+              - id: id
+                label:
+                  key: label
+                value: 0
+              - id: id
+                label:
+                  key: label
+                value: 0
+              id: id
+              hasOtherOption: true
+              visualizer: histogram
+              shortcode: shortcode
+              title:
+                key: title
+              regards: course
+            id: id
+            title:
+              key: title
+          - questions:
+            - isMulti: false
+              isComment: true
+              hasNotApplicableOption: true
+              options:
+              - id: id
+                label:
+                  key: label
+                value: 0
+              - id: id
+                label:
+                  key: label
+                value: 0
+              id: id
+              hasOtherOption: true
+              visualizer: histogram
+              shortcode: shortcode
+              title:
+                key: title
+              regards: course
+            - isMulti: false
+              isComment: true
+              hasNotApplicableOption: true
+              options:
+              - id: id
+                label:
+                  key: label
+                value: 0
+              - id: id
+                label:
+                  key: label
+                value: 0
+              id: id
+              hasOtherOption: true
+              visualizer: histogram
+              shortcode: shortcode
+              title:
+                key: title
+              regards: course
+            id: id
+            title:
+              key: title
+        - id: id
+          sections:
+          - questions:
+            - isMulti: false
+              isComment: true
+              hasNotApplicableOption: true
+              options:
+              - id: id
+                label:
+                  key: label
+                value: 0
+              - id: id
+                label:
+                  key: label
+                value: 0
+              id: id
+              hasOtherOption: true
+              visualizer: histogram
+              shortcode: shortcode
+              title:
+                key: title
+              regards: course
+            - isMulti: false
+              isComment: true
+              hasNotApplicableOption: true
+              options:
+              - id: id
+                label:
+                  key: label
+                value: 0
+              - id: id
+                label:
+                  key: label
+                value: 0
+              id: id
+              hasOtherOption: true
+              visualizer: histogram
+              shortcode: shortcode
+              title:
+                key: title
+              regards: course
+            id: id
+            title:
+              key: title
+          - questions:
+            - isMulti: false
+              isComment: true
+              hasNotApplicableOption: true
+              options:
+              - id: id
+                label:
+                  key: label
+                value: 0
+              - id: id
+                label:
+                  key: label
+                value: 0
+              id: id
+              hasOtherOption: true
+              visualizer: histogram
+              shortcode: shortcode
+              title:
+                key: title
+              regards: course
+            - isMulti: false
+              isComment: true
+              hasNotApplicableOption: true
+              options:
+              - id: id
+                label:
+                  key: label
+                value: 0
+              - id: id
+                label:
+                  key: label
+                value: 0
+              id: id
+              hasOtherOption: true
+              visualizer: histogram
+              shortcode: shortcode
+              title:
+                key: title
+              regards: course
+            id: id
+            title:
+              key: title
+        id: id
+      properties:
+        id:
+          type: string
+        pages:
+          items:
+            $ref: '#/components/schemas/Page'
+          type: array
+      required:
+      - pages
+      type: object
+    Page:
+      description: Group of sections that belong together
+      example:
+        id: id
+        sections:
+        - questions:
+          - isMulti: false
+            isComment: true
+            hasNotApplicableOption: true
+            options:
+            - id: id
+              label:
+                key: label
+              value: 0
+            - id: id
+              label:
+                key: label
+              value: 0
+            id: id
+            hasOtherOption: true
+            visualizer: histogram
+            shortcode: shortcode
+            title:
+              key: title
+            regards: course
+          - isMulti: false
+            isComment: true
+            hasNotApplicableOption: true
+            options:
+            - id: id
+              label:
+                key: label
+              value: 0
+            - id: id
+              label:
+                key: label
+              value: 0
+            id: id
+            hasOtherOption: true
+            visualizer: histogram
+            shortcode: shortcode
+            title:
+              key: title
+            regards: course
+          id: id
+          title:
+            key: title
+        - questions:
+          - isMulti: false
+            isComment: true
+            hasNotApplicableOption: true
+            options:
+            - id: id
+              label:
+                key: label
+              value: 0
+            - id: id
+              label:
+                key: label
+              value: 0
+            id: id
+            hasOtherOption: true
+            visualizer: histogram
+            shortcode: shortcode
+            title:
+              key: title
+            regards: course
+          - isMulti: false
+            isComment: true
+            hasNotApplicableOption: true
+            options:
+            - id: id
+              label:
+                key: label
+              value: 0
+            - id: id
+              label:
+                key: label
+              value: 0
+            id: id
+            hasOtherOption: true
+            visualizer: histogram
+            shortcode: shortcode
+            title:
+              key: title
+            regards: course
+          id: id
+          title:
+            key: title
+      properties:
+        id:
+          type: string
+        sections:
+          items:
+            $ref: '#/components/schemas/Section'
+          type: array
+      required:
+      - sections
+      type: object
+    Section:
+      example:
+        questions:
+        - isMulti: false
+          isComment: true
+          hasNotApplicableOption: true
+          options:
+          - id: id
+            label:
+              key: label
+            value: 0
+          - id: id
+            label:
+              key: label
+            value: 0
+          id: id
+          hasOtherOption: true
+          visualizer: histogram
+          shortcode: shortcode
+          title:
+            key: title
+          regards: course
+        - isMulti: false
+          isComment: true
+          hasNotApplicableOption: true
+          options:
+          - id: id
+            label:
+              key: label
+            value: 0
+          - id: id
+            label:
+              key: label
+            value: 0
+          id: id
+          hasOtherOption: true
+          visualizer: histogram
+          shortcode: shortcode
+          title:
+            key: title
+          regards: course
+        id: id
+        title:
+          key: title
+      properties:
+        id:
+          type: string
+        title:
+          additionalProperties:
+            type: string
+          description: Map of translations for a given string. A string might contain
+            markdown code.
+          type: object
+        questions:
+          items:
+            $ref: '#/components/schemas/Question'
+          type: array
+      required:
+      - questions
+      - title
+      type: object
+    Question:
+      example:
+        isMulti: false
+        isComment: true
+        hasNotApplicableOption: true
+        options:
+        - id: id
+          label:
+            key: label
+          value: 0
+        - id: id
+          label:
+            key: label
+          value: 0
+        id: id
+        hasOtherOption: true
+        visualizer: histogram
+        shortcode: shortcode
+        title:
+          key: title
+        regards: course
+      properties:
+        id:
+          type: string
+        shortcode:
+          description: Unique, humanreadable label.
+          type: string
+        title:
+          additionalProperties:
+            type: string
+          description: Map of translations for a given string. A string might contain
+            markdown code.
+          type: object
+        isMulti:
+          default: false
+          description: Whether this question is a single choice or multiple choice
+            question
+          type: boolean
+        isComment:
+          description: Determines whether it is a free text form. Can not occur with
+            isMulti and hasOtherOption.
+          type: boolean
+        hasOtherOption:
+          description: Some questions have an option that allows custom answers
+          type: boolean
+        regards:
+          description: Question either concerns course, lecturer or tutor.
+          enum:
+          - course
+          - lecturer
+          - tutor
+          type: string
+        hasNotApplicableOption:
+          default: true
+          description: Some questions need a not applicable option.
+          type: boolean
+        visualizer:
+          description: Defines how results should be displayed.
+          enum:
+          - histogram
+          - lines
+          - comments
+          type: string
+        options:
+          description: Array of possibly labeled selection options.
+          items:
+            $ref: '#/components/schemas/Option'
+          type: array
+      required:
+      - hasNotapplicableOption
+      - hasOtherOption
+      - isComment
+      - isMulti
+      - options
+      - regards
+      - shortcode
+      - title
+      - visualizer
+      type: object
+    Option:
+      description: Possibly labeled selection option
+      example:
+        id: id
+        label:
+          key: label
+        value: 0
+      properties:
+        id:
+          type: string
+        label:
+          additionalProperties:
+            type: string
+          description: Map of translations for a given string. A string might contain
+            markdown code.
+          type: object
+        value:
+          type: integer
+      required:
+      - label
+      - value
+      type: object
+    Questionaire:
+      description: A fully completed form.
+      example:
+        answers:
+        - questionId: questionId
+          values:
+          - values
+          - values
+          questionaireId: questionaireId
+          notApplicable: true
+        - questionId: questionId
+          values:
+          - values
+          - values
+          questionaireId: questionaireId
+          notApplicable: true
+        id: id
+      properties:
+        id:
+          type: string
+        answers:
+          items:
+            $ref: '#/components/schemas/Answer'
+          type: array
+      required:
+      - answers
+      type: object
+    Answer:
+      example:
+        questionId: questionId
+        values:
+        - values
+        - values
+        questionaireId: questionaireId
+        notApplicable: true
+      properties:
+        questionaireId:
+          type: string
+        questionId:
+          type: string
+        notApplicable:
+          type: boolean
+        values:
+          items:
+            type: string
+          type: array
+      required:
+      - notApplicable
+      - questionId
+      - questionaireId
+      - values
+    Form:
+      example:
+        termId: termId
+        abstractForm:
+          pages:
+          - id: id
+            sections:
+            - questions:
+              - isMulti: false
+                isComment: true
+                hasNotApplicableOption: true
+                options:
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                id: id
+                hasOtherOption: true
+                visualizer: histogram
+                shortcode: shortcode
+                title:
+                  key: title
+                regards: course
+              - isMulti: false
+                isComment: true
+                hasNotApplicableOption: true
+                options:
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                id: id
+                hasOtherOption: true
+                visualizer: histogram
+                shortcode: shortcode
+                title:
+                  key: title
+                regards: course
+              id: id
+              title:
+                key: title
+            - questions:
+              - isMulti: false
+                isComment: true
+                hasNotApplicableOption: true
+                options:
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                id: id
+                hasOtherOption: true
+                visualizer: histogram
+                shortcode: shortcode
+                title:
+                  key: title
+                regards: course
+              - isMulti: false
+                isComment: true
+                hasNotApplicableOption: true
+                options:
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                id: id
+                hasOtherOption: true
+                visualizer: histogram
+                shortcode: shortcode
+                title:
+                  key: title
+                regards: course
+              id: id
+              title:
+                key: title
+          - id: id
+            sections:
+            - questions:
+              - isMulti: false
+                isComment: true
+                hasNotApplicableOption: true
+                options:
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                id: id
+                hasOtherOption: true
+                visualizer: histogram
+                shortcode: shortcode
+                title:
+                  key: title
+                regards: course
+              - isMulti: false
+                isComment: true
+                hasNotApplicableOption: true
+                options:
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                id: id
+                hasOtherOption: true
+                visualizer: histogram
+                shortcode: shortcode
+                title:
+                  key: title
+                regards: course
+              id: id
+              title:
+                key: title
+            - questions:
+              - isMulti: false
+                isComment: true
+                hasNotApplicableOption: true
+                options:
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                id: id
+                hasOtherOption: true
+                visualizer: histogram
+                shortcode: shortcode
+                title:
+                  key: title
+                regards: course
+              - isMulti: false
+                isComment: true
+                hasNotApplicableOption: true
+                options:
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                - id: id
+                  label:
+                    key: label
+                  value: 0
+                id: id
+                hasOtherOption: true
+                visualizer: histogram
+                shortcode: shortcode
+                title:
+                  key: title
+                regards: course
+              id: id
+              title:
+                key: title
+          id: id
+        name: name
+        id: id
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        termId:
+          type: string
+        abstractForm:
+          $ref: '#/components/schemas/AbstractForm'
+      required:
+      - abstractForm
+      - id
+      - name
+      - termId
+      type: object
+    Forms:
+      items:
+        $ref: '#/components/schemas/Form'
+      type: array
+    ResultPair:
+      example:
+        label:
+          key: label
+        value: value
+      properties:
+        label:
+          additionalProperties:
+            type: string
+          description: Map of translations for a given string. A string might contain
+            markdown code.
+          type: object
+        value:
+          type: string
+      type: object
+    Result:
+      example:
+        values:
+        - label:
+            key: label
+          value: value
+        - label:
+            key: label
+          value: value
+        id: id
+        label:
+          key: label
+        visualizer: visualizer
+      properties:
+        id:
+          type: string
+        label:
+          additionalProperties:
+            type: string
+          description: Map of translations for a given string. A string might contain
+            markdown code.
+          type: object
+        visualizer:
+          description: indicate, how result is displayed.
+          type: string
+        values:
+          items:
+            $ref: '#/components/schemas/ResultPair'
+          type: array
+      type: object
+    ResultSection:
+      example:
+        id: id
+        label:
+          key: label
+        results:
+        - values:
+          - label:
+              key: label
+            value: value
+          - label:
+              key: label
+            value: value
+          id: id
+          label:
+            key: label
+          visualizer: visualizer
+        - values:
+          - label:
+              key: label
+            value: value
+          - label:
+              key: label
+            value: value
+          id: id
+          label:
+            key: label
+          visualizer: visualizer
+      properties:
+        id:
+          type: string
+        label:
+          additionalProperties:
+            type: string
+          description: Map of translations for a given string. A string might contain
+            markdown code.
+          type: object
+        results:
+          items:
+            $ref: '#/components/schemas/Result'
+          type: array
+      type: object
+    TutorReport:
+      example:
+        tutorId: tutorId
+        generated: 2000-01-23T04:56:07.000+00:00
+        id: id
+        courseId: courseId
+        sections:
+        - id: id
+          label:
+            key: label
+          results:
+          - values:
+            - label:
+                key: label
+              value: value
+            - label:
+                key: label
+              value: value
+            id: id
+            label:
+              key: label
+            visualizer: visualizer
+          - values:
+            - label:
+                key: label
+              value: value
+            - label:
+                key: label
+              value: value
+            id: id
+            label:
+              key: label
+            visualizer: visualizer
+        - id: id
+          label:
+            key: label
+          results:
+          - values:
+            - label:
+                key: label
+              value: value
+            - label:
+                key: label
+              value: value
+            id: id
+            label:
+              key: label
+            visualizer: visualizer
+          - values:
+            - label:
+                key: label
+              value: value
+            - label:
+                key: label
+              value: value
+            id: id
+            label:
+              key: label
+            visualizer: visualizer
+      properties:
+        id:
+          type: string
+        tutorId:
+          type: string
+        courseId:
+          type: string
+        generated:
+          format: date-time
+          type: string
+        sections:
+          items:
+            $ref: '#/components/schemas/ResultSection'
+          type: array
+      type: object
+    CourseReport:
+      example:
+        generated: 2000-01-23T04:56:07.000+00:00
+        id: id
+        courseId: courseId
+        tutorReports:
+        - tutorId: tutorId
+          generated: 2000-01-23T04:56:07.000+00:00
+          id: id
+          courseId: courseId
+          sections:
+          - id: id
+            label:
+              key: label
+            results:
+            - values:
+              - label:
+                  key: label
+                value: value
+              - label:
+                  key: label
+                value: value
+              id: id
+              label:
+                key: label
+              visualizer: visualizer
+            - values:
+              - label:
+                  key: label
+                value: value
+              - label:
+                  key: label
+                value: value
+              id: id
+              label:
+                key: label
+              visualizer: visualizer
+          - id: id
+            label:
+              key: label
+            results:
+            - values:
+              - label:
+                  key: label
+                value: value
+              - label:
+                  key: label
+                value: value
+              id: id
+              label:
+                key: label
+              visualizer: visualizer
+            - values:
+              - label:
+                  key: label
+                value: value
+              - label:
+                  key: label
+                value: value
+              id: id
+              label:
+                key: label
+              visualizer: visualizer
+        - tutorId: tutorId
+          generated: 2000-01-23T04:56:07.000+00:00
+          id: id
+          courseId: courseId
+          sections:
+          - id: id
+            label:
+              key: label
+            results:
+            - values:
+              - label:
+                  key: label
+                value: value
+              - label:
+                  key: label
+                value: value
+              id: id
+              label:
+                key: label
+              visualizer: visualizer
+            - values:
+              - label:
+                  key: label
+                value: value
+              - label:
+                  key: label
+                value: value
+              id: id
+              label:
+                key: label
+              visualizer: visualizer
+          - id: id
+            label:
+              key: label
+            results:
+            - values:
+              - label:
+                  key: label
+                value: value
+              - label:
+                  key: label
+                value: value
+              id: id
+              label:
+                key: label
+              visualizer: visualizer
+            - values:
+              - label:
+                  key: label
+                value: value
+              - label:
+                  key: label
+                value: value
+              id: id
+              label:
+                key: label
+              visualizer: visualizer
+        sections:
+        - id: id
+          label:
+            key: label
+          results:
+          - values:
+            - label:
+                key: label
+              value: value
+            - label:
+                key: label
+              value: value
+            id: id
+            label:
+              key: label
+            visualizer: visualizer
+          - values:
+            - label:
+                key: label
+              value: value
+            - label:
+                key: label
+              value: value
+            id: id
+            label:
+              key: label
+            visualizer: visualizer
+        - id: id
+          label:
+            key: label
+          results:
+          - values:
+            - label:
+                key: label
+              value: value
+            - label:
+                key: label
+              value: value
+            id: id
+            label:
+              key: label
+            visualizer: visualizer
+          - values:
+            - label:
+                key: label
+              value: value
+            - label:
+                key: label
+              value: value
+            id: id
+            label:
+              key: label
+            visualizer: visualizer
+      properties:
+        id:
+          type: string
+        courseId:
+          type: string
+        generated:
+          format: date-time
+          type: string
+        tutorReports:
+          items:
+            $ref: '#/components/schemas/TutorReport'
+          type: array
+        sections:
+          description: contains results only concerning course
+          items:
+            $ref: '#/components/schemas/ResultSection'
+          type: array
+      type: object
+    CourseProfReport:
+      example:
+        generated: 2000-01-23T04:56:07.000+00:00
+        id: id
+        courseReport:
+          generated: 2000-01-23T04:56:07.000+00:00
+          id: id
+          courseId: courseId
+          tutorReports:
+          - tutorId: tutorId
+            generated: 2000-01-23T04:56:07.000+00:00
+            id: id
+            courseId: courseId
+            sections:
+            - id: id
+              label:
+                key: label
+              results:
+              - values:
+                - label:
+                    key: label
+                  value: value
+                - label:
+                    key: label
+                  value: value
+                id: id
+                label:
+                  key: label
+                visualizer: visualizer
+              - values:
+                - label:
+                    key: label
+                  value: value
+                - label:
+                    key: label
+                  value: value
+                id: id
+                label:
+                  key: label
+                visualizer: visualizer
+            - id: id
+              label:
+                key: label
+              results:
+              - values:
+                - label:
+                    key: label
+                  value: value
+                - label:
+                    key: label
+                  value: value
+                id: id
+                label:
+                  key: label
+                visualizer: visualizer
+              - values:
+                - label:
+                    key: label
+                  value: value
+                - label:
+                    key: label
+                  value: value
+                id: id
+                label:
+                  key: label
+                visualizer: visualizer
+          - tutorId: tutorId
+            generated: 2000-01-23T04:56:07.000+00:00
+            id: id
+            courseId: courseId
+            sections:
+            - id: id
+              label:
+                key: label
+              results:
+              - values:
+                - label:
+                    key: label
+                  value: value
+                - label:
+                    key: label
+                  value: value
+                id: id
+                label:
+                  key: label
+                visualizer: visualizer
+              - values:
+                - label:
+                    key: label
+                  value: value
+                - label:
+                    key: label
+                  value: value
+                id: id
+                label:
+                  key: label
+                visualizer: visualizer
+            - id: id
+              label:
+                key: label
+              results:
+              - values:
+                - label:
+                    key: label
+                  value: value
+                - label:
+                    key: label
+                  value: value
+                id: id
+                label:
+                  key: label
+                visualizer: visualizer
+              - values:
+                - label:
+                    key: label
+                  value: value
+                - label:
+                    key: label
+                  value: value
+                id: id
+                label:
+                  key: label
+                visualizer: visualizer
+          sections:
+          - id: id
+            label:
+              key: label
+            results:
+            - values:
+              - label:
+                  key: label
+                value: value
+              - label:
+                  key: label
+                value: value
+              id: id
+              label:
+                key: label
+              visualizer: visualizer
+            - values:
+              - label:
+                  key: label
+                value: value
+              - label:
+                  key: label
+                value: value
+              id: id
+              label:
+                key: label
+              visualizer: visualizer
+          - id: id
+            label:
+              key: label
+            results:
+            - values:
+              - label:
+                  key: label
+                value: value
+              - label:
+                  key: label
+                value: value
+              id: id
+              label:
+                key: label
+              visualizer: visualizer
+            - values:
+              - label:
+                  key: label
+                value: value
+              - label:
+                  key: label
+                value: value
+              id: id
+              label:
+                key: label
+              visualizer: visualizer
+        courseId: courseId
+        courseProfId: courseProfId
+        sections:
+        - id: id
+          label:
+            key: label
+          results:
+          - values:
+            - label:
+                key: label
+              value: value
+            - label:
+                key: label
+              value: value
+            id: id
+            label:
+              key: label
+            visualizer: visualizer
+          - values:
+            - label:
+                key: label
+              value: value
+            - label:
+                key: label
+              value: value
+            id: id
+            label:
+              key: label
+            visualizer: visualizer
+        - id: id
+          label:
+            key: label
+          results:
+          - values:
+            - label:
+                key: label
+              value: value
+            - label:
+                key: label
+              value: value
+            id: id
+            label:
+              key: label
+            visualizer: visualizer
+          - values:
+            - label:
+                key: label
+              value: value
+            - label:
+                key: label
+              value: value
+            id: id
+            label:
+              key: label
+            visualizer: visualizer
+      properties:
+        id:
+          type: string
+        courseProfId:
+          type: string
+        courseId:
+          type: string
+        generated:
+          format: date-time
+          type: string
+        courseReport:
+          $ref: '#/components/schemas/CourseReport'
+        sections:
+          description: contains results only concerning courseProf
+          items:
+            $ref: '#/components/schemas/ResultSection'
+          type: array
+      type: object
+    TermReport:
+      example:
+        termId: termId
+        facultyId: facultyId
+        generated: 2000-01-23T04:56:07.000+00:00
+        id: id
+        censored: true
+        courseProfReports:
+        - generated: 2000-01-23T04:56:07.000+00:00
+          id: id
+          courseReport:
+            generated: 2000-01-23T04:56:07.000+00:00
+            id: id
+            courseId: courseId
+            tutorReports:
+            - tutorId: tutorId
+              generated: 2000-01-23T04:56:07.000+00:00
+              id: id
+              courseId: courseId
+              sections:
+              - id: id
+                label:
+                  key: label
+                results:
+                - values:
+                  - label:
+                      key: label
+                    value: value
+                  - label:
+                      key: label
+                    value: value
+                  id: id
+                  label:
+                    key: label
+                  visualizer: visualizer
+                - values:
+                  - label:
+                      key: label
+                    value: value
+                  - label:
+                      key: label
+                    value: value
+                  id: id
+                  label:
+                    key: label
+                  visualizer: visualizer
+              - id: id
+                label:
+                  key: label
+                results:
+                - values:
+                  - label:
+                      key: label
+                    value: value
+                  - label:
+                      key: label
+                    value: value
+                  id: id
+                  label:
+                    key: label
+                  visualizer: visualizer
+                - values:
+                  - label:
+                      key: label
+                    value: value
+                  - label:
+                      key: label
+                    value: value
+                  id: id
+                  label:
+                    key: label
+                  visualizer: visualizer
+            - tutorId: tutorId
+              generated: 2000-01-23T04:56:07.000+00:00
+              id: id
+              courseId: courseId
+              sections:
+              - id: id
+                label:
+                  key: label
+                results:
+                - values:
+                  - label:
+                      key: label
+                    value: value
+                  - label:
+                      key: label
+                    value: value
+                  id: id
+                  label:
+                    key: label
+                  visualizer: visualizer
+                - values:
+                  - label:
+                      key: label
+                    value: value
+                  - label:
+                      key: label
+                    value: value
+                  id: id
+                  label:
+                    key: label
+                  visualizer: visualizer
+              - id: id
+                label:
+                  key: label
+                results:
+                - values:
+                  - label:
+                      key: label
+                    value: value
+                  - label:
+                      key: label
+                    value: value
+                  id: id
+                  label:
+                    key: label
+                  visualizer: visualizer
+                - values:
+                  - label:
+                      key: label
+                    value: value
+                  - label:
+                      key: label
+                    value: value
+                  id: id
+                  label:
+                    key: label
+                  visualizer: visualizer
+            sections:
+            - id: id
+              label:
+                key: label
+              results:
+              - values:
+                - label:
+                    key: label
+                  value: value
+                - label:
+                    key: label
+                  value: value
+                id: id
+                label:
+                  key: label
+                visualizer: visualizer
+              - values:
+                - label:
+                    key: label
+                  value: value
+                - label:
+                    key: label
+                  value: value
+                id: id
+                label:
+                  key: label
+                visualizer: visualizer
+            - id: id
+              label:
+                key: label
+              results:
+              - values:
+                - label:
+                    key: label
+                  value: value
+                - label:
+                    key: label
+                  value: value
+                id: id
+                label:
+                  key: label
+                visualizer: visualizer
+              - values:
+                - label:
+                    key: label
+                  value: value
+                - label:
+                    key: label
+                  value: value
+                id: id
+                label:
+                  key: label
+                visualizer: visualizer
+          courseId: courseId
+          courseProfId: courseProfId
+          sections:
+          - id: id
+            label:
+              key: label
+            results:
+            - values:
+              - label:
+                  key: label
+                value: value
+              - label:
+                  key: label
+                value: value
+              id: id
+              label:
+                key: label
+              visualizer: visualizer
+            - values:
+              - label:
+                  key: label
+                value: value
+              - label:
+                  key: label
+                value: value
+              id: id
+              label:
+                key: label
+              visualizer: visualizer
+          - id: id
+            label:
+              key: label
+            results:
+            - values:
+              - label:
+                  key: label
+                value: value
+              - label:
+                  key: label
+                value: value
+              id: id
+              label:
+                key: label
+              visualizer: visualizer
+            - values:
+              - label:
+                  key: label
+                value: value
+              - label:
+                  key: label
+                value: value
+              id: id
+              label:
+                key: label
+              visualizer: visualizer
+        - generated: 2000-01-23T04:56:07.000+00:00
+          id: id
+          courseReport:
+            generated: 2000-01-23T04:56:07.000+00:00
+            id: id
+            courseId: courseId
+            tutorReports:
+            - tutorId: tutorId
+              generated: 2000-01-23T04:56:07.000+00:00
+              id: id
+              courseId: courseId
+              sections:
+              - id: id
+                label:
+                  key: label
+                results:
+                - values:
+                  - label:
+                      key: label
+                    value: value
+                  - label:
+                      key: label
+                    value: value
+                  id: id
+                  label:
+                    key: label
+                  visualizer: visualizer
+                - values:
+                  - label:
+                      key: label
+                    value: value
+                  - label:
+                      key: label
+                    value: value
+                  id: id
+                  label:
+                    key: label
+                  visualizer: visualizer
+              - id: id
+                label:
+                  key: label
+                results:
+                - values:
+                  - label:
+                      key: label
+                    value: value
+                  - label:
+                      key: label
+                    value: value
+                  id: id
+                  label:
+                    key: label
+                  visualizer: visualizer
+                - values:
+                  - label:
+                      key: label
+                    value: value
+                  - label:
+                      key: label
+                    value: value
+                  id: id
+                  label:
+                    key: label
+                  visualizer: visualizer
+            - tutorId: tutorId
+              generated: 2000-01-23T04:56:07.000+00:00
+              id: id
+              courseId: courseId
+              sections:
+              - id: id
+                label:
+                  key: label
+                results:
+                - values:
+                  - label:
+                      key: label
+                    value: value
+                  - label:
+                      key: label
+                    value: value
+                  id: id
+                  label:
+                    key: label
+                  visualizer: visualizer
+                - values:
+                  - label:
+                      key: label
+                    value: value
+                  - label:
+                      key: label
+                    value: value
+                  id: id
+                  label:
+                    key: label
+                  visualizer: visualizer
+              - id: id
+                label:
+                  key: label
+                results:
+                - values:
+                  - label:
+                      key: label
+                    value: value
+                  - label:
+                      key: label
+                    value: value
+                  id: id
+                  label:
+                    key: label
+                  visualizer: visualizer
+                - values:
+                  - label:
+                      key: label
+                    value: value
+                  - label:
+                      key: label
+                    value: value
+                  id: id
+                  label:
+                    key: label
+                  visualizer: visualizer
+            sections:
+            - id: id
+              label:
+                key: label
+              results:
+              - values:
+                - label:
+                    key: label
+                  value: value
+                - label:
+                    key: label
+                  value: value
+                id: id
+                label:
+                  key: label
+                visualizer: visualizer
+              - values:
+                - label:
+                    key: label
+                  value: value
+                - label:
+                    key: label
+                  value: value
+                id: id
+                label:
+                  key: label
+                visualizer: visualizer
+            - id: id
+              label:
+                key: label
+              results:
+              - values:
+                - label:
+                    key: label
+                  value: value
+                - label:
+                    key: label
+                  value: value
+                id: id
+                label:
+                  key: label
+                visualizer: visualizer
+              - values:
+                - label:
+                    key: label
+                  value: value
+                - label:
+                    key: label
+                  value: value
+                id: id
+                label:
+                  key: label
+                visualizer: visualizer
+          courseId: courseId
+          courseProfId: courseProfId
+          sections:
+          - id: id
+            label:
+              key: label
+            results:
+            - values:
+              - label:
+                  key: label
+                value: value
+              - label:
+                  key: label
+                value: value
+              id: id
+              label:
+                key: label
+              visualizer: visualizer
+            - values:
+              - label:
+                  key: label
+                value: value
+              - label:
+                  key: label
+                value: value
+              id: id
+              label:
+                key: label
+              visualizer: visualizer
+          - id: id
+            label:
+              key: label
+            results:
+            - values:
+              - label:
+                  key: label
+                value: value
+              - label:
+                  key: label
+                value: value
+              id: id
+              label:
+                key: label
+              visualizer: visualizer
+            - values:
+              - label:
+                  key: label
+                value: value
+              - label:
+                  key: label
+                value: value
+              id: id
+              label:
+                key: label
+              visualizer: visualizer
+      properties:
+        id:
+          type: string
+        generated:
+          format: date-time
+          type: string
+        termId:
+          type: string
+        facultyId:
+          type: string
+        censored:
+          type: boolean
+        courseProfReports:
+          items:
+            $ref: '#/components/schemas/CourseProfReport'
+          type: array
+      type: object

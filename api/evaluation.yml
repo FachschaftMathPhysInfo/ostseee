@@ -1,0 +1,1080 @@
+openapi: '3.0.2'
+info:
+  title: Evaluation
+  description: This API descripes the online evaluation service, as accessed by the user and organizers.
+  version: '1.0'
+servers:
+  - url: https://eval.mathphys.info/v1
+paths:
+  /faculties:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Faculty'
+    post:
+      requestBody:
+        description: Changes possible to a faculty
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Faculty' #TODO(henrik) missing id?
+      responses:
+        '200':
+          description: OK
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Faculty'
+  /faculties/{facultyId}:
+    parameters:
+      - in: path
+        name: facultyId
+        schema:
+          type: string
+        required: true
+        description:  ID of the faculty to get
+    get:
+      summary: Get a faculty by ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Faculty'
+    patch:
+      summary: Change a faculty by ID
+      requestBody:
+        description: Changes possible to a faculty
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Faculty' #TODO(henrik) missing id?
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Faculty'
+  /terms:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Term'
+    post:
+      requestBody:
+        description: Changes possible to a term
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Term' #TODO(henrik) missing id?
+      responses:
+        '200':
+          description: OK
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Term'
+  /terms/{termId}:
+    parameters:
+      - in: path
+        name: termId
+        schema:
+          type: string
+        required: true
+        description:  ID of the term to get
+    get:
+      summary: Get a term by ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Term'
+    patch:
+      summary: Change a term by ID
+      requestBody:
+        description: Changes possible to a term
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Term' #TODO(henrik) missing id?
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Term'
+  /terms/{termId}/report:
+    parameters:
+      - in: path
+        name: termId
+        schema:
+          type: string
+        required: true
+        description:  ID of the term to get report from
+    get:
+      summary: Get a term report
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TermReport'
+  /modules:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Module'
+    post:
+      requestBody:
+        description: Changes possible to a module
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Module' #TODO(henrik) missing id?
+      responses:
+        '200':
+          description: OK
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Module'
+  /modules/{moduleId}:
+    parameters:
+      - in: path
+        name: moduleId
+        schema:
+          type: string
+        required: true
+        description:  ID of the module to get
+    get:
+      summary: Get a module by ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Module'
+    patch:
+      summary: Change a module by ID
+      requestBody:
+        description: Changes possible to a module
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Module' #TODO(henrik) missing id?
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Module'
+    delete:
+      summary: Deletes a module by ID
+      responses:
+        '204':
+          description: OK
+  /courses:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Course'
+    post:
+      requestBody:
+        description: Changes possible to a course
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course' #TODO(henrik) missing id?
+      responses:
+        '200':
+          description: OK
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+  /courses/{courseId}:
+    parameters:
+      - in: path
+        name: courseId
+        schema:
+          type: string
+        required: true
+        description:  ID of the course to get
+    get:
+      summary: Get a course by ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+    patch:
+      summary: Change a course by ID
+      requestBody:
+        description: Changes possible to a course
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course' #TODO(henrik) missing id?
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+    delete:
+      summary: Deletes a module by ID
+      responses:
+        '204':
+          description: OK
+  /courses/{courseId}/report:
+    parameters:
+      - in: path
+        name: courseId
+        schema:
+          type: string
+        required: true
+        description:  ID of the course to generate report
+    get:
+      summary: Get a course report
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseReport'
+  /profs:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Prof'
+    post:
+      requestBody:
+        description: Changes possible to a prof
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Prof' #TODO(henrik) missing id?
+      responses:
+        '200':
+          description: OK
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prof'
+  /profs/{profId}:
+    parameters:
+      - in: path
+        name: profId
+        schema:
+          type: string
+        required: true
+        description:  ID of the prof to get
+    get:
+      summary: Get a prof by ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prof'
+    patch:
+      summary: Change a prof by ID
+      requestBody:
+        description: Changes possible to a prof
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Prof' #TODO(henrik) missing id?
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prof'
+    delete:
+      summary: Deletes a module by ID
+      responses:
+        '204':
+          description: OK
+  /courseprofs:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CourseProf'
+    post:
+      requestBody:
+        description: Changes possible to a courseprof
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseProf' #TODO(henrik) missing id?
+      responses:
+        '200':
+          description: OK
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseProf'
+  /courseprofs/{courseProfId}:
+    parameters:
+      - in: path
+        name: courseProfId
+        schema:
+          type: string
+        required: true
+        description:  ID of the courseprof to get
+    get:
+      summary: Get a courseprof by ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseProf'
+    patch:
+      summary: Change a courseprof by ID
+      requestBody:
+        description: Changes possible to a courseprof
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseProf' #TODO(henrik) missing id?
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseProf'
+    delete:
+      summary: Deletes a module by ID
+      responses:
+        '204':
+          description: OK
+  /courseprofs/{courseProfId}/report:
+    parameters:
+      - in: path
+        name: courseProfId
+        schema:
+          type: string
+        required: true
+        description:  ID of the courseProf to generate report
+    get:
+      summary: Get a courseProf report
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseProfReport'
+  /courses/{courseId}/tutors:
+    parameters:
+      - in: path
+        name: courseId
+        schema:
+          type: string
+        required: true
+        description:  ID of the course to get
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tutor'
+    post:
+      requestBody:
+        description: Changes possible to a tutor
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tutor' #TODO(henrik) missing id?
+      responses:
+        '200':
+          description: OK
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tutor'
+  /courses/{courseId}/tutors/{tutorId}:
+    parameters:
+      - in: path
+        name: courseId
+        schema:
+          type: string
+        required: true
+        description:  ID of the course
+      - in: path
+        name: tutorId
+        schema:
+          type: string
+        required: true
+        description:  ID of the tutor to get
+    get:
+      summary: Get a tutor by ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tutor'
+    patch:
+      summary: Change a tutor by ID
+      requestBody:
+        description: Changes possible to a tutor
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tutor' #TODO(henrik) missing id?
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tutor'
+    delete:
+      summary: Deletes a tutor by ID
+      responses:
+        '204':
+          description: OK
+  /courses/{courseId}/tutors/{tutorId}/report:
+    parameters:
+      - in: path
+        name: courseId
+        schema:
+          type: string
+        required: true
+        description:  ID of the course, in which the tutor lives to generate report
+      - in: path
+        name: tutorId
+        schema:
+          type: string
+        required: true
+        description:  ID of the tutor to generate report
+    get:
+      summary: Get a tutor report
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TutorReport'
+  /courses/{courseId}/invitations:
+    parameters:
+      - in: path
+        name: courseId
+        schema:
+          type: string
+        required: true
+        description:  ID of the course
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Invitation'
+  /questionaire/{invitationId}:
+    parameters:
+      - in: path
+        name: invitationId
+        schema:
+          type: string
+        required: true
+        description:  ID of the invitation
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyForm'
+    post:
+      requestBody:
+        description: Upload results into system.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Questionaire'
+      responses:
+        '204':
+          description: OK
+  /forms:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Form'
+    post:
+      requestBody:
+        description: Changes possible to a form
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Form' #TODO(henrik) missing id?
+      responses:
+        '200':
+          description: OK
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Form'
+  /forms/{formId}:
+    parameters:
+      - in: path
+        name: formId
+        schema:
+          type: string
+        required: true
+        description:  ID of the form to get
+    get:
+      summary: Get a form by ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Form'
+    patch:
+      summary: Change a form by ID
+      requestBody:
+        description: Changes possible to a form
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Form' #TODO(henrik) missing id?
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Form'
+components:
+#TODO: But in description, when objects should be deleted.
+  schemas:
+    # organizing stuff
+    Faculty:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      required:
+        - name
+    Term:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        begin:
+          type: string
+          format: date
+        end:
+          type: string
+          format: date
+      required:
+        - name
+        - begin
+        - end
+    Module: 
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        facultyId:
+          type: string
+          description: Determines which faculty is in charge.
+      required:
+        - name
+        - description
+        - facultyId
+      description: used to keep track of courses over many years.
+    Course:
+      type: object
+      properties:
+        id:
+          type: string
+        moduleId:
+          type: string
+        formId:
+          type: string
+        termId:
+          type: string
+        location:
+          type: string
+        numberOfStudents:
+          type: integer
+        language:
+          type: string
+        thirdPartyKey:
+          type: string
+          description: Third-party Key, that identifies a course
+        progress:
+          type: string
+          enum: [created,announced,inEval,processing,published]
+          description: current status for sent mails for this course
+        clearance:
+          type: string
+          description: Describes whether, this course is published to profs and tutors.
+        tutors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tutor'
+      required:
+        - moduleId
+        - formId
+        - termId
+        - location
+        - numberOfStudents
+        - language
+        - progress
+        - clearance
+        - tutors
+    Prof:
+      type: object
+      properties:
+        id:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        title:
+          type: string
+        censored:
+          type: boolean
+          description: Determines, whether public reports can include, this persons results. 
+        censoredDate:
+          type: string
+          format: date
+          description: Date of agreement that results can be published
+        email:
+          type: string
+          format: email
+          description: Used to communicate to prof.
+      required:
+        - firstname
+        - lastname
+        - title
+        - censored
+        - censoredDate
+        - email
+    CourseProf:
+      type: object
+      description: creates a link between courses and prof
+      properties:
+        id:
+          type: string
+        courseId:
+          type: string
+        profId:
+          type: string
+      required:
+        - courseId
+        - profId
+    Tutor:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        censored:
+          type: boolean
+          description: Determines, whether public reports can include, this persons results. 
+        censoredDate:
+          type: string
+          format: date
+          description: Date of agreement that results can be published
+        thirdPartyKey:
+          type: string
+          description: Third-party Key, that identifies a tutor.
+        email:
+          type: string
+          format: email
+      required:
+        - name
+        - censored
+        - censoredDate
+        - email
+      description:  Subteacher, only sees portions of the results of his course. Currently they are created for every year newly.
+    Invitation:
+      type: object
+      properties:
+        id:
+          type: string
+        courseId:
+          type: string
+        used:
+          type: boolean
+      required:
+        - courseId
+      description: Onetime invitation to take a certain evaluation of a course.
+    EmptyForm:
+      type: object
+      description: Empty Form to be completed by student.
+      properties:
+        id:
+          type: string
+        profs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Prof'
+        tutors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tutor'
+        abstractForm:
+          $ref: '#/components/schemas/AbstractForm'
+        course:
+          $ref: '#/components/schemas/Course'
+    # representation/questionsmodule
+    LocalizedString:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map of translations for a given string. A string might contain markdown code.
+    AbstractForm:
+      type: object
+      properties:
+        id:
+          type: string
+        pages: #TODO: discuss data structure
+          type: array
+          items:
+            $ref: '#/components/schemas/Page'
+      required:
+        - pages
+      description: Describes an abstract form
+    Page:
+      type: object
+      properties:
+        id:
+          type: string
+        sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/Section'
+      required:
+        - sections
+      description: Group of sections that belong together
+    Section:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          $ref: '#/components/schemas/LocalizedString'
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+      required:
+        - title
+        - questions
+    Question:
+      type: object
+      properties:
+        id:
+          type: string
+        shortcode:
+          type: string
+          description: Unique, humanreadable label.
+        title:
+          $ref: '#/components/schemas/LocalizedString'
+        isMulti:
+          type: boolean
+          description: Whether this question is a single choice or multiple choice question
+          default: false
+        isComment:
+          type: boolean
+          description: Determines whether it is a free text form. Can not occur with isMulti and hasOtherOption.
+        hasOtherOption:
+          type: boolean
+          description: Some questions have an option that allows custom answers
+        regards:
+         type: string
+         enum: [course,lecturer,tutor]
+         description: Question either concerns course, lecturer or tutor.
+        hasNotApplicableOption:
+          type: boolean
+          default: true
+          description: Some questions need a not applicable option.
+        visualizer:
+          type: string
+          enum: [histogram, lines,comments]
+          description: Defines how results should be displayed.
+        options:
+          type: array
+          items:
+             $ref: '#/components/schemas/Option'
+          description: Array of possibly labeled selection options.
+      required:
+        - shortcode
+        - title
+        - isMulti
+        - isComment
+        - hasOtherOption
+        - regards
+        - hasNotapplicableOption
+        - visualizer
+        - options
+    Option:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          $ref: '#/components/schemas/LocalizedString'
+        value:
+          type: integer
+      required:
+        - label
+        - value
+      description: Possibly labeled selection option
+    Questionaire:
+      type: object
+      description: A fully completed form.
+      properties:
+        id:
+          type: string
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Answer'
+      required:
+        - answers
+    Answer:
+      properties:
+        questionaireId:
+          type: string
+        questionId:
+          type: string
+        notApplicable:
+          type: boolean
+        values:
+          type: array
+          items:
+            type: string
+      required:
+        - questionaireId
+        - questionId
+        - notApplicable
+        - values
+    Form:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        termId:
+          type: string
+        abstractForm:
+          $ref: '#/components/schemas/AbstractForm'
+      required:
+        - id
+        - name
+        - termId
+        - abstractForm
+    Forms:
+      type: array
+      items:
+        $ref: '#/components/schemas/Form'
+    ResultPair:
+      type: object
+      properties:
+        label:
+          $ref: '#/components/schemas/LocalizedString'
+        value:
+          type: string
+    Result:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          $ref: '#/components/schemas/LocalizedString'
+        visualizer:
+          type: string
+          description: indicate, how result is displayed.
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultPair'
+    ResultSection:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          $ref: '#/components/schemas/LocalizedString'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Result'
+    TutorReport:
+      type: object
+      properties:
+        id:
+          type: string
+        tutorId:
+          type: string
+        courseId:
+          type: string
+        generated:
+          type: string
+          format: date-time
+        sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultSection'
+    CourseReport:
+      type: object
+      properties:
+        id:
+          type: string
+        courseId:
+          type: string
+        generated:
+          type: string
+          format: date-time
+        tutorReports:
+          type: array
+          items:
+            $ref: '#/components/schemas/TutorReport' 
+        sections:
+          description: contains results only concerning course
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultSection'
+    CourseProfReport:
+      type: object
+      properties:
+        id:
+          type: string
+        courseProfId:
+          type: string
+        courseId:
+          type: string
+        generated:
+          type: string
+          format: date-time
+        courseReport:
+          $ref: '#/components/schemas/CourseReport'
+        sections:
+          description: contains results only concerning courseProf
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultSection'
+    TermReport:
+      type: object
+      properties:
+        id:
+          type: string
+        generated:
+          type: string
+          format: date-time
+        termId:
+          type: string
+        facultyId:
+          type: string
+        censored:
+          type: boolean
+        courseProfReports:
+          type: array
+          items:
+            $ref: '#/components/schemas/CourseProfReport'

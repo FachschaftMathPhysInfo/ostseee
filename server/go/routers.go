@@ -13,16 +13,17 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 )
 
 // Route is the information for every URI.
 type Route struct {
 	// Name is the name of this Route.
-	Name        string
+	Name string
 	// Method is the string for the HTTP method. ex) GET, POST etc..
-	Method      string
+	Method string
 	// Pattern is the pattern of the URI.
-	Pattern     string
+	Pattern string
 	// HandlerFunc is the handler function of this route.
 	HandlerFunc gin.HandlerFunc
 }
@@ -31,7 +32,324 @@ type Route struct {
 type Routes []Route
 
 // NewRouter returns a new router.
-func NewRouter() *gin.Engine {
+func NewRouter(Db *gorm.DB) *gin.Engine {
+	evalAPI := initEvalAPI(Db)
+	var routes = Routes{
+		{
+			"Index",
+			http.MethodGet,
+			"/v1/",
+			Index,
+		},
+
+		{
+			"CourseprofsCourseProfIdDelete",
+			http.MethodDelete,
+			"/v1/courseprofs/:courseProfId",
+			evalAPI.CourseprofsCourseProfIdDelete,
+		},
+
+		{
+			"CourseprofsCourseProfIdGet",
+			http.MethodGet,
+			"/v1/courseprofs/:courseProfId",
+			evalAPI.CourseprofsCourseProfIdGet,
+		},
+
+		{
+			"CourseprofsCourseProfIdPatch",
+			http.MethodPatch,
+			"/v1/courseprofs/:courseProfId",
+			evalAPI.CourseprofsCourseProfIdPatch,
+		},
+
+		{
+			"CourseprofsCourseProfIdReportGet",
+			http.MethodGet,
+			"/v1/courseprofs/:courseProfId/report",
+			evalAPI.CourseprofsCourseProfIdReportGet,
+		},
+
+		{
+			"CourseprofsGet",
+			http.MethodGet,
+			"/v1/courseprofs",
+			evalAPI.CourseprofsGet,
+		},
+
+		{
+			"CourseprofsPost",
+			http.MethodPost,
+			"/v1/courseprofs",
+			evalAPI.CourseprofsPost,
+		},
+
+		{
+			"CoursesCourseIdDelete",
+			http.MethodDelete,
+			"/v1/courses/:courseId",
+			evalAPI.CoursesCourseIdDelete,
+		},
+
+		{
+			"CoursesCourseIdGet",
+			http.MethodGet,
+			"/v1/courses/:courseId",
+			evalAPI.CoursesCourseIdGet,
+		},
+
+		{
+			"CoursesCourseIdInvitationsGet",
+			http.MethodGet,
+			"/v1/courses/:courseId/invitations",
+			evalAPI.CoursesCourseIdInvitationsGet,
+		},
+
+		{
+			"CoursesCourseIdPatch",
+			http.MethodPatch,
+			"/v1/courses/:courseId",
+			evalAPI.CoursesCourseIdPatch,
+		},
+
+		{
+			"CoursesCourseIdReportGet",
+			http.MethodGet,
+			"/v1/courses/:courseId/report",
+			evalAPI.CoursesCourseIdReportGet,
+		},
+
+		{
+			"CoursesCourseIdTutorsGet",
+			http.MethodGet,
+			"/v1/courses/:courseId/tutors",
+			evalAPI.CoursesCourseIdTutorsGet,
+		},
+
+		{
+			"CoursesCourseIdTutorsPost",
+			http.MethodPost,
+			"/v1/courses/:courseId/tutors",
+			evalAPI.CoursesCourseIdTutorsPost,
+		},
+
+		{
+			"CoursesCourseIdTutorsTutorIdDelete",
+			http.MethodDelete,
+			"/v1/courses/:courseId/tutors/:tutorId",
+			evalAPI.CoursesCourseIdTutorsTutorIdDelete,
+		},
+
+		{
+			"CoursesCourseIdTutorsTutorIdGet",
+			http.MethodGet,
+			"/v1/courses/:courseId/tutors/:tutorId",
+			evalAPI.CoursesCourseIdTutorsTutorIdGet,
+		},
+
+		{
+			"CoursesCourseIdTutorsTutorIdPatch",
+			http.MethodPatch,
+			"/v1/courses/:courseId/tutors/:tutorId",
+			evalAPI.CoursesCourseIdTutorsTutorIdPatch,
+		},
+
+		{
+			"CoursesCourseIdTutorsTutorIdReportGet",
+			http.MethodGet,
+			"/v1/courses/:courseId/tutors/:tutorId/report",
+			evalAPI.CoursesCourseIdTutorsTutorIdReportGet,
+		},
+
+		{
+			"CoursesGet",
+			http.MethodGet,
+			"/v1/courses",
+			evalAPI.CoursesGet,
+		},
+
+		{
+			"CoursesPost",
+			http.MethodPost,
+			"/v1/courses",
+			evalAPI.CoursesPost,
+		},
+
+		{
+			"FacultiesFacultyIdGet",
+			http.MethodGet,
+			"/v1/faculties/:facultyId",
+			evalAPI.FacultiesFacultyIdGet,
+		},
+
+		{
+			"FacultiesFacultyIdPatch",
+			http.MethodPatch,
+			"/v1/faculties/:facultyId",
+			evalAPI.FacultiesFacultyIdPatch,
+		},
+
+		{
+			"FacultiesGet",
+			http.MethodGet,
+			"/v1/faculties",
+			evalAPI.FacultiesGet,
+		},
+
+		{
+			"FacultiesPost",
+			http.MethodPost,
+			"/v1/faculties",
+			evalAPI.FacultiesPost,
+		},
+
+		{
+			"FormsFormIdGet",
+			http.MethodGet,
+			"/v1/forms/:formId",
+			evalAPI.FormsFormIdGet,
+		},
+
+		{
+			"FormsFormIdPatch",
+			http.MethodPatch,
+			"/v1/forms/:formId",
+			evalAPI.FormsFormIdPatch,
+		},
+
+		{
+			"FormsGet",
+			http.MethodGet,
+			"/v1/forms",
+			evalAPI.FormsGet,
+		},
+
+		{
+			"FormsPost",
+			http.MethodPost,
+			"/v1/forms",
+			evalAPI.FormsPost,
+		},
+
+		{
+			"ModulesGet",
+			http.MethodGet,
+			"/v1/modules",
+			evalAPI.ModulesGet,
+		},
+
+		{
+			"ModulesModuleIdDelete",
+			http.MethodDelete,
+			"/v1/modules/:moduleId",
+			evalAPI.ModulesModuleIdDelete,
+		},
+
+		{
+			"ModulesModuleIdGet",
+			http.MethodGet,
+			"/v1/modules/:moduleId",
+			evalAPI.ModulesModuleIdGet,
+		},
+
+		{
+			"ModulesModuleIdPatch",
+			http.MethodPatch,
+			"/v1/modules/:moduleId",
+			evalAPI.ModulesModuleIdPatch,
+		},
+
+		{
+			"ModulesPost",
+			http.MethodPost,
+			"/v1/modules",
+			evalAPI.ModulesPost,
+		},
+
+		{
+			"ProfsGet",
+			http.MethodGet,
+			"/v1/profs",
+			evalAPI.ProfsGet,
+		},
+
+		{
+			"ProfsPost",
+			http.MethodPost,
+			"/v1/profs",
+			evalAPI.ProfsPost,
+		},
+
+		{
+			"ProfsProfIdDelete",
+			http.MethodDelete,
+			"/v1/profs/:profId",
+			evalAPI.ProfsProfIdDelete,
+		},
+
+		{
+			"ProfsProfIdGet",
+			http.MethodGet,
+			"/v1/profs/:profId",
+			evalAPI.ProfsProfIdGet,
+		},
+
+		{
+			"ProfsProfIdPatch",
+			http.MethodPatch,
+			"/v1/profs/:profId",
+			evalAPI.ProfsProfIdPatch,
+		},
+
+		{
+			"QuestionaireInvitationIdGet",
+			http.MethodGet,
+			"/v1/questionaire/:invitationId",
+			evalAPI.QuestionaireInvitationIdGet,
+		},
+
+		{
+			"QuestionaireInvitationIdPost",
+			http.MethodPost,
+			"/v1/questionaire/:invitationId",
+			evalAPI.QuestionaireInvitationIdPost,
+		},
+
+		{
+			"TermsGet",
+			http.MethodGet,
+			"/v1/terms",
+			evalAPI.TermsGet,
+		},
+
+		{
+			"TermsPost",
+			http.MethodPost,
+			"/v1/terms",
+			evalAPI.TermsPost,
+		},
+
+		{
+			"TermsTermIdGet",
+			http.MethodGet,
+			"/v1/terms/:termId",
+			evalAPI.TermsTermIdGet,
+		},
+
+		{
+			"TermsTermIdPatch",
+			http.MethodPatch,
+			"/v1/terms/:termId",
+			evalAPI.TermsTermIdPatch,
+		},
+
+		{
+			"TermsTermIdReportGet",
+			http.MethodGet,
+			"/v1/terms/:termId/report",
+			evalAPI.TermsTermIdReportGet,
+		},
+	}
 	router := gin.Default()
 	for _, route := range routes {
 		switch route.Method {
@@ -52,321 +370,4 @@ func NewRouter() *gin.Engine {
 // Index is the index handler.
 func Index(c *gin.Context) {
 	c.String(http.StatusOK, "Hello World!")
-}
-
-var routes = Routes{
-	{
-		"Index",
-		http.MethodGet,
-		"/v1/",
-		Index,
-	},
-
-	{
-		"CourseprofsCourseProfIdDelete",
-		http.MethodDelete,
-		"/v1/courseprofs/:courseProfId",
-		CourseprofsCourseProfIdDelete,
-	},
-
-	{
-		"CourseprofsCourseProfIdGet",
-		http.MethodGet,
-		"/v1/courseprofs/:courseProfId",
-		CourseprofsCourseProfIdGet,
-	},
-
-	{
-		"CourseprofsCourseProfIdPatch",
-		http.MethodPatch,
-		"/v1/courseprofs/:courseProfId",
-		CourseprofsCourseProfIdPatch,
-	},
-
-	{
-		"CourseprofsCourseProfIdReportGet",
-		http.MethodGet,
-		"/v1/courseprofs/:courseProfId/report",
-		CourseprofsCourseProfIdReportGet,
-	},
-
-	{
-		"CourseprofsGet",
-		http.MethodGet,
-		"/v1/courseprofs",
-		CourseprofsGet,
-	},
-
-	{
-		"CourseprofsPost",
-		http.MethodPost,
-		"/v1/courseprofs",
-		CourseprofsPost,
-	},
-
-	{
-		"CoursesCourseIdDelete",
-		http.MethodDelete,
-		"/v1/courses/:courseId",
-		CoursesCourseIdDelete,
-	},
-
-	{
-		"CoursesCourseIdGet",
-		http.MethodGet,
-		"/v1/courses/:courseId",
-		CoursesCourseIdGet,
-	},
-
-	{
-		"CoursesCourseIdInvitationsGet",
-		http.MethodGet,
-		"/v1/courses/:courseId/invitations",
-		CoursesCourseIdInvitationsGet,
-	},
-
-	{
-		"CoursesCourseIdPatch",
-		http.MethodPatch,
-		"/v1/courses/:courseId",
-		CoursesCourseIdPatch,
-	},
-
-	{
-		"CoursesCourseIdReportGet",
-		http.MethodGet,
-		"/v1/courses/:courseId/report",
-		CoursesCourseIdReportGet,
-	},
-
-	{
-		"CoursesCourseIdTutorsGet",
-		http.MethodGet,
-		"/v1/courses/:courseId/tutors",
-		CoursesCourseIdTutorsGet,
-	},
-
-	{
-		"CoursesCourseIdTutorsPost",
-		http.MethodPost,
-		"/v1/courses/:courseId/tutors",
-		CoursesCourseIdTutorsPost,
-	},
-
-	{
-		"CoursesCourseIdTutorsTutorIdDelete",
-		http.MethodDelete,
-		"/v1/courses/:courseId/tutors/:tutorId",
-		CoursesCourseIdTutorsTutorIdDelete,
-	},
-
-	{
-		"CoursesCourseIdTutorsTutorIdGet",
-		http.MethodGet,
-		"/v1/courses/:courseId/tutors/:tutorId",
-		CoursesCourseIdTutorsTutorIdGet,
-	},
-
-	{
-		"CoursesCourseIdTutorsTutorIdPatch",
-		http.MethodPatch,
-		"/v1/courses/:courseId/tutors/:tutorId",
-		CoursesCourseIdTutorsTutorIdPatch,
-	},
-
-	{
-		"CoursesCourseIdTutorsTutorIdReportGet",
-		http.MethodGet,
-		"/v1/courses/:courseId/tutors/:tutorId/report",
-		CoursesCourseIdTutorsTutorIdReportGet,
-	},
-
-	{
-		"CoursesGet",
-		http.MethodGet,
-		"/v1/courses",
-		CoursesGet,
-	},
-
-	{
-		"CoursesPost",
-		http.MethodPost,
-		"/v1/courses",
-		CoursesPost,
-	},
-
-	{
-		"FacultiesFacultyIdGet",
-		http.MethodGet,
-		"/v1/faculties/:facultyId",
-		FacultiesFacultyIdGet,
-	},
-
-	{
-		"FacultiesFacultyIdPatch",
-		http.MethodPatch,
-		"/v1/faculties/:facultyId",
-		FacultiesFacultyIdPatch,
-	},
-
-	{
-		"FacultiesGet",
-		http.MethodGet,
-		"/v1/faculties",
-		FacultiesGet,
-	},
-
-	{
-		"FacultiesPost",
-		http.MethodPost,
-		"/v1/faculties",
-		FacultiesPost,
-	},
-
-	{
-		"FormsFormIdGet",
-		http.MethodGet,
-		"/v1/forms/:formId",
-		FormsFormIdGet,
-	},
-
-	{
-		"FormsFormIdPatch",
-		http.MethodPatch,
-		"/v1/forms/:formId",
-		FormsFormIdPatch,
-	},
-
-	{
-		"FormsGet",
-		http.MethodGet,
-		"/v1/forms",
-		FormsGet,
-	},
-
-	{
-		"FormsPost",
-		http.MethodPost,
-		"/v1/forms",
-		FormsPost,
-	},
-
-	{
-		"ModulesGet",
-		http.MethodGet,
-		"/v1/modules",
-		ModulesGet,
-	},
-
-	{
-		"ModulesModuleIdDelete",
-		http.MethodDelete,
-		"/v1/modules/:moduleId",
-		ModulesModuleIdDelete,
-	},
-
-	{
-		"ModulesModuleIdGet",
-		http.MethodGet,
-		"/v1/modules/:moduleId",
-		ModulesModuleIdGet,
-	},
-
-	{
-		"ModulesModuleIdPatch",
-		http.MethodPatch,
-		"/v1/modules/:moduleId",
-		ModulesModuleIdPatch,
-	},
-
-	{
-		"ModulesPost",
-		http.MethodPost,
-		"/v1/modules",
-		ModulesPost,
-	},
-
-	{
-		"ProfsGet",
-		http.MethodGet,
-		"/v1/profs",
-		ProfsGet,
-	},
-
-	{
-		"ProfsPost",
-		http.MethodPost,
-		"/v1/profs",
-		ProfsPost,
-	},
-
-	{
-		"ProfsProfIdDelete",
-		http.MethodDelete,
-		"/v1/profs/:profId",
-		ProfsProfIdDelete,
-	},
-
-	{
-		"ProfsProfIdGet",
-		http.MethodGet,
-		"/v1/profs/:profId",
-		ProfsProfIdGet,
-	},
-
-	{
-		"ProfsProfIdPatch",
-		http.MethodPatch,
-		"/v1/profs/:profId",
-		ProfsProfIdPatch,
-	},
-
-	{
-		"QuestionaireInvitationIdGet",
-		http.MethodGet,
-		"/v1/questionaire/:invitationId",
-		QuestionaireInvitationIdGet,
-	},
-
-	{
-		"QuestionaireInvitationIdPost",
-		http.MethodPost,
-		"/v1/questionaire/:invitationId",
-		QuestionaireInvitationIdPost,
-	},
-
-	{
-		"TermsGet",
-		http.MethodGet,
-		"/v1/terms",
-		TermsGet,
-	},
-
-	{
-		"TermsPost",
-		http.MethodPost,
-		"/v1/terms",
-		TermsPost,
-	},
-
-	{
-		"TermsTermIdGet",
-		http.MethodGet,
-		"/v1/terms/:termId",
-		TermsTermIdGet,
-	},
-
-	{
-		"TermsTermIdPatch",
-		http.MethodPatch,
-		"/v1/terms/:termId",
-		TermsTermIdPatch,
-	},
-
-	{
-		"TermsTermIdReportGet",
-		http.MethodGet,
-		"/v1/terms/:termId/report",
-		TermsTermIdReportGet,
-	},
 }

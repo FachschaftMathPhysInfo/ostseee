@@ -11,8 +11,7 @@ package openapi
 
 // Module - used to keep track of courses over many years.
 type Module struct {
-
-	Id string `json:"id,omitempty"`
+	Base
 
 	Name string `json:"name"`
 

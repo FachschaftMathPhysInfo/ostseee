@@ -10,8 +10,7 @@
 package openapi
 
 type Course struct {
-
-	Id string `json:"id,omitempty"`
+	Base
 
 	ModuleId string `json:"moduleId"`
 

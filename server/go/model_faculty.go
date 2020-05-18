@@ -10,8 +10,7 @@
 package openapi
 
 type Faculty struct {
-
-	Id string `json:"id,omitempty"`
+	Base
 
 	Name string `json:"name"`
 }

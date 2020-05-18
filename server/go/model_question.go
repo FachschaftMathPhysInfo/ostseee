@@ -10,8 +10,7 @@
 package openapi
 
 type Question struct {
-
-	Id string `json:"id,omitempty"`
+	Base
 
 	// Unique, humanreadable label.
 	Shortcode string `json:"shortcode"`

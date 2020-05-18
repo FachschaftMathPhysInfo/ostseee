@@ -11,8 +11,7 @@ package openapi
 
 // Invitation - Onetime invitation to take a certain evaluation of a course.
 type Invitation struct {
-
-	Id string `json:"id,omitempty"`
+	Base
 
 	CourseId string `json:"courseId"`
 

@@ -10,8 +10,7 @@
 package openapi
 
 type Section struct {
-
-	Id string `json:"id,omitempty"`
+	Base
 
 	// Map of translations for a given string. A string might contain markdown code.
 	Title map[string]string `json:"title"`

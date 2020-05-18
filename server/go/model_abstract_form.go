@@ -11,8 +11,6 @@ package openapi
 
 // AbstractForm - Describes an abstract form
 type AbstractForm struct {
-
-	Id string `json:"id,omitempty"`
-
+	Base
 	Pages []Page `json:"pages"`
 }

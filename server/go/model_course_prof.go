@@ -11,8 +11,7 @@ package openapi
 
 // CourseProf - creates a link between courses and prof
 type CourseProf struct {
-
-	Id string `json:"id,omitempty"`
+	Base
 
 	CourseId string `json:"courseId"`
 

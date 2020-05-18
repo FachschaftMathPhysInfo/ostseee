@@ -14,8 +14,7 @@ import (
 )
 
 type CourseProfReport struct {
-
-	Id string `json:"id,omitempty"`
+	Base
 
 	CourseProfId string `json:"courseProfId,omitempty"`
 

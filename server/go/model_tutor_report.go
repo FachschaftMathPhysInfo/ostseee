@@ -14,8 +14,7 @@ import (
 )
 
 type TutorReport struct {
-
-	Id string `json:"id,omitempty"`
+	Base
 
 	TutorId string `json:"tutorId,omitempty"`
 

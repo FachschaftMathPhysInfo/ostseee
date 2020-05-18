@@ -11,8 +11,7 @@ package openapi
 
 // Option - Possibly labeled selection option
 type Option struct {
-
-	Id string `json:"id,omitempty"`
+	Base
 
 	// Map of translations for a given string. A string might contain markdown code.
 	Label map[string]string `json:"label"`

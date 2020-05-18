@@ -14,8 +14,7 @@ import (
 )
 
 type TermReport struct {
-
-	Id string `json:"id,omitempty"`
+	Base
 
 	Generated time.Time `json:"generated,omitempty"`
 

@@ -10,227 +10,244 @@
 package openapi
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
+type EvalAPI struct {
+	EvalService EvalService
+}
+
+func ProvideEvalAPI(ev EvalService) EvalAPI {
+	return EvalAPI{EvalService: ev}
+}
+
 // CourseprofsCourseProfIdDelete - Deletes a module by ID
-func CourseprofsCourseProfIdDelete(c *gin.Context) {
+func (ev *EvalAPI) CourseprofsCourseProfIdDelete(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // CourseprofsCourseProfIdGet - Get a courseprof by ID
-func CourseprofsCourseProfIdGet(c *gin.Context) {
+func (ev *EvalAPI) CourseprofsCourseProfIdGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // CourseprofsCourseProfIdPatch - Change a courseprof by ID
-func CourseprofsCourseProfIdPatch(c *gin.Context) {
+func (ev *EvalAPI) CourseprofsCourseProfIdPatch(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // CourseprofsCourseProfIdReportGet - Get a courseProf report
-func CourseprofsCourseProfIdReportGet(c *gin.Context) {
+func (ev *EvalAPI) CourseprofsCourseProfIdReportGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // CourseprofsGet -
-func CourseprofsGet(c *gin.Context) {
+func (ev *EvalAPI) CourseprofsGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // CourseprofsPost -
-func CourseprofsPost(c *gin.Context) {
+func (ev *EvalAPI) CourseprofsPost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // CoursesCourseIdDelete - Deletes a module by ID
-func CoursesCourseIdDelete(c *gin.Context) {
+func (ev *EvalAPI) CoursesCourseIdDelete(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // CoursesCourseIdGet - Get a course by ID
-func CoursesCourseIdGet(c *gin.Context) {
+func (ev *EvalAPI) CoursesCourseIdGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // CoursesCourseIdInvitationsGet -
-func CoursesCourseIdInvitationsGet(c *gin.Context) {
+func (ev *EvalAPI) CoursesCourseIdInvitationsGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // CoursesCourseIdPatch - Change a course by ID
-func CoursesCourseIdPatch(c *gin.Context) {
+func (ev *EvalAPI) CoursesCourseIdPatch(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // CoursesCourseIdReportGet - Get a course report
-func CoursesCourseIdReportGet(c *gin.Context) {
+func (ev *EvalAPI) CoursesCourseIdReportGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // CoursesCourseIdTutorsGet -
-func CoursesCourseIdTutorsGet(c *gin.Context) {
+func (ev *EvalAPI) CoursesCourseIdTutorsGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // CoursesCourseIdTutorsPost -
-func CoursesCourseIdTutorsPost(c *gin.Context) {
+func (ev *EvalAPI) CoursesCourseIdTutorsPost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // CoursesCourseIdTutorsTutorIdDelete - Deletes a tutor by ID
-func CoursesCourseIdTutorsTutorIdDelete(c *gin.Context) {
+func (ev *EvalAPI) CoursesCourseIdTutorsTutorIdDelete(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // CoursesCourseIdTutorsTutorIdGet - Get a tutor by ID
-func CoursesCourseIdTutorsTutorIdGet(c *gin.Context) {
+func (ev *EvalAPI) CoursesCourseIdTutorsTutorIdGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // CoursesCourseIdTutorsTutorIdPatch - Change a tutor by ID
-func CoursesCourseIdTutorsTutorIdPatch(c *gin.Context) {
+func (ev *EvalAPI) CoursesCourseIdTutorsTutorIdPatch(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // CoursesCourseIdTutorsTutorIdReportGet - Get a tutor report
-func CoursesCourseIdTutorsTutorIdReportGet(c *gin.Context) {
+func (ev *EvalAPI) CoursesCourseIdTutorsTutorIdReportGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // CoursesGet -
-func CoursesGet(c *gin.Context) {
+func (ev *EvalAPI) CoursesGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // CoursesPost -
-func CoursesPost(c *gin.Context) {
+func (ev *EvalAPI) CoursesPost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // FacultiesFacultyIdGet - Get a faculty by ID
-func FacultiesFacultyIdGet(c *gin.Context) {
+func (ev *EvalAPI) FacultiesFacultyIdGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // FacultiesFacultyIdPatch - Change a faculty by ID
-func FacultiesFacultyIdPatch(c *gin.Context) {
+func (ev *EvalAPI) FacultiesFacultyIdPatch(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // FacultiesGet -
-func FacultiesGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+func (ev *EvalAPI) FacultiesGet(c *gin.Context) {
+	c.JSON(http.StatusOK, ev.EvalService.FindAllFaculties())
 }
 
 // FacultiesPost -
-func FacultiesPost(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+func (ev *EvalAPI) FacultiesPost(c *gin.Context) {
+	var faculty Faculty
+	err := c.BindJSON(&faculty)
+	if err != nil {
+		log.Fatalln(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+
+	c.JSON(http.StatusOK, ev.EvalService.Save(faculty))
 }
 
 // FormsFormIdGet - Get a form by ID
-func FormsFormIdGet(c *gin.Context) {
+func (ev *EvalAPI) FormsFormIdGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // FormsFormIdPatch - Change a form by ID
-func FormsFormIdPatch(c *gin.Context) {
+func (ev *EvalAPI) FormsFormIdPatch(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // FormsGet -
-func FormsGet(c *gin.Context) {
+func (ev *EvalAPI) FormsGet(c *gin.Context) {
 	c.JSON(http.StatusOK, []Form{{Name: "Test", Id: "232131232", AbstractForm: AbstractForm{Pages: []Page{}}}, {Name: "Form", Id: "3", AbstractForm: AbstractForm{Pages: []Page{}}}})
 }
 
 // FormsPost -
-func FormsPost(c *gin.Context) {
+func (ev *EvalAPI) FormsPost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // ModulesGet -
-func ModulesGet(c *gin.Context) {
+func (ev *EvalAPI) ModulesGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // ModulesModuleIdDelete - Deletes a module by ID
-func ModulesModuleIdDelete(c *gin.Context) {
+func (ev *EvalAPI) ModulesModuleIdDelete(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // ModulesModuleIdGet - Get a module by ID
-func ModulesModuleIdGet(c *gin.Context) {
+func (ev *EvalAPI) ModulesModuleIdGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // ModulesModuleIdPatch - Change a module by ID
-func ModulesModuleIdPatch(c *gin.Context) {
+func (ev *EvalAPI) ModulesModuleIdPatch(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // ModulesPost -
-func ModulesPost(c *gin.Context) {
+func (ev *EvalAPI) ModulesPost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // ProfsGet -
-func ProfsGet(c *gin.Context) {
+func (ev *EvalAPI) ProfsGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // ProfsPost -
-func ProfsPost(c *gin.Context) {
+func (ev *EvalAPI) ProfsPost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // ProfsProfIdDelete - Deletes a module by ID
-func ProfsProfIdDelete(c *gin.Context) {
+func (ev *EvalAPI) ProfsProfIdDelete(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // ProfsProfIdGet - Get a prof by ID
-func ProfsProfIdGet(c *gin.Context) {
+func (ev *EvalAPI) ProfsProfIdGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // ProfsProfIdPatch - Change a prof by ID
-func ProfsProfIdPatch(c *gin.Context) {
+func (ev *EvalAPI) ProfsProfIdPatch(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // QuestionaireInvitationIdGet -
-func QuestionaireInvitationIdGet(c *gin.Context) {
+func (ev *EvalAPI) QuestionaireInvitationIdGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // QuestionaireInvitationIdPost -
-func QuestionaireInvitationIdPost(c *gin.Context) {
+func (ev *EvalAPI) QuestionaireInvitationIdPost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // TermsGet -
-func TermsGet(c *gin.Context) {
+func (ev *EvalAPI) TermsGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // TermsPost -
-func TermsPost(c *gin.Context) {
+func (ev *EvalAPI) TermsPost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // TermsTermIdGet - Get a term by ID
-func TermsTermIdGet(c *gin.Context) {
+func (ev *EvalAPI) TermsTermIdGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // TermsTermIdPatch - Change a term by ID
-func TermsTermIdPatch(c *gin.Context) {
+func (ev *EvalAPI) TermsTermIdPatch(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 // TermsTermIdReportGet - Get a term report
-func TermsTermIdReportGet(c *gin.Context) {
+func (ev *EvalAPI) TermsTermIdReportGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }

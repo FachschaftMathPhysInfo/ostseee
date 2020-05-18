@@ -11,8 +11,7 @@ package openapi
 
 // Tutor - Subteacher, only sees portions of the results of his course. Currently they are created for every year newly.
 type Tutor struct {
-
-	Id string `json:"id,omitempty"`
+	Base
 
 	Name string `json:"name"`
 

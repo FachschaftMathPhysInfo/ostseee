@@ -11,8 +11,7 @@ package openapi
 
 // Page - Group of sections that belong together
 type Page struct {
-
-	Id string `json:"id,omitempty"`
+	Base
 
 	Sections []Section `json:"sections"`
 }

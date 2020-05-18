@@ -10,8 +10,7 @@
 package openapi
 
 type Prof struct {
-
-	Id string `json:"id,omitempty"`
+	Base
 
 	Firstname string `json:"firstname"`
 

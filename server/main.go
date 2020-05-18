@@ -20,12 +20,25 @@ import (
 	//    sw "github.com/myname/myrepo/go"
 	//
 	sw "github.com/fachschaftmathphys/ostseee/server/go"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
+
+func initDB() *gorm.DB {
+	db, err := gorm.Open("sqlite3", "test3.sqlite")
+	if err != nil {
+		panic(err)
+	}
+
+	db.AutoMigrate(&sw.Faculty{})
+
+	return db
+}
 
 func main() {
 	log.Printf("Server started")
 
-	router := sw.NewRouter()
+	router := sw.NewRouter(initDB())
 
 	log.Fatal(router.Run(":8080"))
 }

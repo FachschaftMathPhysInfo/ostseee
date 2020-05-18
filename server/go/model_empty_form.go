@@ -11,8 +11,7 @@ package openapi
 
 // EmptyForm - Empty Form to be completed by student.
 type EmptyForm struct {
-
-	Id string `json:"id,omitempty"`
+	Base
 
 	Profs []Prof `json:"profs,omitempty"`
 

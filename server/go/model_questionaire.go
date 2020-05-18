@@ -11,8 +11,7 @@ package openapi
 
 // Questionaire - A fully completed form.
 type Questionaire struct {
-
-	Id string `json:"id,omitempty"`
+	Base
 
 	Answers []Answer `json:"answers"`
 }

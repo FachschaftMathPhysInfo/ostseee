@@ -37,8 +37,9 @@ func initDB() *gorm.DB {
 
 func main() {
 	log.Printf("Server started")
-
-	router := sw.NewRouter(initDB())
+	db := initDB()
+	defer db.Close()
+	router := sw.NewRouter(db)
 
 	log.Fatal(router.Run(":8080"))
 }

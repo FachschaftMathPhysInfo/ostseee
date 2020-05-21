@@ -5,6 +5,7 @@ import './App.css';
 import { EuiHeaderLogo } from '@elastic/eui';
 import FormsOverView from './components/FormsOverView';
 import store from './lib/store';
+import FacultiesOverView from './components/FacultiesOverView';
 function App() {
   return (
     <div className="App">
@@ -12,7 +13,8 @@ function App() {
       <EuiHeaderLogo iconType="logoKibana"></EuiHeaderLogo>
         
       </EuiHeader>
-      <FormsOverView store={store}></FormsOverView>
+      <FacultiesOverView
+       store={store}></FacultiesOverView>
     </div>
   );
 }

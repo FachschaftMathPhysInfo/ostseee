@@ -9,10 +9,12 @@ import styled, { ThemeProvider } from 'styled-components';
 import * as euiVars from '@elastic/eui/dist/eui_theme_light.json';
 import FormsOverView from './components/FormsOverView';
 import store from './lib/store';
+import FacultiesOverView from './components/FacultiesOverView';
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={euiVars}>
-    <FormsOverView store={store}></FormsOverView>
+    <FacultiesOverView
+       store={store}></FacultiesOverView>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')

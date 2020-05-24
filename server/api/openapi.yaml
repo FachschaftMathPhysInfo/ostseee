@@ -1050,6 +1050,12 @@ components:
           type: string
         courseId:
           type: string
+        validBegin:
+          type: string
+          format: date-time
+        validEnd:
+          type: string
+          format: date-time
         used:
           type: boolean
       required:

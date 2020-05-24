@@ -9,6 +9,8 @@
 
 package openapi
 
+import uuid "github.com/satori/go.uuid"
+
 // Module - used to keep track of courses over many years.
 type Module struct {
 	Base
@@ -18,5 +20,5 @@ type Module struct {
 	Description string `json:"description"`
 
 	// Determines which faculty is in charge.
-	FacultyId string `json:"facultyId"`
+	FacultyId uuid.UUID `gorm:"type:uuid;" json:"facultyId"`
 }

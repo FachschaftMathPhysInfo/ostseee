@@ -9,11 +9,12 @@
 
 package openapi
 
+import uuid "github.com/satori/go.uuid"
+
 type Answer struct {
+	QuestionaireId uuid.UUID `gorm:"type:uuid;" json:"questionaireId"`
 
-	QuestionaireId string `json:"questionaireId"`
-
-	QuestionId string `json:"questionId"`
+	QuestionId uuid.UUID `gorm:"type:uuid;" json:"questionId"`
 
 	NotApplicable bool `json:"notApplicable"`
 

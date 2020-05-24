@@ -11,14 +11,16 @@ package openapi
 
 import (
 	"time"
+
+	uuid "github.com/satori/go.uuid"
 )
 
 type TutorReport struct {
 	Base
 
-	TutorId string `json:"tutorId,omitempty"`
+	TutorId uuid.UUID `gorm:"type:uuid;" json:"tutorId,omitempty"`
 
-	CourseId string `json:"courseId,omitempty"`
+	CourseId uuid.UUID `gorm:"type:uuid;" json:"courseId,omitempty"`
 
 	Generated time.Time `json:"generated,omitempty"`
 

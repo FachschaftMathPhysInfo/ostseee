@@ -9,11 +9,13 @@
 
 package openapi
 
+import uuid "github.com/satori/go.uuid"
+
 // CourseProf - creates a link between courses and prof
 type CourseProf struct {
 	Base
 
-	CourseId string `json:"courseId"`
+	CourseId uuid.UUID `gorm:"type:uuid;" json:"courseId"`
 
-	ProfId string `json:"profId"`
+	ProfId uuid.UUID `gorm:"type:uuid;" json:"profId"`
 }

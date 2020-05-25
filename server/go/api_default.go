@@ -139,7 +139,7 @@ func (ev *EvalAPI) FacultiesPost(c *gin.Context) {
 	var faculty Faculty
 	err := c.BindJSON(&faculty)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
 		c.Status(http.StatusBadRequest)
 		return
 	}
@@ -159,12 +159,20 @@ func (ev *EvalAPI) FormsFormIdPatch(c *gin.Context) {
 
 // FormsGet -
 func (ev *EvalAPI) FormsGet(c *gin.Context) {
-	c.JSON(http.StatusOK, []Form{{Name: "Test", Id: "232131232", AbstractForm: AbstractForm{Pages: []Page{}}}, {Name: "Form", Id: "3", AbstractForm: AbstractForm{Pages: []Page{}}}})
+	c.JSON(http.StatusOK, ev.EvalService.FindAllForms())
 }
 
 // FormsPost -
 func (ev *EvalAPI) FormsPost(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	var form Form
+	err := c.BindJSON(&form)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+
+	c.JSON(http.StatusOK, ev.EvalService.SaveForm(form))
 }
 
 // ModulesGet -

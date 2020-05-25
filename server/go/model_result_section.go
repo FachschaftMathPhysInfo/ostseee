@@ -11,9 +11,7 @@ package openapi
 
 type ResultSection struct {
 	Base
-
-	// Map of translations for a given string. A string might contain markdown code.
-	Label map[string]string `json:"label,omitempty"`
+	LabeledObject
 
 	Results []Result `json:"results,omitempty"`
 }

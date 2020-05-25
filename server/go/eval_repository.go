@@ -23,3 +23,12 @@ func (ev *EvalRepository) Save(fac Faculty) Faculty {
 	ev.DB.Save(&fac)
 	return fac
 }
+func (ev *EvalRepository) SaveForm(form Form) Form {
+	ev.DB.Save(&form)
+	return form
+}
+func (ev *EvalRepository) FindAllForms() []Form {
+	var forms []Form
+	ev.DB.Set("gorm:auto_preload", true).Find(&forms)
+	return forms
+}

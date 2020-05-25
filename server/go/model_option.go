@@ -9,12 +9,12 @@
 
 package openapi
 
+import uuid "github.com/satori/go.uuid"
+
 // Option - Possibly labeled selection option
 type Option struct {
 	Base
-
-	// Map of translations for a given string. A string might contain markdown code.
-	Label map[string]string `json:"label"`
-
-	Value int32 `json:"value"`
+	LabeledObject
+	Value      int32     `json:"value"`
+	QuestionId uuid.UUID `gorm:"type:uuid" json:"-"`
 }

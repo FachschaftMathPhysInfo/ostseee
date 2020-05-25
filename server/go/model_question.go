@@ -9,14 +9,17 @@
 
 package openapi
 
+import uuid "github.com/satori/go.uuid"
+
 type Question struct {
 	Base
+
+	SectionId uuid.UUID `gorm:"type:uuid" json:"-"`
 
 	// Unique, humanreadable label.
 	Shortcode string `json:"shortcode"`
 
-	// Map of translations for a given string. A string might contain markdown code.
-	Title map[string]string `json:"title"`
+	TitledObject
 
 	// Whether this question is a single choice or multiple choice question
 	IsMulti bool `json:"isMulti"`
@@ -37,5 +40,7 @@ type Question struct {
 	Visualizer string `json:"visualizer"`
 
 	// Array of possibly labeled selection options.
-	Options []Option `json:"options"`
+	Options []Option `gorm:"foreignkey:QuestionId" json:"options"`
+
+	//Answers []Answer `gorm:"foreignkey:QuestionId"`
 }

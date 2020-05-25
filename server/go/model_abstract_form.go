@@ -9,8 +9,11 @@
 
 package openapi
 
+import uuid "github.com/satori/go.uuid"
+
 // AbstractForm - Describes an abstract form
 type AbstractForm struct {
 	Base
-	Pages []Page `json:"pages"`
+	FormId uuid.UUID `gorm:"type:uuid;" json:"-"`
+	Pages  []Page    `gorm:"foreignkey:AbstractFormId" json:"pages"`
 }

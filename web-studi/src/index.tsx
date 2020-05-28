@@ -7,14 +7,29 @@ import '@elastic/eui/dist/eui_theme_light.css';
 //@ts-ignore
 import styled, { ThemeProvider } from 'styled-components';
 import * as euiVars from '@elastic/eui/dist/eui_theme_light.json';
-import FormsOverView from './components/FormsOverView';
 import store from './lib/store';
-import FacultiesOverView from './components/FacultiesOverView';
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={euiVars}>
-    <FacultiesOverView
-       store={store}></FacultiesOverView>
+    {/* <FacultiesOverView
+       store={store}></FacultiesOverView> */}
+       {/* header */}
+        {/* landing page */}
+
+        {/* sprachauswahl */}
+        {/* Datenschutz, Verantwortliche */}
+        {/* unauffällige links zu impressum, legal, license */}
+
+        {/* FRAGEBOGEN */}
+
+        {/* sections */}
+          {/* question */}
+              {/* antwortmöglichkeit */}
+          {/* question */}
+              {/* antwortmöglichkeit */}
+      <div id="landingpage">
+        <h1>Willkommen</h1>
+      </div>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')

@@ -23,6 +23,9 @@ import { EuiFlyout } from '@elastic/eui';
 import { EuiButton } from '@elastic/eui';
 import { EuiFlexGroup } from '@elastic/eui';
 import { EuiFlexItem } from '@elastic/eui';
+import Form from './components/Form';
+import { EuiSpacer } from '@elastic/eui';
+
 function App() {
   const [isFlyoutPrivacyVisible, setIsFlyoutPrivacyVisible] = useState(false);
 
@@ -112,7 +115,10 @@ function App() {
             </EuiPageContentHeader>
             <EuiPageContentBody>Content body</EuiPageContentBody>
           </EuiPageContent>
+          <EuiSpacer size="xl" />
+          <Form/>
         </EuiPageBody>
+
       </EuiPage>
       {/* <FacultiesOverView
        store={store}></FacultiesOverView> */}
@@ -130,11 +136,7 @@ function App() {
       {/* antwortmöglichkeit */}
       {/* question */}
       {/* antwortmöglichkeit */}
-      <div id="landingpage">
-        <h1>Willkommen</h1>
-      </div>
-      {/* <FacultiesOverView
-       store={store}></FacultiesOverView> */}
+      
        {flyoutPrivacy}
        {flyoutLegal}
     </div>

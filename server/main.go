@@ -37,6 +37,7 @@ func initDB() *gorm.DB {
 	db.AutoMigrate(&sw.Section{})
 	db.AutoMigrate(&sw.Question{})
 	db.AutoMigrate(&sw.Option{})
+	db.AutoMigrate(&sw.Term{})
 	return db
 }
 

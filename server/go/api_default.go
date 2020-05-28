@@ -237,12 +237,25 @@ func (ev *EvalAPI) QuestionaireInvitationIdPost(c *gin.Context) {
 
 // TermsGet -
 func (ev *EvalAPI) TermsGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	c.JSON(http.StatusOK, ev.EvalService.FindAllTerms())
 }
 
 // TermsPost -
 func (ev *EvalAPI) TermsPost(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	var term Term
+	err := c.BindJSON(&term)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	t, err := ev.EvalService.SaveTerm(term)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, t)
 }
 
 // TermsTermIdGet - Get a term by ID

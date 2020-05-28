@@ -32,3 +32,14 @@ func (ev *EvalRepository) FindAllForms() []Form {
 	ev.DB.Set("gorm:auto_preload", true).Find(&forms)
 	return forms
 }
+
+func (ev *EvalRepository) FindAllTerms() []Term {
+	var terms []Term
+	ev.DB.Find(&terms)
+	return terms
+}
+
+func (ev *EvalRepository) SaveTerm(term Term) Term {
+	ev.DB.Save(&term)
+	return term
+}

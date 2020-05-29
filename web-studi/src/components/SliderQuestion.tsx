@@ -29,7 +29,7 @@ const SliderQuestion = props => {
     }
   >
     <EuiFlexGroup>
-    <EuiFlexItem>
+    <EuiFlexItem grow={true}>
     <EuiRange fullWidth
     value={selected}
   showTicks

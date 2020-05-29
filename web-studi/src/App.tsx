@@ -119,7 +119,7 @@ function App() {
       ),
     },
     {
-      value: 'option_two',
+      value: 'option_three',
       inputDisplay: 'Tutor*in',
       dropdownDisplay: (
         <Fragment>
@@ -249,14 +249,7 @@ function App() {
               </EuiTitle>
             </EuiPageHeaderSection>
             <EuiPageHeaderSection>
-            <EuiFlexGroup gutterSize="s" alignItems="center">
-      <EuiFlexItem grow={false}>
-              <EuiButton onClick={showFlyoutPrivacy}>Datenschutz</EuiButton>
-              </EuiFlexItem>
-              <EuiFlexItem grow={false}>
-            <EuiButton onClick={showFlyoutLegal}>Impressum</EuiButton>
-            </EuiFlexItem>
-            </EuiFlexGroup>
+            
             </EuiPageHeaderSection>
           </EuiPageHeader>
           <EuiPageContent>
@@ -273,6 +266,7 @@ function App() {
               Sie soll helfen, die Lehre zu verbessern bzw.  Lehrveranstaltungen guter Qualität zu erhalten. Bitte lese die Fragen sorgfältig durch und beantworte sie anschließend.
               </EuiText>
               <EuiText style={{textAlign:"left"}}> Diese Umfrage betrifft folgende Veranstaltung: </EuiText>
+              <EuiSpacer size="l" />
               <EuiText><b>Physik I</b> bei <b>Frau Mustermann</b></EuiText>
                 <br></br>
                 <EuiCard
@@ -296,6 +290,15 @@ function App() {
       <a href="#abschnitt"><EuiButton fill iconType="arrowDown">
         Evaluation beginnen
       </EuiButton></a>
+      <EuiSpacer size="xl" />
+      <EuiFlexGroup gutterSize="s" alignItems="center">
+      <EuiFlexItem grow={false}>
+              <EuiButton onClick={showFlyoutPrivacy}>Datenschutz</EuiButton>
+              </EuiFlexItem>
+              <EuiFlexItem grow={false}>
+            <EuiButton onClick={showFlyoutLegal}>Impressum</EuiButton>
+            </EuiFlexItem>
+            </EuiFlexGroup>
                 </EuiPageContentBody>
           </EuiPageContent>
           <EuiSpacer size="xl" />

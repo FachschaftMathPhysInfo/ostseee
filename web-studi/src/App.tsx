@@ -226,7 +226,7 @@ function App() {
             <h3>Verlässlichkeit</h3>
           </EuiTitle>
           <EuiText>
-            Auch bei schlechter Internetverbindung hast du die Möglichkeit dein Feedback rückzumelden.
+            Auch bei schlechter Internetverbindung hast du die Möglichkeit, dein Feedback rückzumelden.
           </EuiText>
         </Fragment>
       ),
@@ -267,14 +267,12 @@ function App() {
                 </EuiTitle>
               </EuiPageContentHeaderSection>
             </EuiPageContentHeader>
-            <EuiPageContentBody><p>
+            <EuiPageContentBody><p style={{textAlign:"left", lineHeight:"1.75"}}>
               Diese Evaluation wird von der Studienkommission in Zusammenarbeit mit der Fachschaft MathPhysInfo durchgeführt.
               Sie soll helfen, die Lehre zu verbessern bzw.  Lehrveranstaltungen guter Qualität zu erhalten. Bitte lese die Fragen sorgfältig durch und beantworte sie anschließend.
               </p>
-              <p> Diese Umfrage betrifft folgende Veranstaltung:
-                  <p style={{alignContent:"center",padding:16}}><b>Physik I</b></p>
-                  bei <p style={{alignContent:"center",padding:16}}><b>Frau Mustermann</b></p>
-                </p>
+              <p style={{textAlign:"left", lineHeight:"1.75"}}> Diese Umfrage betrifft folgende Veranstaltung: <b>Physik I</b> bei <b>Frau Mustermann</b></p>
+                <br></br>
                 <EuiCard
         layout="vertical"
         title={'Prinzipien der Evaluation'}

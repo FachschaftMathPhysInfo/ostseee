@@ -9,37 +9,57 @@ import { EuiSuperSelect } from '@elastic/eui';
 import { EuiText } from '@elastic/eui';
 import { EuiRange } from '@elastic/eui';
 import { EuiCheckbox } from '@elastic/eui';
+import { EuiFlexGroup } from '@elastic/eui';
+import { EuiSpacer } from '@elastic/eui';
+import { htmlIdGenerator } from '@elastic/eui';
+import { EuiFlexItem } from '@elastic/eui';
 
 const SliderQuestion = props => {
   let [selected, setSelected] = useState('3') 
+
+  const [checked, setChecked]= useState(false);
   return (
+    
     <EuiDescribedFormGroup fullWidth
-    title={<h3>Beispielfrage</h3>}
+    title={<h3>Durch das Umstellen auf das digitale Format hat sich mein Arbeitsaufwand folgendermaßen verändert:</h3>}
     description={
       <Fragment>
-        Erläuterung zu der Beispielfrage
+        
       </Fragment>
     }
   >
+    <EuiFlexGroup>
+    <EuiFlexItem>
     <EuiRange fullWidth
     value={selected}
   showTicks
   min = {1}
   max = {5}
   ticks={[
-    { label: 'sehr schlecht', value: 1 },
-    { label: 'schlecht', value: 2 },
-    { label: 'b', value: 3 },
-    { label: '.', value: 4 },
-    { label: 'sehr gut', value: 5 }
+    { label: 'deutlich erhöht', value: 1 },
+    { label: 'leicht erhöht', value: 2 },
+    { label: 'unverändert', value: 3 },
+    { label: 'leicht reduziert', value: 4 },
+    { label: 'deutlich reduziert', value: 5 }
   ]}
   //@ts-ignore
   onChange = {(e) => setSelected(e.target.value)}
   //@ts-ignore
   //append={(<EuiCheckbox label="kA" onChange={(e) => alert(e)} checked={false}>keine Angabe</EuiCheckbox>)}
   append={(<EuiText>tedt</EuiText>)}
+  disabled={checked}
 />
-  
+</EuiFlexItem>
+<EuiFlexItem grow={false}>
+    <EuiCheckbox
+        id={htmlIdGenerator()()}
+        label="k.A."
+        checked={checked}
+        //@ts-ignore
+        onChange={e => {setChecked(e.target.checked);setSelected('')}}
+      />
+      </EuiFlexItem>
+  </EuiFlexGroup>
   </EuiDescribedFormGroup>
   );
 };

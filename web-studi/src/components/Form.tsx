@@ -7,7 +7,6 @@ const Form = props => {
   return (
       <div>
         <Section/>
-        <Section/>
     </div>
   );
 };

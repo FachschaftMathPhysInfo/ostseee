@@ -12,12 +12,13 @@ const Section = props => {
   return (
     <div>
       <EuiSpacer size="xl" />
-      <EuiPanel className={styles.form} betaBadgeLabel={"Tutor*innen"}>
-        <CommentQuestion/>
+      <EuiPanel className={styles.form} betaBadgeLabel={"Abschnittsname"}>
+      <SelectQuestion/>
+        <SliderQuestion/>
+        
         <SingleChoiceQuestion/>
         <MultipleChoiceQuestion/>
-        <SelectQuestion/>
-        <SliderQuestion/>
+        <CommentQuestion/>
       </EuiPanel>
     </div>
     

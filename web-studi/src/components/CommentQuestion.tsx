@@ -8,15 +8,14 @@ import { EuiTextArea } from '@elastic/eui';
 const CommentQuestion = props => {
   return (
     <EuiDescribedFormGroup fullWidth
-    title={<h3>Beispielfrage</h3>}
+    title={<h3>Zusätzliche Anmerkungen zum Seminar (bitte in Stichworten):</h3>}
     description={
       <Fragment>
-        Erläuterung zu der Beispielfrage
+        Bitte keine persönlichen Angaben, die ein Rückschluss auf dich zu lassen.
       </Fragment>
     }
   >
     <EuiFormRow
-      label="Möglicher Beschreibungstext"
       fullWidth
     >
       <EuiTextArea fullWidth/>

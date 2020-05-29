@@ -9,6 +9,7 @@ import { EuiSuperSelect } from '@elastic/eui';
 import { EuiText } from '@elastic/eui';
 
 const SelectQuestion = props => {
+  
   let options = [{
     value: 'Bachelro',
     inputDisplay: (<EuiText>Bachelor</EuiText>),
@@ -24,15 +25,21 @@ const SelectQuestion = props => {
   {
     value: 'Sonstiges',
     inputDisplay: (<EuiText>Sonstiges</EuiText>),
-  }]
+  },
+  {
+    value: 'keine Angabe',
+    inputDisplay: (<EuiText>keine Angabe</EuiText>),
+  }
+
+]
   let [seleted, setSelected] = useState(null);
 
   return (
     <EuiDescribedFormGroup fullWidth
-    title={<h3>Beispielfrage</h3>}
+    title={<h3>Mit welchen Abschlussziel studierst du?</h3>}
     description={
       <Fragment>
-        Erläuterung zu der Beispielfrage
+        
       </Fragment>
     }
   >

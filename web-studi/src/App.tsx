@@ -267,19 +267,22 @@ function App() {
                 </EuiTitle>
               </EuiPageContentHeaderSection>
             </EuiPageContentHeader>
-            <EuiPageContentBody><p style={{textAlign:"left", lineHeight:"1.75"}}>
+            <EuiPageContentBody>
+              <EuiText style={{textAlign:"left"}}>
               Diese Evaluation wird von der Studienkommission in Zusammenarbeit mit der Fachschaft MathPhysInfo durchgeführt.
               Sie soll helfen, die Lehre zu verbessern bzw.  Lehrveranstaltungen guter Qualität zu erhalten. Bitte lese die Fragen sorgfältig durch und beantworte sie anschließend.
-              </p>
-              <p style={{textAlign:"left", lineHeight:"1.75"}}> Diese Umfrage betrifft folgende Veranstaltung: <b>Physik I</b> bei <b>Frau Mustermann</b></p>
+              </EuiText>
+              <EuiText style={{textAlign:"left"}}> Diese Umfrage betrifft folgende Veranstaltung: </EuiText>
+              <EuiText><b>Physik I</b> bei <b>Frau Mustermann</b></EuiText>
                 <br></br>
                 <EuiCard
         layout="vertical"
         title={'Prinzipien der Evaluation'}
         description=""
-        href="#"
+        // href="#"
       >
      <EuiTabbedContent
+     expand={true}
       tabs={tabs}
       initialSelectedTab={tabs[0]}
       autoFocus="selected"
@@ -288,6 +291,11 @@ function App() {
         console.log('clicked tab', tab);
       }}
     /></EuiCard>
+
+  <EuiSpacer size="xl" />
+      <a href="#abschnitt"><EuiButton fill iconType="arrowDown">
+        Evaluation beginnen
+      </EuiButton></a>
                 </EuiPageContentBody>
           </EuiPageContent>
           <EuiSpacer size="xl" />

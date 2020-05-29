@@ -13,7 +13,7 @@ const SingleChoiceQuestion = props => {
   const [selected, setSelected]= useState('');
   const [checked, setChecked]= useState(false);
   return (
-    <EuiDescribedFormGroup fullWidth
+    <EuiDescribedFormGroup fullWidth gutterSize="xl"
     title={<h3> Falls Leistungspunkte (LP) vergeben werden: Verglichen mit den  vergebenen Leistungspunkten ist mein tatsächlicher Arbeitsaufwand für diese Lehrveranstaltung (1 LP = 30 Stunden Arbeitsaufwand):</h3>}
     description={
       <Fragment>

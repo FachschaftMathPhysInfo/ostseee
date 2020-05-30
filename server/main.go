@@ -38,6 +38,17 @@ func initDB() *gorm.DB {
 	db.AutoMigrate(&sw.Question{})
 	db.AutoMigrate(&sw.Option{})
 	db.AutoMigrate(&sw.Term{})
+	db.AutoMigrate(&sw.Module{})
+	db.AutoMigrate(&sw.Prof{})
+	db.AutoMigrate(&sw.Course{})
+	db.AutoMigrate(&sw.CourseProf{})
+	db.AutoMigrate(&sw.CourseProfReport{})
+	db.AutoMigrate(&sw.CourseReport{})
+	db.AutoMigrate(&sw.Tutor{})
+	db.AutoMigrate(&sw.TutorReport{})
+	db.AutoMigrate(&sw.Invitation{})
+	db.AutoMigrate(&sw.Answer{})
+
 	return db
 }
 

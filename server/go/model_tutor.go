@@ -9,6 +9,8 @@
 
 package openapi
 
+import uuid "github.com/satori/go.uuid"
+
 // Tutor - Subteacher, only sees portions of the results of his course. Currently they are created for every year newly.
 type Tutor struct {
 	Base
@@ -25,4 +27,6 @@ type Tutor struct {
 	ThirdPartyKey string `json:"thirdPartyKey,omitempty"`
 
 	Email string `json:"email"`
+
+	CourseId uuid.UUID `gorm:"type:uuid;" json:"courseId,omitempty"`
 }

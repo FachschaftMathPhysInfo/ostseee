@@ -359,6 +359,8 @@ func NewRouter(Db *gorm.DB) *gin.Engine {
 			router.POST(route.Pattern, route.HandlerFunc)
 		case http.MethodPut:
 			router.PUT(route.Pattern, route.HandlerFunc)
+		case http.MethodPatch:
+			router.PATCH(route.Pattern, route.HandlerFunc)
 		case http.MethodDelete:
 			router.DELETE(route.Pattern, route.HandlerFunc)
 		}

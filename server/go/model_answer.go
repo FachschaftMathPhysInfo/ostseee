@@ -18,5 +18,5 @@ type Answer struct {
 
 	NotApplicable bool `json:"notApplicable"`
 
-	Values []string `json:"values"`
+	Values []string `gorm:"-" json:"values"`
 }

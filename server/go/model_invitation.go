@@ -9,11 +9,15 @@
 
 package openapi
 
+import uuid "github.com/satori/go.uuid"
+
 // Invitation - Onetime invitation to take a certain evaluation of a course.
 type Invitation struct {
 	Base
 
-	CourseId string `json:"courseId"`
+	CourseId uuid.UUID `gorm:"type:uuid;" json:"courseId"`
 
-	Used bool `json:"used,omitempty"`
+	ValidBegin string `json:"validBegin"`
+	ValidEnd   string `json:"validEnd"`
+	Used       bool   `json:"used,omitempty"`
 }

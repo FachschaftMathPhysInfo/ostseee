@@ -94,6 +94,8 @@ export interface CoursesCourseIdGetRequest {
 
 export interface CoursesCourseIdInvitationsGetRequest {
     courseId: string;
+    begin: Date;
+    end: Date;
 }
 
 export interface CoursesCourseIdPatchRequest {
@@ -599,8 +601,27 @@ function coursesCourseIdInvitationsGetRaw<T>(requestParameters: CoursesCourseIdI
         throw new runtime.RequiredError('courseId','Required parameter requestParameters.courseId was null or undefined when calling coursesCourseIdInvitationsGet.');
     }
 
+    if (requestParameters.begin === null || requestParameters.begin === undefined) {
+        throw new runtime.RequiredError('begin','Required parameter requestParameters.begin was null or undefined when calling coursesCourseIdInvitationsGet.');
+    }
+
+    if (requestParameters.end === null || requestParameters.end === undefined) {
+        throw new runtime.RequiredError('end','Required parameter requestParameters.end was null or undefined when calling coursesCourseIdInvitationsGet.');
+    }
+
     let queryParameters = null;
 
+    queryParameters = {};
+
+
+    if (requestParameters.begin !== undefined) {
+        queryParameters['begin'] = (requestParameters.begin as any).toISOString();
+    }
+
+
+    if (requestParameters.end !== undefined) {
+        queryParameters['end'] = (requestParameters.end as any).toISOString();
+    }
 
     const headerParameters = {};
 

@@ -9,14 +9,16 @@
 
 package openapi
 
+import uuid "github.com/satori/go.uuid"
+
 type Course struct {
 	Base
 
-	ModuleId string `json:"moduleId"`
+	ModuleId uuid.UUID `gorm:"type:uuid;" json:"moduleId"`
 
-	FormId string `json:"formId"`
+	FormId uuid.UUID `gorm:"type:uuid;" json:"formId"`
 
-	TermId string `json:"termId"`
+	TermId uuid.UUID `gorm:"type:uuid;" json:"termId"`
 
 	Location string `json:"location"`
 

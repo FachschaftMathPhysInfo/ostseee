@@ -11,6 +11,8 @@ package openapi
 
 import (
 	"time"
+
+	uuid "github.com/satori/go.uuid"
 )
 
 type TermReport struct {
@@ -18,9 +20,9 @@ type TermReport struct {
 
 	Generated time.Time `json:"generated,omitempty"`
 
-	TermId string `json:"termId,omitempty"`
+	TermId uuid.UUID `gorm:"type:uuid;" json:"termId,omitempty"`
 
-	FacultyId string `json:"facultyId,omitempty"`
+	FacultyId uuid.UUID `gorm:"type:uuid;" json:"facultyId,omitempty"`
 
 	Censored bool `json:"censored,omitempty"`
 

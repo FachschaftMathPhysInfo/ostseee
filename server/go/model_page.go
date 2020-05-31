@@ -9,9 +9,11 @@
 
 package openapi
 
+import uuid "github.com/satori/go.uuid"
+
 // Page - Group of sections that belong together
 type Page struct {
 	Base
-
-	Sections []Section `json:"sections"`
+	AbstractFormId uuid.UUID `gorm:"type:uuid" json:"-"`
+	Sections       []Section `gorm:"foreignkey:PageId" json:"sections"`
 }

@@ -9,11 +9,12 @@
 
 package openapi
 
+import uuid "github.com/satori/go.uuid"
+
 type Section struct {
 	Base
 
-	// Map of translations for a given string. A string might contain markdown code.
-	Title map[string]string `json:"title"`
-
-	Questions []Question `json:"questions"`
+	TitledObject
+	PageId    uuid.UUID  `gorm:"type:uuid" json:"-"`
+	Questions []Question `gorm:"foreignkey:SectionId" json:"questions"`
 }

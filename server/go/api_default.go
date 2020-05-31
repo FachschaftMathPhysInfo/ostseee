@@ -14,6 +14,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	uuid "github.com/satori/go.uuid"
 )
 
 type EvalAPI struct {
@@ -26,17 +27,59 @@ func ProvideEvalAPI(ev EvalService) EvalAPI {
 
 // CourseprofsCourseProfIdDelete - Deletes a module by ID
 func (ev *EvalAPI) CourseprofsCourseProfIdDelete(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	id, err := uuid.FromString(c.Param("courseProfId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	err = ev.EvalService.DeleteCourseProf(id)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.Status(http.StatusNoContent)
 }
 
 // CourseprofsCourseProfIdGet - Get a courseprof by ID
 func (ev *EvalAPI) CourseprofsCourseProfIdGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	id, err := uuid.FromString(c.Param("courseProfId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	courseprof, err := ev.EvalService.FindCourseProf(id)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, courseprof)
 }
 
 // CourseprofsCourseProfIdPatch - Change a courseprof by ID
 func (ev *EvalAPI) CourseprofsCourseProfIdPatch(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	var courseprof CourseProf
+	err := c.BindJSON(&courseprof)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	id, err := uuid.FromString(c.Param("courseProfId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	courseprof.Id = id
+	co, err := ev.EvalService.SaveCourseProf(courseprof)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, co)
 }
 
 // CourseprofsCourseProfIdReportGet - Get a courseProf report
@@ -46,22 +89,57 @@ func (ev *EvalAPI) CourseprofsCourseProfIdReportGet(c *gin.Context) {
 
 // CourseprofsGet -
 func (ev *EvalAPI) CourseprofsGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	c.JSON(http.StatusOK, ev.EvalService.FindAllCourseProfs())
 }
 
 // CourseprofsPost -
 func (ev *EvalAPI) CourseprofsPost(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	var courseprof CourseProf
+	err := c.BindJSON(&courseprof)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	co, err := ev.EvalService.SaveCourseProf(courseprof)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, co)
 }
 
 // CoursesCourseIdDelete - Deletes a module by ID
 func (ev *EvalAPI) CoursesCourseIdDelete(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	id, err := uuid.FromString(c.Param("courseId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	err = ev.EvalService.DeleteCourse(id)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.Status(http.StatusNoContent)
 }
 
 // CoursesCourseIdGet - Get a course by ID
 func (ev *EvalAPI) CoursesCourseIdGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	id, err := uuid.FromString(c.Param("courseId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	course, err := ev.EvalService.FindCourse(id)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, course)
 }
 
 // CoursesCourseIdInvitationsGet -
@@ -71,7 +149,27 @@ func (ev *EvalAPI) CoursesCourseIdInvitationsGet(c *gin.Context) {
 
 // CoursesCourseIdPatch - Change a course by ID
 func (ev *EvalAPI) CoursesCourseIdPatch(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	var course Course
+	err := c.BindJSON(&course)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	id, err := uuid.FromString(c.Param("courseId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	course.Id = id
+	co, err := ev.EvalService.SaveCourse(course)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, co)
 }
 
 // CoursesCourseIdReportGet - Get a course report
@@ -81,27 +179,116 @@ func (ev *EvalAPI) CoursesCourseIdReportGet(c *gin.Context) {
 
 // CoursesCourseIdTutorsGet -
 func (ev *EvalAPI) CoursesCourseIdTutorsGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	courseId, err := uuid.FromString(c.Param("courseId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, ev.EvalService.FindAllCourseTutors(courseId))
 }
 
 // CoursesCourseIdTutorsPost -
 func (ev *EvalAPI) CoursesCourseIdTutorsPost(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	var tutor Tutor
+	err := c.BindJSON(&tutor)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	courseId, err := uuid.FromString(c.Param("courseId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	tutor.CourseId = courseId
+	co, err := ev.EvalService.SaveTutor(tutor)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, co)
 }
 
 // CoursesCourseIdTutorsTutorIdDelete - Deletes a tutor by ID
 func (ev *EvalAPI) CoursesCourseIdTutorsTutorIdDelete(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+
+	tutorId, err := uuid.FromString(c.Param("tutorId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	courseId, err := uuid.FromString(c.Param("courseId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	err = ev.EvalService.DeleteTutor(courseId, tutorId)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.Status(http.StatusNoContent)
 }
 
 // CoursesCourseIdTutorsTutorIdGet - Get a tutor by ID
 func (ev *EvalAPI) CoursesCourseIdTutorsTutorIdGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	courseId, err := uuid.FromString(c.Param("courseId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	tutorId, err := uuid.FromString(c.Param("tutorId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	tutor, err := ev.EvalService.FindCourseTutor(courseId, tutorId)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, tutor)
 }
 
 // CoursesCourseIdTutorsTutorIdPatch - Change a tutor by ID
 func (ev *EvalAPI) CoursesCourseIdTutorsTutorIdPatch(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	var tutor Tutor
+	err := c.BindJSON(&tutor)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	courseId, err := uuid.FromString(c.Param("courseId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	tutorId, err := uuid.FromString(c.Param("tutorId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	tutor.Id = tutorId
+	tutor.CourseId = courseId
+	co, err := ev.EvalService.SaveTutor(tutor)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, co)
 }
 
 // CoursesCourseIdTutorsTutorIdReportGet - Get a tutor report
@@ -111,12 +298,25 @@ func (ev *EvalAPI) CoursesCourseIdTutorsTutorIdReportGet(c *gin.Context) {
 
 // CoursesGet -
 func (ev *EvalAPI) CoursesGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	c.JSON(http.StatusOK, ev.EvalService.FindAllCourses())
 }
 
 // CoursesPost -
 func (ev *EvalAPI) CoursesPost(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	var course Course
+	err := c.BindJSON(&course)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	co, err := ev.EvalService.SaveCourse(course)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, co)
 }
 
 // FacultiesFacultyIdGet - Get a faculty by ID
@@ -126,7 +326,22 @@ func (ev *EvalAPI) FacultiesFacultyIdGet(c *gin.Context) {
 
 // FacultiesFacultyIdPatch - Change a faculty by ID
 func (ev *EvalAPI) FacultiesFacultyIdPatch(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	var faculty Faculty
+	err := c.BindJSON(&faculty)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	//BUG(henrik): if faculty id doesn't exists the faculty will be created.
+	id := c.Params.ByName("facultyId")
+	faculty.Id, err = uuid.FromString(id)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, ev.EvalService.Save(faculty))
 }
 
 // FacultiesGet -
@@ -139,7 +354,7 @@ func (ev *EvalAPI) FacultiesPost(c *gin.Context) {
 	var faculty Faculty
 	err := c.BindJSON(&faculty)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
 		c.Status(http.StatusBadRequest)
 		return
 	}
@@ -159,62 +374,166 @@ func (ev *EvalAPI) FormsFormIdPatch(c *gin.Context) {
 
 // FormsGet -
 func (ev *EvalAPI) FormsGet(c *gin.Context) {
-	c.JSON(http.StatusOK, []Form{{Name: "Test", Id: "232131232", AbstractForm: AbstractForm{Pages: []Page{}}}, {Name: "Form", Id: "3", AbstractForm: AbstractForm{Pages: []Page{}}}})
+	c.JSON(http.StatusOK, ev.EvalService.FindAllForms())
 }
 
 // FormsPost -
 func (ev *EvalAPI) FormsPost(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	var form Form
+	err := c.BindJSON(&form)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+
+	c.JSON(http.StatusOK, ev.EvalService.SaveForm(form))
 }
 
 // ModulesGet -
 func (ev *EvalAPI) ModulesGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	c.JSON(http.StatusOK, ev.EvalService.FindAllModules())
 }
 
 // ModulesModuleIdDelete - Deletes a module by ID
 func (ev *EvalAPI) ModulesModuleIdDelete(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	id, err := uuid.FromString(c.Param("moduleId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	err = ev.EvalService.DeleteModule(id)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.Status(http.StatusNoContent)
 }
 
 // ModulesModuleIdGet - Get a module by ID
 func (ev *EvalAPI) ModulesModuleIdGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	id, err := uuid.FromString(c.Param("moduleId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	module, err := ev.EvalService.FindModule(id)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, module)
 }
 
 // ModulesModuleIdPatch - Change a module by ID
 func (ev *EvalAPI) ModulesModuleIdPatch(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	var module Module
+	err := c.BindJSON(&module)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	m, err := ev.EvalService.SaveModule(module)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, m)
 }
 
 // ModulesPost -
 func (ev *EvalAPI) ModulesPost(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	var module Module
+	err := c.BindJSON(&module)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	m, err := ev.EvalService.SaveModule(module)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, m)
 }
 
 // ProfsGet -
 func (ev *EvalAPI) ProfsGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	c.JSON(http.StatusOK, ev.EvalService.FindAllProfs())
 }
 
 // ProfsPost -
 func (ev *EvalAPI) ProfsPost(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	var prof Prof
+	err := c.BindJSON(&prof)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	co, err := ev.EvalService.SaveProf(prof)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, co)
 }
 
 // ProfsProfIdDelete - Deletes a module by ID
 func (ev *EvalAPI) ProfsProfIdDelete(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	id, err := uuid.FromString(c.Param("profId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	err = ev.EvalService.DeleteProf(id)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.Status(http.StatusNoContent)
 }
 
 // ProfsProfIdGet - Get a prof by ID
 func (ev *EvalAPI) ProfsProfIdGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	id, err := uuid.FromString(c.Param("profId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	prof, err := ev.EvalService.FindProf(id)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, prof)
 }
 
 // ProfsProfIdPatch - Change a prof by ID
 func (ev *EvalAPI) ProfsProfIdPatch(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	var prof Prof
+	err := c.BindJSON(&prof)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	co, err := ev.EvalService.SaveProf(prof)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, co)
 }
 
 // QuestionaireInvitationIdGet -
@@ -229,22 +548,59 @@ func (ev *EvalAPI) QuestionaireInvitationIdPost(c *gin.Context) {
 
 // TermsGet -
 func (ev *EvalAPI) TermsGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	c.JSON(http.StatusOK, ev.EvalService.FindAllTerms())
 }
 
 // TermsPost -
 func (ev *EvalAPI) TermsPost(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	var term Term
+	err := c.BindJSON(&term)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	t, err := ev.EvalService.SaveTerm(term)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, t)
 }
 
 // TermsTermIdGet - Get a term by ID
 func (ev *EvalAPI) TermsTermIdGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	id, err := uuid.FromString(c.Param("termId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	term, err := ev.EvalService.FindTerm(id)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, term)
 }
 
 // TermsTermIdPatch - Change a term by ID
 func (ev *EvalAPI) TermsTermIdPatch(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	var term Term
+	err := c.BindJSON(&term)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	t, err := ev.EvalService.SaveTerm(term)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, t)
 }
 
 // TermsTermIdReportGet - Get a term report

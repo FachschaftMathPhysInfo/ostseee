@@ -12,7 +12,7 @@ package openapi
 type ResultPair struct {
 
 	// Map of translations for a given string. A string might contain markdown code.
-	Label map[string]string `json:"label,omitempty"`
+	LabeledObject
 
 	Value string `json:"value,omitempty"`
 }

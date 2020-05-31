@@ -539,6 +539,20 @@ paths:
           type: string
         required: true
         description:  ID of the course
+      - in: query
+        name: begin
+        schema:
+          type: string
+          format: date-time
+        required: true
+        description: The begin of the valid time of these invitations.
+      - in: query
+        name: end
+        schema:
+          type: string
+          format: date-time
+        required: true
+        description: The begin of the valid time of these invitations.
     get:
       responses:
         '200':
@@ -798,6 +812,12 @@ components:
           type: string
         courseId:
           type: string
+        validBegin:
+          type: string
+          format: date-time
+        validEnd:
+          type: string
+          format: date-time
         used:
           type: boolean
       required:

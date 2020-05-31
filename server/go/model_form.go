@@ -9,13 +9,14 @@
 
 package openapi
 
-type Form struct {
+import uuid "github.com/satori/go.uuid"
 
-	Id string `json:"id"`
+type Form struct {
+	Base
 
 	Name string `json:"name"`
 
-	TermId string `json:"termId"`
+	TermId uuid.UUID `gorm:"type:uuid;" json:"termId"`
 
-	AbstractForm AbstractForm `json:"abstractForm"`
+	AbstractForm AbstractForm `json:"abstractForm" gorm:"foreignkey:FormId"`
 }

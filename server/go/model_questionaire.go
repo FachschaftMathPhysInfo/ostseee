@@ -9,9 +9,11 @@
 
 package openapi
 
+import uuid "github.com/satori/go.uuid"
+
 // Questionaire - A fully completed form.
 type Questionaire struct {
 	Base
-
-	Answers []Answer `json:"answers"`
+	CourseId uuid.UUID
+	Answers  []Answer `json:"answers"`
 }

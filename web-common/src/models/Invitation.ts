@@ -32,6 +32,18 @@ export interface Invitation  {
     courseId: string;
     /**
      * 
+     * @type {Date}
+     * @memberof Invitation
+     */
+    validBegin?: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Invitation
+     */
+    validEnd?: Date;
+    /**
+     * 
      * @type {boolean}
      * @memberof Invitation
      */
@@ -42,6 +54,8 @@ export function InvitationFromJSON(json: any): Invitation {
     return {
         'id': !exists(json, 'id') ? undefined : json['id'],
         'courseId': json['courseId'],
+        'validBegin': !exists(json, 'validBegin') ? undefined : new Date(json['validBegin']),
+        'validEnd': !exists(json, 'validEnd') ? undefined : new Date(json['validEnd']),
         'used': !exists(json, 'used') ? undefined : json['used'],
     };
 }
@@ -53,6 +67,8 @@ export function InvitationToJSON(value?: Invitation): any {
     return {
         'id': value.id,
         'courseId': value.courseId,
+        'validBegin': value.validBegin === undefined ? undefined : value.validBegin.toISOString(),
+        'validEnd': value.validEnd === undefined ? undefined : value.validEnd.toISOString(),
         'used': value.used,
     };
 }

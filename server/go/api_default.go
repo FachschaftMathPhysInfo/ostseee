@@ -144,7 +144,25 @@ func (ev *EvalAPI) CoursesCourseIdGet(c *gin.Context) {
 
 // CoursesCourseIdInvitationsGet -
 func (ev *EvalAPI) CoursesCourseIdInvitationsGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	type Timespan struct {
+		Begin string `form:"begin"`
+		End   string `form:"end"`
+	}
+	var timespan Timespan
+	c.Bind(&timespan)
+	log.Println(timespan)
+	id, err := uuid.FromString(c.Param("courseId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	invitations, err := ev.EvalService.FindOrGenerateCourseInvitations(id, timespan.Begin, timespan.End)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, invitations)
 }
 
 // CoursesCourseIdPatch - Change a course by ID
@@ -538,7 +556,19 @@ func (ev *EvalAPI) ProfsProfIdPatch(c *gin.Context) {
 
 // QuestionaireInvitationIdGet -
 func (ev *EvalAPI) QuestionaireInvitationIdGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	id, err := uuid.FromString(c.Param("invitationId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	eform, err := ev.EvalService.RenderInvitationToEmptyForm(id)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, eform)
 }
 
 // QuestionaireInvitationIdPost -

@@ -226,3 +226,44 @@ func (ev *EvalRepository) SaveTutor(tutor Tutor) Tutor {
 	ev.DB.Save(&tutor)
 	return tutor
 }
+
+func (ev *EvalRepository) DeleteAllInvitationsOfCourse(courseId uuid.UUID) error {
+	ev.DB.Where("course_id LIKE ?", courseId).Delete(Invitation{})
+	return nil
+}
+
+//SaveInvitation upserts a term, i.e. if a invitation with this id exists it will be created.
+func (ev *EvalRepository) SaveInvitation(invitation Invitation) Invitation {
+	ev.DB.Save(&invitation)
+	return invitation
+}
+
+func (ev *EvalRepository) FindCourseInvitations(courseId uuid.UUID) ([]Invitation, error) {
+	var invs []Invitation
+	ev.DB.Where("course_id LIKE ?", courseId).Find(&invs)
+	return invs, nil
+}
+
+func (ev *EvalRepository) FindInvitation(id uuid.UUID) (Invitation, error) {
+	var inv Invitation
+	filter := &Invitation{}
+	filter.Id = id
+	ev.DB.Where(filter).First(&inv)
+	return inv, nil
+}
+
+//FindAllCourseProfsForCourse returns all courseProfs profs with id = courseProfId
+func (ev *EvalRepository) FindAllCourseProfsForCourse(courseId uuid.UUID) ([]Prof, error) {
+	var courseprofs []CourseProf
+	ev.DB.Where("course_id LIKE ?", courseId).Find(&courseprofs)
+	profs := make([]Prof, len(courseprofs))
+	for i, cp := range courseprofs {
+		profs[i], _ = ev.FindProf(cp.ProfId)
+		profs[i].Id = cp.Id
+		//BUG(henrik): Privacy
+		profs[i].Censored = false
+		profs[i].CensoredDate = ""
+		profs[i].Email = ""
+	}
+	return profs, nil
+}

@@ -2,6 +2,7 @@ package openapi
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	uuid "github.com/satori/go.uuid"
@@ -140,4 +141,84 @@ func (ev *EvalService) FindCourseTutor(courseId, tutorId uuid.UUID) (Tutor, erro
 
 func (ev *EvalService) FindAllCourseTutors(courseId uuid.UUID) []Tutor {
 	return ev.EvalRepository.FindAllCourseTutors(courseId)
+}
+
+func anyInvitationUsed(invs []Invitation) bool {
+	for _, v := range invs {
+		if v.Used {
+			return true
+		}
+	}
+	return false
+}
+
+//FindOrGenerateCourseInvitations finds or generates Course Invititations based on no of students, if there is a mismatch in numbers, they will be regenerated
+func (ev *EvalService) FindOrGenerateCourseInvitations(courseId uuid.UUID, begin, end string) ([]Invitation, error) {
+	course, _ := ev.EvalRepository.FindCourse(courseId)
+	invs, err := ev.EvalRepository.FindCourseInvitations(courseId)
+	if err != nil {
+		return []Invitation{}, err
+	}
+	if len(invs) != int(course.NumberOfStudents) {
+		log.Println("len(invs)!=course.NumberOfStudents")
+		if anyInvitationUsed(invs) {
+			return []Invitation{}, fmt.Errorf("Some Invitation were already used, cannot savely recreate!")
+		}
+		//Delete
+		err = ev.EvalRepository.DeleteAllInvitationsOfCourse(courseId)
+		if err != nil {
+			return []Invitation{}, err
+		}
+		//create new ones
+		invs = make([]Invitation, course.NumberOfStudents)
+		var i int32
+		log.Println("Generating", begin, end)
+		for i = 0; i < course.NumberOfStudents; i++ {
+			inv := Invitation{ValidBegin: begin, ValidEnd: end, CourseId: courseId, Used: false}
+			invs[i] = ev.EvalRepository.SaveInvitation(inv)
+		}
+	}
+	return invs, nil
+}
+func privaticeTutors(tutors []Tutor) []Tutor {
+	for i := range tutors {
+		tutors[i].Censored = false
+		tutors[i].CensoredDate = ""
+		tutors[i].Email = ""
+		tutors[i].ThirdPartyKey = ""
+	}
+	return tutors
+}
+func (ev *EvalService) RenderInvitationToEmptyForm(invitationID uuid.UUID) (EmptyForm, error) {
+	inv, err := ev.EvalRepository.FindInvitation(invitationID)
+	if inv.Id == uuid.Nil {
+		return EmptyForm{}, fmt.Errorf("No invitation with that ID")
+	}
+	//BUG(henrik): Use right format in parse!
+	beginDateTime, err := time.Parse("2006-01-02", inv.ValidBegin)
+	if err != nil {
+		return EmptyForm{}, err
+	}
+	endDateTime, err := time.Parse("2006-01-02", inv.ValidEnd)
+	if err != nil {
+		return EmptyForm{}, err
+	}
+	if time.Now().Before(beginDateTime) {
+		return EmptyForm{}, fmt.Errorf("invitation not valid")
+	}
+	if time.Now().After(endDateTime) {
+		return EmptyForm{}, fmt.Errorf("invitation not valid")
+	}
+	if inv.Used {
+		return EmptyForm{}, fmt.Errorf("invitation not valid")
+	}
+	emptyForm := EmptyForm{}
+	emptyForm.Id = invitationID
+	emptyForm.Profs, _ = ev.EvalRepository.FindAllCourseProfsForCourse(inv.CourseId) //BUG(henrik): we need the id of courseProf
+	emptyForm.Tutors = privaticeTutors(ev.FindAllCourseTutors(inv.CourseId))
+	emptyForm.Course, _ = ev.FindCourse(inv.CourseId)
+	emptyForm.Course.Tutors = []Tutor{} //protect Identity
+	form, _ := ev.EvalRepository.FindForm(emptyForm.Course.FormId)
+	emptyForm.AbstractForm = form.AbstractForm
+	return emptyForm, nil
 }

@@ -35,5 +35,5 @@ type Course struct {
 	// Describes whether, this course is published to profs and tutors.
 	Clearance string `json:"clearance"`
 
-	Tutors []Tutor `json:"tutors"`
+	Tutors []Tutor `json:"tutors"` //BUG(henrik): Autoload them via GORM
 }

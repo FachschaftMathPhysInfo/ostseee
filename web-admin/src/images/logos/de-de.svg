@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 59 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,-177.358,-11.0325)">
+        <g id="Ebene-1" serif:id="Ebene 1" transform="matrix(1,0,0,1,24.1892,-986.123)">
+            <g id="logo">
+                <g id="text2989-3">
+                </g>
+                <g id="text3199">
+                </g>
+            </g>
+            <g transform="matrix(1,0,0,1,-24.1892,986.123)">
+                <rect x="177.358" y="24.056" width="58.425" height="13.024" style="fill:rgb(227,0,0);"/>
+            </g>
+            <g transform="matrix(1,0,0,1,-24.1892,973.099)">
+                <rect x="177.358" y="24.056" width="58.425" height="13.024"/>
+            </g>
+            <g transform="matrix(1,0,0,1,-24.1892,999.146)">
+                <rect x="177.358" y="24.056" width="58.425" height="13.024" style="fill:rgb(227,199,0);"/>
+            </g>
+        </g>
+    </g>
+</svg>

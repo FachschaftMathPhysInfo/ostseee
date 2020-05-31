@@ -21,14 +21,15 @@ import store from './lib/store';
 
 // import LecturesOverview from './components/LecturesOverview';
 import FormsOverView from './components/FormsOverView';
- import FacultiesOverView from './components/FacultiesOverView';
+import FacultiesOverView from './components/FacultiesOverView';
+import ModulesOverview from './components/ModulesOverview';
 
 
 function App({store}) {
 
   const tabs = [
     {
-      id: 'anonym--id',
+      id: 'lecture--id',
       name: 'Veranstaltungen',
       content: (
         <Fragment>
@@ -37,16 +38,16 @@ function App({store}) {
             <h3>Evaluierte Veranstaltungen</h3>
           </EuiTitle>
           <EuiText>
-            Hier kannst du die Liste aller zu evaluierenden Veranstaltungen einsehen und diese bearbeiten.
+            Hier kannst du die Liste aller zu evaluierenden Veranstaltungen sehen und sie bearbeiten.
+            <ModulesOverview store={store}/>
 
             {/* <LecturesOverview/> */}
-            <FormsOverView store={store}/>
           </EuiText>
         </Fragment>
       ),
     },
     {
-      id: 'sicherheit--id',
+      id: 'term--id',
       name: 'Semester',
       content: (
         <Fragment>
@@ -56,12 +57,13 @@ function App({store}) {
           </EuiTitle>
           <EuiText>
             Hier können alle vergangenen Semester ausgewählt werden.
+            <FacultiesOverView store={store}/>
           </EuiText>
         </Fragment>
       ),
     },
     {
-      id: 'integritaet--id',
+      id: 'prof--id',
       name:"ProfessorInnen",
       content: (
         <Fragment>
@@ -76,7 +78,7 @@ function App({store}) {
       ),
     },
     {
-      id: 'verlaesslichkeit--id',
+      id: 'tutor--id',
       name: 'TutorInnen',
       content: (
         <Fragment>
@@ -91,7 +93,7 @@ function App({store}) {
       ),
     },
     {
-      id: 'verlaesslichkeit--id',
+      id: 'form--id',
       name: 'Bögen',
       content: (
         <Fragment>
@@ -107,7 +109,7 @@ function App({store}) {
       ),
     },
     {
-      id: 'verlaesslichkeit--id',
+      id: 'report--id',
       name: 'Berichte',
       content: (
         <Fragment>
@@ -122,7 +124,7 @@ function App({store}) {
       ),
     },
     {
-      id: 'verlaesslichkeit--id',
+      id: 'hitme--id',
       name: 'Hitmes',
       content: (
         <Fragment>
@@ -169,8 +171,6 @@ function App({store}) {
           </EuiPageContent>
         </EuiPageBody>
       </EuiPage>
-       <FacultiesOverView
-       store={store}></FacultiesOverView> 
     </div>
   );
 }

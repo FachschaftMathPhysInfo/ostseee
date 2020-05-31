@@ -1,20 +1,43 @@
 import * as React from 'react';
-import { Provider } from 'react-redux';
-import { Provider as ReduxQueryProvider } from 'redux-query-react';
+import { Provider, useSelector } from 'react-redux';
+import { Provider as ReduxQueryProvider, useRequest } from 'redux-query-react';
 
-import FormsList from '../components/FormsList';
-import { getQueries } from '../lib/store';
+import {
+  EuiBasicTable,
+  EuiSpacer,
+  EuiText,
+} from "@elastic/eui";
+
+import * as formQueryConfigs from '../query-configs/forms';
+import * as formsSelectors from '../selectors/forms';
+import { Form } from 'ostseee-web-common';
 
 const FormsOverView = props => {
-  return (
-    <Provider store={props.store}>
-      <ReduxQueryProvider queriesSelector={getQueries}>
-        <>
-          <h1>Forms Overview</h1>
-          <FormsList />
-        </>
-      </ReduxQueryProvider>
-    </Provider>
+  useRequest(formQueryConfigs.testGet());
+  const Forms = useSelector(formsSelectors.getForms);
+  console.log(Forms);
+
+  const columns = [
+    {
+      field: 'Lecturer',  // for further arguments, see https://elastic.github.io/eui/#/tabular-content/tables
+      name: 'Lecturer',
+      sortable: true,
+    },
+    {
+      field: 'course', 
+      name: 'Course',
+      truncateText: true,
+    },
+  ];
+
+  return ( 
+    <>
+      <h1>Forms Overview</h1>
+      <EuiBasicTable
+        items={Forms}  // adjust for server request
+        columns={columns}
+      />
+    </>
   );
 };
 

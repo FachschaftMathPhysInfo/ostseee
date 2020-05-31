@@ -21,10 +21,10 @@ import store from './lib/store';
 
 // import LecturesOverview from './components/LecturesOverview';
 import FormsOverView from './components/FormsOverView';
-// import FacultiesOverView from './components/FacultiesOverView';
+ import FacultiesOverView from './components/FacultiesOverView';
 
 
-function App() {
+function App({store}) {
 
   const tabs = [
     {
@@ -40,7 +40,7 @@ function App() {
             Hier kannst du die Liste aller zu evaluierenden Veranstaltungen einsehen und diese bearbeiten.
 
             {/* <LecturesOverview/> */}
-            <FormsOverView/>
+            <FormsOverView store={store}/>
           </EuiText>
         </Fragment>
       ),
@@ -169,8 +169,8 @@ function App() {
           </EuiPageContent>
         </EuiPageBody>
       </EuiPage>
-      {/* <FacultiesOverView
-       store={store}></FacultiesOverView> */}
+       <FacultiesOverView
+       store={store}></FacultiesOverView> 
     </div>
   );
 }

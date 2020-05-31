@@ -13,8 +13,9 @@ import FacultiesOverView from './components/FacultiesOverView';
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={euiVars}>
-    <FacultiesOverView
-       store={store}></FacultiesOverView>
+    <App></App>
+    {/* <FacultiesOverView
+       store={store}></FacultiesOverView> */}
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')

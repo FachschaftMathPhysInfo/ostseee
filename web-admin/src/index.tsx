@@ -7,9 +7,7 @@ import '@elastic/eui/dist/eui_theme_light.css';
 //@ts-ignore
 import styled, { ThemeProvider } from 'styled-components';
 import * as euiVars from '@elastic/eui/dist/eui_theme_light.json';
-import FormsOverView from './components/FormsOverView';
 import store, { getQueries } from './lib/store';
-import FacultiesOverView from './components/FacultiesOverView';
 import { Provider } from 'react-redux';
 import { Provider as ReduxQueryProvider } from 'redux-query-react';
 
@@ -18,15 +16,14 @@ ReactDOM.render(
   <React.StrictMode>
     
     <ThemeProvider theme={euiVars}>
-    <Provider store={store}>
-      <ReduxQueryProvider queriesSelector={getQueries}>
-    
-          <App store={store}></App>
-      </ReduxQueryProvider>
-    </Provider>
-    {/* <FacultiesOverView
-       store={store}></FacultiesOverView> */}
+      <Provider store={store}>
+        <ReduxQueryProvider queriesSelector={getQueries}>
+      
+            <App store={store}></App>
+        </ReduxQueryProvider>
+      </Provider>
     </ThemeProvider>
+    
   </React.StrictMode>,
   document.getElementById('root')
 );

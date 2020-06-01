@@ -19,10 +19,11 @@ import {
 import './App.css';
 import store from './lib/store';
 
-// import LecturesOverview from './components/LecturesOverview';
-import FormsOverView from './components/FormsOverView';
-import FacultiesOverView from './components/FacultiesOverView';
+//@ts-ignore
+import FormsOverview from './components/FormsOverview';
+import ProfOverview from './components/ProfOverview';
 import ModulesOverview from './components/ModulesOverview';
+import TermsOverview from './components/TermsOverview';
 
 
 function App({store}) {
@@ -41,7 +42,6 @@ function App({store}) {
             Hier kannst du die Liste aller zu evaluierenden Veranstaltungen sehen und sie bearbeiten.
             <ModulesOverview store={store}/>
 
-            {/* <LecturesOverview/> */}
           </EuiText>
         </Fragment>
       ),
@@ -57,7 +57,7 @@ function App({store}) {
           </EuiTitle>
           <EuiText>
             Hier können alle vergangenen Semester ausgewählt werden.
-            <FacultiesOverView store={store}/>
+            <TermsOverview store={store}/>
           </EuiText>
         </Fragment>
       ),
@@ -73,6 +73,7 @@ function App({store}) {
           </EuiTitle>
           <EuiText>
             Eine Liste aller zu evaluierenden ProfessorInnen.
+            <ProfOverview store={store}/>
           </EuiText>
         </Fragment>
       ),
@@ -103,7 +104,7 @@ function App({store}) {
           </EuiTitle>
           <EuiText>
             Hier erscheinen die fertig asugefüllten Bögen zu allen Veranstaltungen.
-
+            <FormsOverview store={store}/>
           </EuiText>
         </Fragment>
       ),

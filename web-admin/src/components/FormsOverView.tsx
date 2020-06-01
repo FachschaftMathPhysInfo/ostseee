@@ -12,8 +12,8 @@ import * as formQueryConfigs from '../query-configs/forms';
 import * as formsSelectors from '../selectors/forms';
 import { Form } from 'ostseee-web-common';
 
-const FormsOverView = props => {
-  useRequest(formQueryConfigs.testGet());
+const FormsOverview = props => {
+  useRequest(formQueryConfigs.formsGet());
   const Forms = useSelector(formsSelectors.getForms);
   console.log(Forms);
 
@@ -41,4 +41,4 @@ const FormsOverView = props => {
   );
 };
 
-export default FormsOverView;
+export default FormsOverview;

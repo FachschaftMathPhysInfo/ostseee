@@ -15,8 +15,22 @@ type Answer struct {
 	QuestionaireId uuid.UUID `gorm:"type:uuid;" json:"questionaireId"`
 
 	QuestionId uuid.UUID `gorm:"type:uuid;" json:"questionId"`
+	//BUG(henrik): Concerns must be integrated into the api
+	Concerns uuid.UUID `gorm:"type:uuid;" json:"repeatFor"`
 
 	NotApplicable bool `json:"notApplicable"`
 
 	Values []string `gorm:"-" json:"values"`
+}
+
+type SingleAnswer struct {
+	QuestionaireId uuid.UUID `gorm:"type:uuid;" json:"questionaireId"`
+
+	QuestionId uuid.UUID `gorm:"type:uuid;" json:"questionId"`
+	//BUG(henrik): Concerns must be integrated into the api
+	Concerns uuid.UUID `gorm:"type:uuid;" json:"repeatFor"`
+
+	NotApplicable bool `json:"notApplicable"`
+
+	Value string `json:"value"`
 }

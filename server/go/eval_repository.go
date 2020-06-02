@@ -1,6 +1,8 @@
 package openapi
 
 import (
+	"fmt"
+
 	"github.com/jinzhu/gorm"
 	uuid "github.com/satori/go.uuid"
 )
@@ -53,7 +55,7 @@ func (ev *EvalRepository) FindForm(id uuid.UUID) (Form, error) {
 	var form Form
 	filter := &Form{}
 	filter.Id = id
-	ev.DB.Where(filter).First(&form)
+	ev.DB.Set("gorm:auto_preload", true).Where(filter).First(&form)
 	return form, nil
 }
 
@@ -266,4 +268,39 @@ func (ev *EvalRepository) FindAllCourseProfsForCourse(courseId uuid.UUID) ([]Pro
 		profs[i].Email = ""
 	}
 	return profs, nil
+}
+
+func (ev *EvalRepository) InvalidateInvitationAndCommitQuestionaire(invitationId uuid.UUID, quest Questionaire) error {
+	// begin a transaction
+	tx := ev.DB.Begin()
+
+	// create questionaire, with new random id
+	quest.Id = uuid.Nil
+	tx.Create(&quest)
+	for _, ans := range quest.Answers {
+		if ans.NotApplicable {
+			singleAnsw := SingleAnswer{Concerns: ans.Concerns, Value: "", QuestionId: ans.QuestionId, QuestionaireId: quest.Id, NotApplicable: ans.NotApplicable}
+			tx.Create(&singleAnsw)
+		} else {
+			for _, val := range ans.Values {
+				singleAnsw := SingleAnswer{Concerns: ans.Concerns, Value: val, QuestionId: ans.QuestionId, QuestionaireId: quest.Id, NotApplicable: ans.NotApplicable}
+				tx.Create(&singleAnsw)
+			}
+		}
+	}
+	// ...
+	var inv Invitation
+	filter := &Invitation{}
+	filter.Id = invitationId
+	tx.Where(filter).First(&inv)
+	// rollback the transaction in case of used questionaire
+	if inv.Used {
+		tx.Rollback()
+		return fmt.Errorf("already used")
+	}
+	inv.Used = true
+	tx.Save(&inv)
+	// Or commit on success
+	tx.Commit()
+	return nil
 }

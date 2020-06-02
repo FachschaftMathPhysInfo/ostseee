@@ -3,6 +3,7 @@ package openapi
 import (
 	"fmt"
 	"log"
+	"strconv"
 	"time"
 
 	uuid "github.com/satori/go.uuid"
@@ -221,4 +222,85 @@ func (ev *EvalService) RenderInvitationToEmptyForm(invitationID uuid.UUID) (Empt
 	form, _ := ev.EvalRepository.FindForm(emptyForm.Course.FormId)
 	emptyForm.AbstractForm = form.AbstractForm
 	return emptyForm, nil
+}
+func FormQuestionsToMap(form Form) map[uuid.UUID]Question {
+	res := make(map[uuid.UUID]Question)
+	for _, p := range form.AbstractForm.Pages {
+		for _, s := range p.Sections {
+			for _, q := range s.Questions {
+				res[q.Id] = q
+			}
+		}
+	}
+	return res
+}
+func contains(options []Option, value string) bool {
+	for _, opt := range options {
+		if strconv.Itoa(int(opt.Value)) == value {
+			return true
+		}
+	}
+	return false
+}
+func (ev *EvalService) ValidateAndSaveQuestionaire(invitationId uuid.UUID, quest Questionaire) error {
+	inv, err := ev.EvalRepository.FindInvitation(invitationId)
+	if err != nil {
+		return err
+	}
+	//BUG(henrik): Use right format in parse!
+	beginDateTime, err := time.Parse("2006-01-02", inv.ValidBegin)
+	if err != nil {
+		return err
+	}
+	endDateTime, err := time.Parse("2006-01-02", inv.ValidEnd)
+	if err != nil {
+		return err
+	}
+	if time.Now().Before(beginDateTime) {
+		return fmt.Errorf("invitation not valid")
+	}
+	if time.Now().After(endDateTime) {
+		return fmt.Errorf("invitation not valid")
+	}
+	if inv.Used {
+		return fmt.Errorf("invitation not valid")
+	}
+	//load questions
+	course, err := ev.EvalRepository.FindCourse(inv.CourseId)
+	if err != nil {
+		return err
+	}
+	form, err := ev.EvalRepository.FindForm(course.FormId)
+	questions := FormQuestionsToMap(form)
+	for _, answer := range quest.Answers {
+		quest := questions[answer.QuestionId]
+		//now check - if load was sucessfull
+		if quest.Id == uuid.Nil {
+			return fmt.Errorf("Question not found")
+		}
+		// check
+		if !quest.HasNotApplicableOption && answer.NotApplicable {
+			return fmt.Errorf("not applicable not allowed")
+		}
+		if !quest.IsMulti && !quest.IsComment && len(answer.Values) > 1 {
+			return fmt.Errorf("len(answer.Values)>1 on single choice")
+		}
+		if !quest.IsComment && !quest.HasOtherOption {
+			//check if all values are in options
+			for _, val := range answer.Values {
+				if !contains(quest.Options, val) {
+					return fmt.Errorf("Wrong value supplied")
+				}
+			}
+		}
+		//BUG(henrik): check if ids of referenced is right
+		if answer.Concerns == uuid.Nil {
+			return fmt.Errorf("Answer is not marked to a specific object")
+		}
+		delete(questions, answer.QuestionId)
+	}
+
+	//now we are ready to commit to db
+
+	return ev.EvalRepository.InvalidateInvitationAndCommitQuestionaire(invitationId, quest)
 }

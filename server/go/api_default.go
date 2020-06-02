@@ -573,7 +573,26 @@ func (ev *EvalAPI) QuestionaireInvitationIdGet(c *gin.Context) {
 
 // QuestionaireInvitationIdPost -
 func (ev *EvalAPI) QuestionaireInvitationIdPost(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	var questionaire Questionaire
+	err := c.BindJSON(&questionaire)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	invId, err := uuid.FromString(c.Param("invitationId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	err = ev.EvalService.ValidateAndSaveQuestionaire(invId, questionaire)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.Status(http.StatusNoContent)
 }
 
 // TermsGet -

@@ -19,6 +19,12 @@ import { exists, mapValues } from '../runtime';
  */
 export interface Answer  {
     /**
+     * Id of courseprof, course o tutor the question is ment for.
+     * @type {string}
+     * @memberof Answer
+     */
+    concerns?: string;
+    /**
      * 
      * @type {string}
      * @memberof Answer
@@ -46,6 +52,7 @@ export interface Answer  {
 
 export function AnswerFromJSON(json: any): Answer {
     return {
+        'concerns': !exists(json, 'concerns') ? undefined : json['concerns'],
         'questionaireId': json['questionaireId'],
         'questionId': json['questionId'],
         'notApplicable': json['notApplicable'],
@@ -58,6 +65,7 @@ export function AnswerToJSON(value?: Answer): any {
         return undefined;
     }
     return {
+        'concerns': value.concerns,
         'questionaireId': value.questionaireId,
         'questionId': value.questionId,
         'notApplicable': value.notApplicable,

@@ -16,7 +16,7 @@ type Answer struct {
 
 	QuestionId uuid.UUID `gorm:"type:uuid;" json:"questionId"`
 	//BUG(henrik): Concerns must be integrated into the api
-	Concerns uuid.UUID `gorm:"type:uuid;" json:"repeatFor"`
+	Concerns uuid.UUID `gorm:"type:uuid;" json:"concerns"`
 
 	NotApplicable bool `json:"notApplicable"`
 
@@ -28,7 +28,7 @@ type SingleAnswer struct {
 
 	QuestionId uuid.UUID `gorm:"type:uuid;" json:"questionId"`
 	//BUG(henrik): Concerns must be integrated into the api
-	Concerns uuid.UUID `gorm:"type:uuid;" json:"repeatFor"`
+	Concerns uuid.UUID `gorm:"type:uuid;" json:"concerns"`
 
 	NotApplicable bool `json:"notApplicable"`
 

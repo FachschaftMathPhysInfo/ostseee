@@ -959,6 +959,9 @@ components:
         - answers
     Answer:
       properties:
+        concerns:
+          type: string
+          description: Id of courseprof, course o tutor the question is ment for.
         questionaireId:
           type: string
         questionId:

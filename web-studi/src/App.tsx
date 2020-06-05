@@ -38,6 +38,7 @@ import { EuiProgress } from '@elastic/eui';
 import { EuiPortal } from '@elastic/eui';
 import { EuiSuperSelect } from '@elastic/eui';
 import { EuiHeaderSection } from '@elastic/eui';
+import { EuiButtonGroup } from '@elastic/eui';
 function App() {
   const [isFlyoutPrivacyVisible, setIsFlyoutPrivacyVisible] = useState(false);
 
@@ -138,6 +139,24 @@ function App() {
   const onChangeSection = value => {
     setSection(value);
   };
+  const languageOptions = [
+    {
+      id: `language0`,
+      label: 'de',
+      iconType: logoDe,
+    },
+    {
+      id: `language1`,
+      label: 'en',
+      iconType: logoEn,
+    },
+  ];
+  const [languageSelected, setSelectedLanguageId] = useState('language0');
+  const [idToSelectedLanguageMap, setIdToSelectedLanguageMap] = useState({'language0':true});
+  const onChangeLanguage = languageId => {
+    setSelectedLanguageId(languageId);
+  };
+
   const Headersections = [
     {
       items: [
@@ -163,10 +182,21 @@ function App() {
     },
     {
       items: [
+        // <div style={{ padding: 16 }}>
+          // <EuiButtonIcon iconType={logoDe} iconSize="l" disabled={true}></EuiButtonIcon>
+          // <EuiButtonIcon iconType={logoEn} disabled={false}></EuiButtonIcon>
+        // </div>,
         <div style={{ padding: 16 }}>
-          <EuiButtonIcon iconType={logoDe} iconSize="l" disabled={true}></EuiButtonIcon>
-          <EuiButtonIcon iconType={logoEn} disabled={false}></EuiButtonIcon>
-        </div>,
+          <EuiButtonGroup buttonSize="m"
+            legend="select language"
+            options={languageOptions}
+            idSelected={languageSelected}
+            idToSelectedMap={idToSelectedLanguageMap}
+            onChange={id => onChangeLanguage(id)}
+            type="single"
+            isIconOnly
+          />
+        </div>
       ],
     },
   ];

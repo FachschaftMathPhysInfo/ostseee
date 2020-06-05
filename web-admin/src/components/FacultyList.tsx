@@ -11,11 +11,12 @@ const FacultiesList = props => {
   const Faculties = useSelector(facultysSelectors.getFaculties);
     console.log(Faculties);
   return (
-    <>Hallo<ol>
+    <>
+    {/* Hallo<ol>
       {Faculties.slice(0, 30).map((faculty:Faculty) => (
         <li>{faculty.id}:{faculty.name}</li>
       ))}
-    </ol>
+    </ol> */}
     </>
   );
 };

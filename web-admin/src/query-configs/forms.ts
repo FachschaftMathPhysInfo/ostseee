@@ -1,5 +1,5 @@
 import * as t from 'ostseee-web-common/dist/modules/es2017/index';
-export const testGet =()=>{
+export const formsGet =()=>{
     return t.formsGet({
         transform:(val: any)=>{
             console.log(val);

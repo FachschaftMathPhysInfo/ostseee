@@ -9,20 +9,19 @@ import {
 } from "@elastic/eui";
 
 import { getQueries } from '../lib/store';
-import FacultyCreateDialog from './FacultyCreateDialog';
 
-import * as facultyQueryConfigs from '../query-configs/faculties';
-import * as facultysSelectors from '../selectors/faculties';
-import { Faculty } from 'ostseee-web-common';
+import * as profQueryConfigs from '../query-configs/profs';
+import * as profSelectors from '../selectors/profs';
+import { Prof } from 'ostseee-web-common';
 
-const FacultiesOverview = props => {
-  useRequest(facultyQueryConfigs.facultiesGet());
-  const Faculties = useSelector(facultysSelectors.getFaculties);
+const ProfOverview = props => {
+  useRequest(profQueryConfigs.profsGet());
+  const Profs = useSelector(profSelectors.getProfs);
 
   const columns = [
     {
       field: 'name',  // for further arguments, see https://elastic.github.io/eui/#/tabular-content/tables
-      name: 'Faculty',
+      name: 'Prof',
       sortable: true,
     },
     {
@@ -34,14 +33,13 @@ const FacultiesOverview = props => {
 
   return (
     <>
-      <h1>Faculty Overview</h1>
+      <h1>Prof Overview</h1>
       <EuiBasicTable
-        items={Faculties}  // adjust for server request
+        items={Profs}  // adjust for server request
         columns={columns}
       />
-      <FacultyCreateDialog></FacultyCreateDialog>
     </>
   );
 };
 
-export default FacultiesOverview;
+export default ProfOverview;

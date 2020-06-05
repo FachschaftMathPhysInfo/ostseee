@@ -45,6 +45,7 @@ function App() {
   const closeFlyoutPrivacy = () => setIsFlyoutPrivacyVisible(false);
 
   const showFlyoutPrivacy = () => setIsFlyoutPrivacyVisible(true);
+  const toggleFlyoutPrivacy = () => setIsFlyoutPrivacyVisible(!isFlyoutPrivacyVisible);
   let flyoutPrivacy;
   if (isFlyoutPrivacyVisible) {
     flyoutPrivacy = (
@@ -70,6 +71,7 @@ function App() {
   const closeFlyoutLegal = () => setIsFlyoutLegalVisible(false);
 
   const showFlyoutLegal = () => setIsFlyoutLegalVisible(true);
+  const toggleFlyoutLegal = () => setIsFlyoutLegalVisible(!isFlyoutLegalVisible);
   let flyoutLegal;
   if (isFlyoutLegalVisible) {
     flyoutLegal = (
@@ -323,10 +325,10 @@ function App() {
       <EuiSpacer size="xl" />
       <EuiFlexGroup gutterSize="s" alignItems="center">
       <EuiFlexItem grow={false}>
-              <EuiButton onClick={showFlyoutPrivacy}>Datenschutz</EuiButton>
+              <EuiButton onClick={toggleFlyoutPrivacy}>Datenschutz</EuiButton>
               </EuiFlexItem>
               <EuiFlexItem grow={false}>
-            <EuiButton onClick={showFlyoutLegal}>Impressum</EuiButton>
+            <EuiButton onClick={toggleFlyoutLegal}>Impressum</EuiButton>
             </EuiFlexItem>
             </EuiFlexGroup>
                 </EuiPageContentBody>

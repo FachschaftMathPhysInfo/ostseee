@@ -18,8 +18,7 @@ ReactDOM.render(
     <ThemeProvider theme={euiVars}>
       <Provider store={store}>
         <ReduxQueryProvider queriesSelector={getQueries}>
-      
-            <App store={store}></App>
+          <App store={store}></App>
         </ReduxQueryProvider>
       </Provider>
     </ThemeProvider>

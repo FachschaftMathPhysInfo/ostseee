@@ -10,8 +10,12 @@
 package openapi
 
 import (
+	"log"
 	"net/http"
+	"os"
+	"time"
 
+	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
@@ -34,7 +38,22 @@ type Routes []Route
 // NewRouter returns a new router.
 func NewRouter(Db *gorm.DB) *gin.Engine {
 	evalAPI := initEvalAPI(Db)
-	var routes = Routes{
+	var unsecuredRoutes = Routes{
+		{
+			"QuestionaireInvitationIdGet",
+			http.MethodGet,
+			"/v1/questionaire/:invitationId",
+			evalAPI.QuestionaireInvitationIdGet,
+		},
+
+		{
+			"QuestionaireInvitationIdPost",
+			http.MethodPost,
+			"/v1/questionaire/:invitationId",
+			evalAPI.QuestionaireInvitationIdPost,
+		},
+	}
+	var securedRoutes = Routes{
 		{
 			"Index",
 			http.MethodGet,
@@ -300,21 +319,6 @@ func NewRouter(Db *gorm.DB) *gin.Engine {
 			"/v1/profs/:profId",
 			evalAPI.ProfsProfIdPatch,
 		},
-
-		{
-			"QuestionaireInvitationIdGet",
-			http.MethodGet,
-			"/v1/questionaire/:invitationId",
-			evalAPI.QuestionaireInvitationIdGet,
-		},
-
-		{
-			"QuestionaireInvitationIdPost",
-			http.MethodPost,
-			"/v1/questionaire/:invitationId",
-			evalAPI.QuestionaireInvitationIdPost,
-		},
-
 		{
 			"TermsGet",
 			http.MethodGet,
@@ -350,7 +354,118 @@ func NewRouter(Db *gorm.DB) *gin.Engine {
 			evalAPI.TermsTermIdReportGet,
 		},
 	}
+
 	router := gin.Default()
+	addRoutes(router, unsecuredRoutes)
+	if _, jwtEnabled := os.LookupEnv("JWT_ENABLED"); jwtEnabled {
+		authMiddleware := initJWT()
+		router.POST("/v1/login", authMiddleware.LoginHandler)
+		router.GET("/v1/refresh_token", authMiddleware.RefreshHandler)
+		router.Use(authMiddleware.MiddlewareFunc())
+	}
+	addRoutes(router, securedRoutes)
+	return router
+}
+
+// Index is the index handler.
+func Index(c *gin.Context) {
+	c.String(http.StatusOK, "Hello World!")
+}
+
+type login struct {
+	Username string `form:"username" json:"username" binding:"required"`
+	Password string `form:"password" json:"password" binding:"required"`
+}
+
+// User demo
+type User struct {
+	UserName  string
+	FirstName string
+	LastName  string
+}
+
+var identityKey = "id"
+
+func initJWT() *jwt.GinJWTMiddleware {
+	// the jwt middleware
+	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
+		Realm:       "Evaluation",
+		Key:         []byte(os.Getenv("JWT_SECRET_KEY")),
+		Timeout:     time.Hour,
+		MaxRefresh:  time.Hour,
+		IdentityKey: identityKey,
+		PayloadFunc: func(data interface{}) jwt.MapClaims {
+			if v, ok := data.(*User); ok {
+				return jwt.MapClaims{
+					identityKey: v.UserName,
+				}
+			}
+			return jwt.MapClaims{}
+		},
+		IdentityHandler: func(c *gin.Context) interface{} {
+			claims := jwt.ExtractClaims(c)
+			return &User{
+				UserName: claims[identityKey].(string),
+			}
+		},
+		Authenticator: func(c *gin.Context) (interface{}, error) {
+			var loginVals login
+			if err := c.ShouldBind(&loginVals); err != nil {
+				return "", jwt.ErrMissingLoginValues
+			}
+			userID := loginVals.Username
+			password := loginVals.Password
+			//BUG(henrik): Replace with db lookup!
+			if userID == os.Getenv("ADMIN_USER_ID") && password == os.Getenv("ADMIN_USER_PASSWORD") {
+				return &User{
+					UserName:  userID,
+					LastName:  "Admin",
+					FirstName: "John",
+				}, nil
+			}
+
+			return nil, jwt.ErrFailedAuthentication
+		},
+		Authorizator: func(data interface{}, c *gin.Context) bool {
+			//BUG(henrik): Replace with db/casbin lookup!
+			if v, ok := data.(*User); ok && v.UserName == os.Getenv("ADMIN_USER_ID") {
+				return true
+			}
+
+			return false
+		},
+		Unauthorized: func(c *gin.Context, code int, message string) {
+			c.JSON(code, gin.H{
+				"code":    code,
+				"message": message,
+			})
+		},
+		// TokenLookup is a string in the form of "<source>:<name>" that is used
+		// to extract token from the request.
+		// Optional. Default value "header:Authorization".
+		// Possible values:
+		// - "header:<name>"
+		// - "query:<name>"
+		// - "cookie:<name>"
+		// - "param:<name>"
+		TokenLookup: "header: Authorization, query: token, cookie: jwt",
+		// TokenLookup: "query:token",
+		// TokenLookup: "cookie:token",
+
+		// TokenHeadName is a string in the header. Default value is "Bearer"
+		TokenHeadName: "Bearer",
+
+		// TimeFunc provides the current time. You can override it to use another time value. This is useful for testing or if your server uses a different time zone than your tokens.
+		TimeFunc: time.Now,
+	})
+
+	if err != nil {
+		log.Fatal("JWT Error:" + err.Error())
+	}
+	return authMiddleware
+}
+
+func addRoutes(router *gin.Engine, routes Routes) {
 	for _, route := range routes {
 		switch route.Method {
 		case http.MethodGet:
@@ -366,10 +481,4 @@ func NewRouter(Db *gorm.DB) *gin.Engine {
 		}
 	}
 
-	return router
-}
-
-// Index is the index handler.
-func Index(c *gin.Context) {
-	c.String(http.StatusOK, "Hello World!")
 }

@@ -30,10 +30,15 @@ import './App.css';
 import store from './lib/store';
 
 //@ts-ignore
-import FormsOverview from './components/FormsOverview';
+import FormsOverview from './components/FormsOverView';
 import ProfOverview from './components/ProfOverview';
 import ModulesOverview from './components/ModulesOverview';
 import TermsOverview from './components/TermsOverview';
+import { EuiCollapsibleNavGroup } from '@elastic/eui';
+import { EuiCollapsibleNav } from '@elastic/eui';
+import EuiCustomLink from './EuiCustomLink';
+import { Route, Switch, useHistory } from 'react-router';
+import ProfDetail from './components/ProfDetail';
 
 
 function App({store}) {
@@ -85,27 +90,12 @@ function App({store}) {
       },
     },
   ]
-
+  const history = useHistory();
   const profLink = [
     {
       label: 'Professoren',
       iconType: 'user',
-      flyoutMenu: {
-        title: 'Professoren',
-        listItems: [
-          {
-            label: 'Nature Plugin (image as icon)',
-            href: '#/layout/nav-drawer',
-            icon: (
-              <EuiImage
-                size="s"
-                alt="Random nature image"
-                url="https://source.unsplash.com/300x300/?Nature"
-              />
-            ),
-          },
-        ],
-      },
+      onClick:()=>{history.push("/profs")}
     },
   ];
 
@@ -318,11 +308,32 @@ function App({store}) {
       ),
     },
   ];
-
+  const [navIsOpen,setNavIsOpen] = useState(false);
+  const navbar = (<EuiCollapsibleNav isOpen={navIsOpen}  
+    onClose={() => setNavIsOpen(false)}
+    isDocked={true}
+    button={
+      <EuiHeaderSectionItemButton
+        aria-label="Toggle main navigation"
+        onClick={() => setNavIsOpen(!navIsOpen)}>
+        <EuiIcon type={'menu'} size="m" aria-hidden="true" />
+      </EuiHeaderSectionItemButton>
+    }>
+    <EuiCollapsibleNavGroup >
+      <EuiCustomLink to={"/modules"} >Modules</EuiCustomLink>
+      <EuiNavDrawerGroup listItems={moduleLink} />
+      <EuiNavDrawerGroup listItems={profLink} />
+    </EuiCollapsibleNavGroup>
+    </EuiCollapsibleNav>)
+  const leftbar=[navbar,(<EuiHeaderLogo iconType={mathphysinfoLogo}></EuiHeaderLogo>)]
   return (
     <div className="App">
-      <EuiHeader>
-        <EuiHeaderLogo iconType={mathphysinfoLogo}></EuiHeaderLogo>
+      <EuiHeader sections={[
+              {
+                items: leftbar,
+                borders: 'none',
+              },]}>
+        
       </EuiHeader>
 
       {/* Tab View */}
@@ -351,39 +362,26 @@ function App({store}) {
           </EuiPageContent>
         </EuiPageBody>
       </EuiPage> */}
-
-      <EuiNavDrawer ref={navDrawerRef}>
-        <EuiNavDrawerGroup listItems={termLink} />
-        <EuiNavDrawerGroup listItems={moduleLink} />
-        <EuiNavDrawerGroup listItems={profLink} />
-        <EuiNavDrawerGroup listItems={tutorLink} />
-        <EuiNavDrawerGroup listItems={formLink} />
-        <EuiNavDrawerGroup listItems={reportLink} />
-        <EuiNavDrawerGroup listItems={hitmeLink} />
-      </EuiNavDrawer>
-      <EuiPage className="euiNavDrawerPage">
-        <EuiPageBody className="euiNavDrawerPage__pageBody">
-          <EuiPageHeader>
-            <EuiPageHeaderSection>
-              <EuiTitle size="l">
-                <h1>Page title</h1>
-              </EuiTitle>
-            </EuiPageHeaderSection>
-          </EuiPageHeader>
-          <EuiPageContent>
-            <EuiPageContentHeader>
-              <EuiPageContentHeaderSection>
-                <EuiTitle>
-                  <h2>Content title</h2>
-                </EuiTitle>
-              </EuiPageContentHeaderSection>
-            </EuiPageContentHeader>
-            <EuiPageContentBody>
-              {/* Tables to show */}
-            </EuiPageContentBody>
-          </EuiPageContent>
-        </EuiPageBody>
-      </EuiPage>  
+      <Switch>
+          <Route path="/about">
+            About
+          </Route>
+          <Route path="/modules">
+           test
+          </Route>
+          <Route path="/profs/:profId">
+            <ProfDetail></ProfDetail>
+          </Route>
+          <Route path="/profs">
+           feset
+          </Route>
+          
+          <Route path="/">
+            willkommen
+            <EuiCustomLink to={`/profs/${32}`}>Hier</EuiCustomLink>
+          </Route>
+        </Switch>
+      
     </div>
   );
 }

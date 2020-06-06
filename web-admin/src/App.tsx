@@ -1,8 +1,14 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useRef, Fragment } from 'react';
 import mathphysinfoLogo from './images/logos/mathphysinfo.svg';
 import {
+  EuiButton,
+  EuiIcon,
+  EuiImage,
   EuiHeader,
   EuiHeaderLogo,
+  EuiHeaderSection,
+  EuiHeaderSectionItem,
+  EuiHeaderSectionItemButton,
   EuiPage,
   EuiPageBody,
   EuiPageContent,
@@ -10,7 +16,11 @@ import {
   EuiPageContentHeader,
   EuiPageContentHeaderSection,
   EuiPageHeader,
-  EuiPageHeaderSection,
+  EuiPageHeaderSection,  
+  //@ts-ignore
+  EuiNavDrawerGroup,
+    //@ts-ignore
+  EuiNavDrawer,
   EuiSpacer,
   EuiText,
   EuiTitle,
@@ -20,13 +30,181 @@ import './App.css';
 import store from './lib/store';
 
 //@ts-ignore
-import FormsOverview from './components/FormsOverView';
+import FormsOverview from './components/FormsOverview';
 import ProfOverview from './components/ProfOverview';
 import ModulesOverview from './components/ModulesOverview';
 import TermsOverview from './components/TermsOverview';
 
 
 function App({store}) {
+
+  const navDrawerRef = useRef(null);
+
+  const termLink = [
+    {
+      label: 'Semester',
+      iconType: 'calendar',
+      flyoutMenu: {
+        title: 'Semester',
+        listItems: [
+          {
+            label: 'Nature Plugin (image as icon)',
+            href: '#/layout/nav-drawer',
+            icon: (
+              <EuiImage
+                size="s"
+                alt="Random nature image"
+                url="https://source.unsplash.com/300x300/?Nature"
+              />
+            ),
+          },
+        ],
+      },
+    },
+  ]
+
+  const moduleLink = [
+    {
+      label: 'Veranstaltungen',
+      iconType: 'managementApp',
+      flyoutMenu: {
+        title: 'Veranstaltungen',
+        listItems: [
+          {
+            label: 'Liste aller Veranstaltungen',
+            href: '#/components/ModulesOverview',
+            icon: (
+              <EuiImage
+                size="s"
+                alt="Random nature image"
+                url="https://source.unsplash.com/300x300/?Nature"
+              />
+            ),
+          },
+        ],
+      },
+    },
+  ]
+
+  const profLink = [
+    {
+      label: 'Professoren',
+      iconType: 'user',
+      flyoutMenu: {
+        title: 'Professoren',
+        listItems: [
+          {
+            label: 'Nature Plugin (image as icon)',
+            href: '#/layout/nav-drawer',
+            icon: (
+              <EuiImage
+                size="s"
+                alt="Random nature image"
+                url="https://source.unsplash.com/300x300/?Nature"
+              />
+            ),
+          },
+        ],
+      },
+    },
+  ];
+
+  const tutorLink = [
+    {
+      label: 'Tutoren',
+      iconType: 'training',
+      flyoutMenu: {
+        title: 'Tutoren',
+        listItems: [
+          {
+            label: 'Discover',
+            href: '#/layout/nav-drawer',
+            iconType: 'discoverApp',
+            extraAction: {
+              color: 'subdued',
+              iconType: 'starEmpty',
+              iconSize: 's',
+              'aria-label': 'Add Discover to favorites',
+            },
+          },
+        ],
+      },
+    },
+  ];
+
+  const formLink = [
+    {
+      label: 'Bögen',
+      iconType: 'reportingApp',
+      flyoutMenu: {
+        title: 'Bögen',
+        listItems: [
+          {
+            label: 'SIEM',
+            href: '#/layout/nav-drawer',
+            iconType: 'securityApp',
+          },
+          {
+            label: 'Endpoints',
+            href: '#/layout/nav-drawer',
+            iconType: 'securityAnalyticsApp',
+            extraAction: {
+              color: 'subdued',
+              iconType: 'starEmpty',
+              iconSize: 's',
+              'aria-label': 'Add SIEM to favorites',
+            },
+          },
+        ],
+      },
+    },
+  ];
+
+  const reportLink = [
+    {
+      label: 'Berichte',
+      iconType: 'notebookApp',
+      flyoutMenu: {
+        title: 'Berichte',
+        listItems: [
+          {
+            label: 'Site search',
+            href: '#/layout/nav-drawer',
+            iconType: 'searchProfilerApp',
+            extraAction: {
+              color: 'subdued',
+              iconType: 'starEmpty',
+              iconSize: 's',
+              'aria-label': 'Add Enterprise search to favorites',
+            },
+          },
+        ],
+      },
+    },
+  ];
+
+  const hitmeLink = [
+    {
+      label: 'HitMe',
+      iconType: 'pencil',
+      flyoutMenu: {
+        title: 'HitMe',
+        listItems: [
+          {
+            label: 'Logs',
+            href: '#/layout/nav-drawer',
+            iconType: 'logsApp',
+            extraAction: {
+              color: 'subdued',
+              iconType: 'starEmpty',
+              iconSize: 's',
+              'aria-label': 'Add Logs to favorites',
+            },
+          },
+        ],
+      },
+    },
+  ];
 
   const tabs = [
     {
@@ -147,7 +325,8 @@ function App({store}) {
         <EuiHeaderLogo iconType={mathphysinfoLogo}></EuiHeaderLogo>
       </EuiHeader>
 
-      <EuiPage>
+      {/* Tab View */}
+      {/* <EuiPage>
         <EuiPageBody component="div">
           <EuiPageHeader>
             <EuiPageHeaderSection>
@@ -171,7 +350,40 @@ function App({store}) {
             </EuiPageContentBody>
           </EuiPageContent>
         </EuiPageBody>
-      </EuiPage>
+      </EuiPage> */}
+
+      <EuiNavDrawer ref={navDrawerRef}>
+        <EuiNavDrawerGroup listItems={termLink} />
+        <EuiNavDrawerGroup listItems={moduleLink} />
+        <EuiNavDrawerGroup listItems={profLink} />
+        <EuiNavDrawerGroup listItems={tutorLink} />
+        <EuiNavDrawerGroup listItems={formLink} />
+        <EuiNavDrawerGroup listItems={reportLink} />
+        <EuiNavDrawerGroup listItems={hitmeLink} />
+      </EuiNavDrawer>
+      <EuiPage className="euiNavDrawerPage">
+        <EuiPageBody className="euiNavDrawerPage__pageBody">
+          <EuiPageHeader>
+            <EuiPageHeaderSection>
+              <EuiTitle size="l">
+                <h1>Page title</h1>
+              </EuiTitle>
+            </EuiPageHeaderSection>
+          </EuiPageHeader>
+          <EuiPageContent>
+            <EuiPageContentHeader>
+              <EuiPageContentHeaderSection>
+                <EuiTitle>
+                  <h2>Content title</h2>
+                </EuiTitle>
+              </EuiPageContentHeaderSection>
+            </EuiPageContentHeader>
+            <EuiPageContentBody>
+              {/* Tables to show */}
+            </EuiPageContentBody>
+          </EuiPageContent>
+        </EuiPageBody>
+      </EuiPage>  
     </div>
   );
 }

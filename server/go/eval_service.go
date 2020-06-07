@@ -242,6 +242,16 @@ func contains(options []Option, value string) bool {
 	}
 	return false
 }
+func isIn(u uuid.UUID, uuids []uuid.UUID) bool {
+	for _, v := range uuids {
+		if u == v {
+			return true
+		}
+	}
+	return false
+}
+
+//ValidateAndSaveQuestionaire validates and saves a questionaire. Beaware, that there can only exist one subteacher in answer
 func (ev *EvalService) ValidateAndSaveQuestionaire(invitationId uuid.UUID, quest Questionaire) error {
 	inv, err := ev.EvalRepository.FindInvitation(invitationId)
 	if err != nil {
@@ -265,13 +275,26 @@ func (ev *EvalService) ValidateAndSaveQuestionaire(invitationId uuid.UUID, quest
 	if inv.Used {
 		return fmt.Errorf("invitation not valid")
 	}
-	//load questions
+	//load course Information
 	course, err := ev.EvalRepository.FindCourse(inv.CourseId)
+	tutors := ev.EvalRepository.FindAllCourseTutors(inv.CourseId)
+	courseProfs, err := ev.EvalRepository.FindAllCourseProfsForCourse(inv.CourseId)
+	validUUIDs := make([]uuid.UUID, len(tutors)+len(courseProfs)+1)
+	validUUIDs[0] = course.Id
+	for i, v := range courseProfs {
+		validUUIDs[i+1] = v.Id //WARNING(henrik): This uses a trick of findallCourseProfs that overrides all ids
+	}
+	for i, v := range tutors {
+		validUUIDs[i+len(courseProfs)+1] = v.Id //WARNING(henrik): This uses a trick of findallCourseProfs that overrides all ids
+	}
 	if err != nil {
 		return err
 	}
+	//load questions
 	form, err := ev.EvalRepository.FindForm(course.FormId)
 	questions := FormQuestionsToMap(form)
+	//make storage to count how many answers are to multiperson questions.
+	multiPersonMap := make(map[uuid.UUID]int)
 	for _, answer := range quest.Answers {
 		quest := questions[answer.QuestionId]
 		//now check - if load was sucessfull
@@ -293,11 +316,20 @@ func (ev *EvalService) ValidateAndSaveQuestionaire(invitationId uuid.UUID, quest
 				}
 			}
 		}
-		//BUG(henrik): check if ids of referenced is right
-		if answer.Concerns == uuid.Nil {
-			return fmt.Errorf("Answer is not marked to a specific object")
+		//Check if concerns is valid, does not check
+		if !isIn(answer.Concerns, validUUIDs) {
+			return fmt.Errorf("Answer is not concerning to  specific object")
 		}
-		delete(questions, answer.QuestionId)
+		if len(courseProfs) <= 1 || quest.Regards != "lecturer" {
+			delete(questions, answer.QuestionId)
+		} else {
+			// increase count
+			multiPersonMap[answer.QuestionId]++
+			// delete if reached
+			if len(courseProfs) == multiPersonMap[answer.QuestionId] {
+				delete(questions, answer.QuestionId)
+			}
+		}
 	}
 
 	//now we are ready to commit to db

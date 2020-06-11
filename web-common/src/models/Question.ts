@@ -84,6 +84,12 @@ export interface Question  {
      * @memberof Question
      */
     options: Array<Option>;
+    /**
+     * Used to determine position in array
+     * @type {number}
+     * @memberof Question
+     */
+    position?: number;
 }
 
 export function QuestionFromJSON(json: any): Question {
@@ -98,6 +104,7 @@ export function QuestionFromJSON(json: any): Question {
         'hasNotApplicableOption': !exists(json, 'hasNotApplicableOption') ? undefined : json['hasNotApplicableOption'],
         'visualizer': json['visualizer'],
         'options': (json['options'] as Array<any>).map(OptionFromJSON),
+        'position': !exists(json, 'position') ? undefined : json['position'],
     };
 }
 
@@ -116,6 +123,7 @@ export function QuestionToJSON(value?: Question): any {
         'hasNotApplicableOption': value.hasNotApplicableOption,
         'visualizer': value.visualizer,
         'options': (value.options as Array<any>).map(OptionToJSON),
+        'position': value.position,
     };
 }
 

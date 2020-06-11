@@ -13,7 +13,7 @@ import uuid "github.com/satori/go.uuid"
 
 type Question struct {
 	Base
-
+	Position  int32     `json:"position"`
 	SectionId uuid.UUID `gorm:"type:uuid" json:"-"`
 
 	// Unique, humanreadable label.

@@ -36,12 +36,19 @@ export interface Page  {
      * @memberof Page
      */
     sections: Array<Section>;
+    /**
+     * Used to determine position in array
+     * @type {number}
+     * @memberof Page
+     */
+    position?: number;
 }
 
 export function PageFromJSON(json: any): Page {
     return {
         'id': !exists(json, 'id') ? undefined : json['id'],
         'sections': (json['sections'] as Array<any>).map(SectionFromJSON),
+        'position': !exists(json, 'position') ? undefined : json['position'],
     };
 }
 
@@ -52,6 +59,7 @@ export function PageToJSON(value?: Page): any {
     return {
         'id': value.id,
         'sections': (value.sections as Array<any>).map(SectionToJSON),
+        'position': value.position,
     };
 }
 

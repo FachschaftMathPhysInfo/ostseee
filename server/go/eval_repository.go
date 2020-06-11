@@ -47,7 +47,16 @@ func (ev *EvalRepository) SaveForm(form Form) Form {
 //FindAllForms loads all forms and their abstractForms
 func (ev *EvalRepository) FindAllForms() []Form {
 	var forms []Form
-	ev.DB.Set("gorm:auto_preload", true).Find(&forms)
+
+	ev.DB.Preload("AbstractForm").Preload("AbstractForm.Pages", func(db *gorm.DB) *gorm.DB {
+		return db.Order("pages.position ASC")
+	}).Preload("AbstractForm.Pages.Sections", func(db *gorm.DB) *gorm.DB {
+		return db.Order("sections.position ASC")
+	}).Preload("AbstractForm.Pages.Sections.Questions", func(db *gorm.DB) *gorm.DB {
+		return db.Order("questions.position ASC")
+	}).Preload("AbstractForm.Pages.Sections.Questions.Options", func(db *gorm.DB) *gorm.DB {
+		return db.Order("options.position ASC")
+	}).Find(&forms)
 	return forms
 }
 
@@ -55,7 +64,16 @@ func (ev *EvalRepository) FindForm(id uuid.UUID) (Form, error) {
 	var form Form
 	filter := &Form{}
 	filter.Id = id
-	ev.DB.Set("gorm:auto_preload", true).Where(filter).First(&form)
+
+	ev.DB.Preload("AbstractForm").Preload("AbstractForm.Pages", func(db *gorm.DB) *gorm.DB {
+		return db.Order("pages.position ASC")
+	}).Preload("AbstractForm.Pages.Sections", func(db *gorm.DB) *gorm.DB {
+		return db.Order("sections.position ASC")
+	}).Preload("AbstractForm.Pages.Sections.Questions", func(db *gorm.DB) *gorm.DB {
+		return db.Order("questions.position ASC")
+	}).Preload("AbstractForm.Pages.Sections.Questions.Options", func(db *gorm.DB) *gorm.DB {
+		return db.Order("options.position ASC")
+	}).Where(filter).First(&form)
 	return form, nil
 }
 

@@ -42,6 +42,12 @@ export interface Section  {
      * @memberof Section
      */
     questions: Array<Question>;
+    /**
+     * Used to determine position in array
+     * @type {number}
+     * @memberof Section
+     */
+    position?: number;
 }
 
 export function SectionFromJSON(json: any): Section {
@@ -49,6 +55,7 @@ export function SectionFromJSON(json: any): Section {
         'id': !exists(json, 'id') ? undefined : json['id'],
         'title': json['title'],
         'questions': (json['questions'] as Array<any>).map(QuestionFromJSON),
+        'position': !exists(json, 'position') ? undefined : json['position'],
     };
 }
 
@@ -60,6 +67,7 @@ export function SectionToJSON(value?: Section): any {
         'id': value.id,
         'title': value.title,
         'questions': (value.questions as Array<any>).map(QuestionToJSON),
+        'position': value.position,
     };
 }
 

@@ -242,8 +242,19 @@ func contains(options []Option, value string) bool {
 	}
 	return false
 }
+func isIn(u uuid.UUID, uuids []uuid.UUID) bool {
+	for _, v := range uuids {
+		if u == v {
+			return true
+		}
+	}
+	return false
+}
+
+//ValidateAndSaveQuestionaire validates and saves a questionaire. Beaware, that there can only exist one subteacher in answer
 func (ev *EvalService) ValidateAndSaveQuestionaire(invitationId uuid.UUID, quest Questionaire) error {
 	inv, err := ev.EvalRepository.FindInvitation(invitationId)
+	quest.CourseId = inv.CourseId
 	if err != nil {
 		return err
 	}
@@ -265,13 +276,26 @@ func (ev *EvalService) ValidateAndSaveQuestionaire(invitationId uuid.UUID, quest
 	if inv.Used {
 		return fmt.Errorf("invitation not valid")
 	}
-	//load questions
+	//load course Information
 	course, err := ev.EvalRepository.FindCourse(inv.CourseId)
+	tutors := ev.EvalRepository.FindAllCourseTutors(inv.CourseId)
+	courseProfs, err := ev.EvalRepository.FindAllCourseProfsForCourse(inv.CourseId)
+	validUUIDs := make([]uuid.UUID, len(tutors)+len(courseProfs)+1)
+	validUUIDs[0] = course.Id
+	for i, v := range courseProfs {
+		validUUIDs[i+1] = v.Id //WARNING(henrik): This uses a trick of findallCourseProfs that overrides all ids
+	}
+	for i, v := range tutors {
+		validUUIDs[i+len(courseProfs)+1] = v.Id //WARNING(henrik): This uses a trick of findallCourseProfs that overrides all ids
+	}
 	if err != nil {
 		return err
 	}
+	//load questions
 	form, err := ev.EvalRepository.FindForm(course.FormId)
 	questions := FormQuestionsToMap(form)
+	//make storage to count how many answers are to multiperson questions.
+	multiPersonMap := make(map[uuid.UUID]int)
 	for _, answer := range quest.Answers {
 		quest := questions[answer.QuestionId]
 		//now check - if load was sucessfull
@@ -293,14 +317,220 @@ func (ev *EvalService) ValidateAndSaveQuestionaire(invitationId uuid.UUID, quest
 				}
 			}
 		}
-		//BUG(henrik): check if ids of referenced is right
-		if answer.Concerns == uuid.Nil {
-			return fmt.Errorf("Answer is not marked to a specific object")
+		//Check if concerns is valid, does not check
+		if !isIn(answer.Concerns, validUUIDs) {
+			return fmt.Errorf("Answer is not concerning to  specific object")
 		}
-		delete(questions, answer.QuestionId)
+		if len(courseProfs) <= 1 || quest.Regards != "lecturer" {
+			delete(questions, answer.QuestionId)
+		} else {
+			// increase count
+			multiPersonMap[answer.QuestionId]++
+			// delete if reached
+			if len(courseProfs) == multiPersonMap[answer.QuestionId] {
+				delete(questions, answer.QuestionId)
+			}
+		}
 	}
 
 	//now we are ready to commit to db
 
 	return ev.EvalRepository.InvalidateInvitationAndCommitQuestionaire(invitationId, quest)
+}
+func reduceToRegardingSection(form AbstractForm, regards string) []Section {
+	result := make([]Section, 0)
+	for _, p := range form.Pages {
+		for _, sec := range p.Sections {
+			section := sec
+			section.Questions = make([]Question, 0)
+			for _, q := range sec.Questions {
+				if q.Regards == regards {
+					section.Questions = append(section.Questions, q)
+				}
+			}
+			if len(section.Questions) > 0 {
+				result = append(result, section)
+			}
+		}
+	}
+	return result
+}
+
+func filterOption(options []Option, value string, HasOtherOption bool) (map[string]string, error) {
+	for _, option := range options {
+		if value == strconv.Itoa(int(option.Value)) {
+			return option.Label, nil
+		}
+	}
+	if HasOtherOption {
+		r := make(map[string]string, 0)
+		r["de"] = value
+		r["en"] = value
+		return r, nil
+	}
+	fmt.Println(value)
+	return map[string]string{}, fmt.Errorf("hasOtherOption not enabled and not in option")
+}
+
+func (ev *EvalService) generateResult(question Question, objectId uuid.UUID) (Result, error) {
+	result := Result{Visualizer: question.Visualizer}
+	result.Label = question.Title
+	if question.IsComment {
+		answers := ev.EvalRepository.FindAllSingleAnswers(question.Id, objectId)
+		pairs := make([]ResultPair, len(answers))
+		for i, answer := range answers {
+			pairs[i].Value = answer.Value
+		}
+		result.Values = pairs
+		return result, nil
+	}
+	if question.HasNotApplicableOption {
+		//Count not applicable
+		result.NotApplicableCount = ev.EvalRepository.CountNotApplicable(question.Id, objectId)
+	}
+	counts, err := ev.EvalRepository.CountPerOption(question.Id, objectId)
+	fmt.Println(counts)
+	if err != nil {
+		return Result{}, err
+	}
+	resultpairs := make([]ResultPair, len(counts))
+	for i, pair := range counts {
+		label, err := filterOption(question.Options, pair.Value, question.HasOtherOption)
+		if err != nil {
+			return Result{}, err
+		}
+		resultpairs[i].Label = label
+		resultpairs[i].Value = strconv.Itoa(pair.Freq)
+	}
+	result.Values = resultpairs
+	return result, nil
+}
+func (ev *EvalService) generateResults(questions []Question, objectId uuid.UUID) ([]Result, error) {
+	results := make([]Result, len(questions))
+	for i, q := range questions {
+		var err error
+		results[i], err = ev.generateResult(q, objectId)
+		if err != nil {
+			return []Result{}, err
+		}
+
+	}
+	return results, nil
+}
+
+//GenerateTutorReport generates a Tutor report
+func (ev *EvalService) GenerateTutorReport(courseId, tutorId uuid.UUID) (TutorReport, error) {
+	course, err := ev.EvalRepository.FindCourse(courseId)
+	if err != nil {
+		return TutorReport{}, err
+	}
+	if ev.EvalRepository.CountOfQuestionaires(courseId) < 5 { //TODO(henrik): Factor in Tutor,
+		return TutorReport{}, fmt.Errorf("less than 5 questionaires")
+	}
+	tutor, err := ev.EvalRepository.FindTutor(courseId, tutorId)
+	if err != nil {
+		return TutorReport{}, err
+	}
+	// load form
+	form, err := ev.EvalRepository.FindForm(course.FormId)
+	if err != nil {
+		return TutorReport{}, err
+	}
+	//now find all questions to be included
+	sections := reduceToRegardingSection(form.AbstractForm, "tutor")
+	if len(sections) == 0 {
+		return TutorReport{}, fmt.Errorf("contains no questions regarding tutor")
+	}
+	generatedSections := make([]ResultSection, len(sections))
+	for i, sec := range sections {
+		generatedSections[i].Label = sec.Title
+		generatedSections[i].Results, err = ev.generateResults(sec.Questions, tutor.Id)
+		if err != nil {
+			return TutorReport{}, err
+		}
+	}
+	result := TutorReport{TutorId: tutor.Id, CourseId: course.Id, Generated: time.Now(), Sections: generatedSections}
+	return result, nil
+}
+
+//GenerateCourseReport generates a  report for course
+func (ev *EvalService) GenerateCourseReport(courseId uuid.UUID) (CourseReport, error) {
+	course, err := ev.EvalRepository.FindCourse(courseId)
+	if err != nil {
+		return CourseReport{}, err
+	}
+	if ev.EvalRepository.CountOfQuestionaires(courseId) < 5 {
+		return CourseReport{}, fmt.Errorf("less than 5 questionaires")
+	}
+	if err != nil {
+		return CourseReport{}, err
+	}
+	// load form
+	form, err := ev.EvalRepository.FindForm(course.FormId)
+	if err != nil {
+		return CourseReport{}, err
+	}
+	//generate Tutors report
+	tutors := ev.EvalRepository.FindAllCourseTutors(courseId)
+	tutorsReport := make([]TutorReport, len(tutors))
+	for i, tut := range tutors {
+		tutorsReport[i], _ = ev.GenerateTutorReport(courseId, tut.Id)
+		//no pass of err
+	}
+	//now find all questions to be included
+	sections := reduceToRegardingSection(form.AbstractForm, "course")
+	if len(sections) == 0 {
+		return CourseReport{}, fmt.Errorf("contains no questions regarding course")
+	}
+	generatedSections := make([]ResultSection, len(sections))
+	for i, sec := range sections {
+		generatedSections[i].Label = sec.Title
+		generatedSections[i].Results, err = ev.generateResults(sec.Questions, course.Id)
+		if err != nil {
+			return CourseReport{}, err
+		}
+	}
+	result := CourseReport{CourseId: course.Id, Generated: time.Now(), Sections: generatedSections, TutorReports: tutorsReport}
+	return result, nil
+}
+
+//GenerateCourseReport generates a  report for course
+func (ev *EvalService) GenerateCourseProfReport(courseprofId uuid.UUID) (CourseProfReport, error) {
+	courseprof, err := ev.EvalRepository.FindCourseProf(courseprofId)
+	if err != nil {
+		return CourseProfReport{}, err
+	}
+	course, err := ev.EvalRepository.FindCourse(courseprof.CourseId)
+	if err != nil {
+		return CourseProfReport{}, err
+	}
+	if ev.EvalRepository.CountOfQuestionaires(course.Id) < 5 { //TODO(henrik): Do we have to calc how many questions are correct answered
+		return CourseProfReport{}, fmt.Errorf("less than 5 questionaires")
+	}
+
+	// load form
+	form, err := ev.EvalRepository.FindForm(course.FormId)
+	if err != nil {
+		return CourseProfReport{}, err
+	}
+	//generate course report
+	coursereport, err := ev.GenerateCourseReport(courseprof.CourseId)
+	if err != nil {
+		return CourseProfReport{}, err
+	}
+	//now find all questions to be included
+	sections := reduceToRegardingSection(form.AbstractForm, "lecturer")
+	if len(sections) == 0 {
+		return CourseProfReport{}, fmt.Errorf("contains no questions regarding course")
+	}
+	generatedSections := make([]ResultSection, len(sections))
+	for i, sec := range sections {
+		generatedSections[i].Label = sec.Title
+		generatedSections[i].Results, err = ev.generateResults(sec.Questions, course.Id)
+		if err != nil {
+			return CourseProfReport{}, err
+		}
+	}
+	result := CourseProfReport{CourseId: course.Id, Generated: time.Now(), Sections: generatedSections, CourseProfId: courseprofId, CourseReport: coursereport}
+	return result, nil
 }

@@ -304,3 +304,41 @@ func (ev *EvalRepository) InvalidateInvitationAndCommitQuestionaire(invitationId
 	tx.Commit()
 	return nil
 }
+
+func (ev *EvalRepository) CountOfQuestionaires(courseId uuid.UUID) int {
+	var filter Questionaire
+	filter.CourseId = courseId
+	var count int
+	ev.DB.Table("questionaires").Where(&filter).Count(&count)
+	return count
+}
+
+type Pair struct {
+	Value string
+	Freq  int
+}
+
+func (ev *EvalRepository) CountPerOption(questionId uuid.UUID, objectId uuid.UUID) ([]Pair, error) {
+	var res []Pair
+	ev.DB.Table("single_answers").Where("not_applicable <> True AND question_id = ? AND concerns = ?", questionId, objectId).Select("value, count(*) as freq").Group("value").Scan(&res)
+	return res, nil
+}
+
+func (ev *EvalRepository) FindAllSingleAnswers(questionId, objectId uuid.UUID) []SingleAnswer {
+	var filter SingleAnswer
+	filter.QuestionId = questionId
+	filter.Concerns = objectId
+	var results []SingleAnswer
+	ev.DB.Where(&filter).Find(&results)
+	return results
+}
+
+func (ev *EvalRepository) CountNotApplicable(questionId uuid.UUID, objectId uuid.UUID) int {
+	var filter SingleAnswer
+	filter.QuestionId = questionId
+	filter.Concerns = objectId
+	filter.NotApplicable = true
+	var count int
+	ev.DB.Table("single_answers").Where(&filter).Count(&count)
+	return count
+}

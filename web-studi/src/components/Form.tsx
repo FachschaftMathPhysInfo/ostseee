@@ -13,11 +13,11 @@ const Form = (props) => {
       <div id="abschnitt">
         {
           emptyForm.abstractForm.pages.map(page =>page.sections.map(sec=>(
-            <>
+            <div key={sec.id} id={sec.id}>
           <EuiSpacer size="xl"></EuiSpacer>
           <EuiSpacer size="xl"></EuiSpacer>
         <SectionComponent section={sec}/>
-        </>)))
+        </div>)))
 }
     </div>
   );

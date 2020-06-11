@@ -10,7 +10,9 @@ import { htmlIdGenerator } from '@elastic/eui';
 import { EuiSpacer } from '@elastic/eui';
 import { Question } from 'ostseee-web-common';
 import { getLanguage } from '../../selectors/language';
-import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
+import { getAnswer } from '../../selectors/answers';
+import { changeAnswer } from '../../lib/store';
 const SingleChoiceQuestion = props => {
   const question:Question = props.question
   const languageCode = useSelector(getLanguage)
@@ -20,16 +22,23 @@ const SingleChoiceQuestion = props => {
       label:opt.label[languageCode]
     }
   })
-  const [selected, setSelected]= useState('');
-  const [checked, setChecked]= useState(false);
+  const answer = useSelector(getAnswer(question.id,props.concerns))
+  const dispatch = useDispatch()
+  const setSelected= function(option){
+    dispatch(changeAnswer(question.id,props.concerns,option))
+  }
+  const notApplicable = (notApp)=>{
+    dispatch(changeAnswer(question.id,props.concerns,"",notApp))
+  }
+  const checked = answer.NotApplicable
   return (
     <>
      <EuiRadioGroup 
      disabled={checked}
       options={options}
-      idSelected={selected}
+      idSelected={answer.values}
       onChange={(option)=> setSelected(option)}
-      name="radio group"
+      name={question.id}
       
     />
     <EuiSpacer size="m"></EuiSpacer>{
@@ -39,7 +48,7 @@ const SingleChoiceQuestion = props => {
         label={{"de":"keine Angabe","en":"n.a."}[languageCode]}
         checked={checked}
         //@ts-ignore
-        onChange={e => {setChecked(e.target.checked);setSelected('')}}
+        onChange={e => {setChecked(e.target.checked);notApplicable(e.target.checked)}}
       />:<></>}
       </>
   );

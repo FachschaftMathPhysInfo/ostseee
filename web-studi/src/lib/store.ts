@@ -9,6 +9,7 @@ const initialState = {
   language:"de"
 }
 export const CHANGE_LANGUAGE = "CHANGE_LANGUAGE"
+
 const localizeReducer =(state,action)=>{
   if (typeof state === 'undefined') {
     return initialState
@@ -18,7 +19,24 @@ const localizeReducer =(state,action)=>{
   }
   return state
 }
-
+export const CHANGE_ANSWER = "CHANGE_ANSWER"
+const initialAnswerState = {
+  answers:{}
+}
+const answersReducer =(state=initialAnswerState,action)=>{
+  if(action.type==CHANGE_ANSWER){
+    state.answers[`${action.questionId}:${action.concerns}`]= {values:action.value,notApplicable:action.notApplicable}
+  }
+  return state
+}
+export const changeAnswer = (questionId,concerns,value,notApplicable=false) =>{
+  return {
+    type: CHANGE_ANSWER,
+    questionId,
+    value,
+    concerns
+  }
+}
 export const changeLanguage = langCode =>{
   return {
     type: CHANGE_LANGUAGE,
@@ -28,7 +46,8 @@ export const changeLanguage = langCode =>{
 const reducer = combineReducers({
   entities: entitiesReducer,
   queries: queriesReducer,
-  localize: localizeReducer
+  localize: localizeReducer,
+  answers : answersReducer
 });
 var authorizeRequest = function(token) {
 

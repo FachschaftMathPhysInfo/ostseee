@@ -1,3 +1,3 @@
-export const getEmptyForm = (state, itemId) => {
+export const getEmptyForm = (state) => {
     return state.entities.EmptyForm;
   };

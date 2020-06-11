@@ -14,7 +14,7 @@ const SectionComponent = props => {
       <EuiSpacer size="xl" />
       <EuiPanel className={styles.form} betaBadgeLabel={section.title[languageCode]}>
       {section.questions.map(question=>(
-        <QuestionComponent question={question}></QuestionComponent>
+        <QuestionComponent key={question.id} question={question}></QuestionComponent>
       ))}
       </EuiPanel>
     </div>

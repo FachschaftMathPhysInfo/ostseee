@@ -868,6 +868,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Section'
+        position:
+          type: integer
+          description: Used to determine position in array
       required:
         - sections
       description: Group of sections that belong together
@@ -882,6 +885,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Question'
+        position:
+          type: integer
+          description: Used to determine position in array
       required:
         - title
         - questions
@@ -922,6 +928,9 @@ components:
           items:
              $ref: '#/components/schemas/Option'
           description: Array of possibly labeled selection options.
+        position:
+          type: integer
+          description: Used to determine position in array
       required:
         - shortcode
         - title
@@ -941,6 +950,9 @@ components:
           $ref: '#/components/schemas/LocalizedString'
         value:
           type: integer
+        position:
+          type: integer
+          description: Used to determine position in array
       required:
         - label
         - value

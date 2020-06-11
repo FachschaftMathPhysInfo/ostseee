@@ -8,57 +8,40 @@ import { EuiRadioGroup } from '@elastic/eui';
 import { EuiCheckbox } from '@elastic/eui';
 import { htmlIdGenerator } from '@elastic/eui';
 import { EuiSpacer } from '@elastic/eui';
-
+import { Question } from 'ostseee-web-common';
+import { getLanguage } from '../../selectors/language';
+import {useSelector} from 'react-redux'
 const SingleChoiceQuestion = props => {
+  const question:Question = props.question
+  const languageCode = useSelector(getLanguage)
+  const options = question.options.map(opt=>{
+    return {
+      id:`${opt.value}`,
+      label:opt.label[languageCode]
+    }
+  })
   const [selected, setSelected]= useState('');
   const [checked, setChecked]= useState(false);
   return (
-    <EuiDescribedFormGroup fullWidth gutterSize="xl"
-    title={<h3> Falls Leistungspunkte (LP) vergeben werden: Verglichen mit den  vergebenen Leistungspunkten ist mein tatsächlicher Arbeitsaufwand für diese Lehrveranstaltung:</h3>}
-    description={
-      <Fragment>
-        (1 LP = 30 Stunden Arbeitsaufwand)
-      </Fragment>
-    }
-  >
+    <>
      <EuiRadioGroup 
      disabled={checked}
-      options={[
-        {
-          id: '1',
-          label: 'sehr hoch',
-        },
-        {
-          id: '2',
-          label: 'hoch',
-        },
-        {
-          id: '3',
-          label: 'angemessen',
-        },
-        {
-          id: '4',
-          label: 'niedrig',
-        },
-        {
-          id: '5',
-          label: 'sehr niedrig',
-        },
-      ]}
+      options={options}
       idSelected={selected}
       onChange={(option)=> setSelected(option)}
       name="radio group"
       
     />
-    <EuiSpacer size="m"></EuiSpacer>
+    <EuiSpacer size="m"></EuiSpacer>{
+      question.hasNotApplicableOption?
     <EuiCheckbox
         id={htmlIdGenerator()()}
-        label="keine Angabe"
+        label={{"de":"keine Angabe","en":"n.a."}[languageCode]}
         checked={checked}
         //@ts-ignore
         onChange={e => {setChecked(e.target.checked);setSelected('')}}
-      />
-  </EuiDescribedFormGroup>
+      />:<></>}
+      </>
   );
 };
 

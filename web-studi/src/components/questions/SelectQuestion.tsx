@@ -8,29 +8,42 @@ import { EuiRadioGroup } from '@elastic/eui';
 import { EuiSuperSelect } from '@elastic/eui';
 import { EuiText } from '@elastic/eui';
 import { Question } from 'ostseee-web-common';
-import {useSelector} from "react-redux"
+import {useSelector, useDispatch} from "react-redux"
 import { getLanguage } from '../../selectors/language';
 import { EuiSpacer } from '@elastic/eui';
 import { htmlIdGenerator } from '@elastic/eui';
 import { EuiCheckbox } from '@elastic/eui';
+import { changeAnswer } from '../../lib/store';
+import { getAnswer } from '../../selectors/answers';
 const SelectQuestion = props => {
   const question : Question = props.question
   const languageCode = useSelector(getLanguage)
   let options = question.options.map(option=>{
     return {
-      value: option.value,
+      value: `${option.value}`,
     inputDisplay: (<EuiText>{option.label[languageCode]}</EuiText>),
     }
   })
-  let [seleted, setSelected] = useState(null);
-
-  const [checked, setChecked]= useState(false);
+  
+  const dispatch = useDispatch()
+  const setSelected=(qid,concerns)=>(option:string)=>{
+    console.log(qid,concerns,option)
+    const val = option
+    dispatch(changeAnswer(props.sectionId, qid,concerns,[val]))
+  }
+  const answer = useSelector(getAnswer(question.id,props.concerns))
+  //const selected = question.options.filter(o=>`${o.value}`== answer.values[0])[0]?.label[languageCode]
+const selected = answer.values[0]
+  const checked = answer.NotApplicable
+  const notApplicable = (notApp)=>{
+    dispatch(changeAnswer(question.id,props.concerns,[""],notApp))
+  }
   return (
    <>
      <EuiSuperSelect fullWidth
       options={options}
-      valueOfSelected={seleted}
-      onChange={(option)=>setSelected(option)}
+      valueOfSelected={selected}
+      onChange={setSelected(question.id,props.concerns)}
       disabled={checked}
     />
     <EuiSpacer size="m"></EuiSpacer>{
@@ -40,7 +53,7 @@ const SelectQuestion = props => {
         label={{"de":"keine Angabe","en":"n.a."}[languageCode]}
         checked={checked}
         //@ts-ignore
-        onChange={e => {setChecked(e.target.checked);setSelected('')}}
+        onChange={e => {notApplicable(e.target.checked)}}
       />:<></>}
     </>
   );

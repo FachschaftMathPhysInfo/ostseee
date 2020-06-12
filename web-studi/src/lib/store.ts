@@ -21,18 +21,22 @@ const localizeReducer =(state,action)=>{
 }
 export const CHANGE_ANSWER = "CHANGE_ANSWER"
 const initialAnswerState = {
-  answers:{}
+  answers:{},
+  section:""
 }
 const answersReducer =(state=initialAnswerState,action)=>{
   if(action.type==CHANGE_ANSWER){
+    console.log(action)
     state.answers[`${action.questionId}:${action.concerns}`]= {values:action.value,notApplicable:action.notApplicable}
+    state.section = action.sectionId
   }
   return state
 }
-export const changeAnswer = (questionId,concerns,value,notApplicable=false) =>{
+export const changeAnswer = (sectionId,questionId,concerns,value,notApplicable=false) =>{
   return {
     type: CHANGE_ANSWER,
     questionId,
+    sectionId,
     value,
     concerns
   }

@@ -42,57 +42,14 @@ import { EuiButtonGroup } from '@elastic/eui';
 
 import { Route, Switch, useHistory } from 'react-router';
 import Questionaire from './components/QuestionairePage';
+import { getEmptyForm } from './selectors/emptyform';
+import {useSelector} from 'react-redux'
+import { getAnswersCount, getLastSectionAnswered } from './selectors/answers';
+import { EmptyForm } from 'ostseee-web-common';
 function App() {
 
-  const sections = [
-    {
-      value: 'section_1',
-      inputDisplay: 'Einführung',
-      dropdownDisplay: (
-        <Fragment>
-          <strong> Einführung</strong>
-          <EuiText size="s" color="subdued">
-            <p className="euiTextColor--subdued">
-             Infotext
-            </p>
-          </EuiText>
-        </Fragment>
-      ),
-    },
-    {
-      value: 'option_two',
-      inputDisplay: 'Allgemeines',
-      dropdownDisplay: (
-        <Fragment>
-          <strong>Allgemeine Fragen</strong>
-          <EuiText size="s" color="subdued">
-            <p className="euiTextColor--subdued">
-              Allgemeine Fragen 
-            </p>
-          </EuiText>
-        </Fragment>
-      ),
-    },
-    {
-      value: 'option_three',
-      inputDisplay: 'Tutor*in',
-      dropdownDisplay: (
-        <Fragment>
-          <strong>Tutor*in</strong>
-          <EuiText size="s" color="subdued">
-            <p className="euiTextColor--subdued">
-              Fragen zum Tutorium
-            </p>
-          </EuiText>
-        </Fragment>
-      ),
-    }
-  ];
-
-  const [section, setSection] = useState('section_1');
-  const onChangeSection = value => {
-    setSection(value);
-  };
+  
+  
   const languageOptions = [
     {
       id: `de`,
@@ -112,7 +69,24 @@ function App() {
     store.dispatch(changeLanguage(languageId))
     setSelectedLanguageId(languageId);
   };
-
+   const emptyForm:EmptyForm= useSelector(getEmptyForm)
+   const total = emptyForm?.abstractForm.pages.map(p=>p.sections.map(s=>s.questions.map(q=>q.regards=="lecturer"?emptyForm.profs?.length:1).reduce((pv,cv)=>pv+cv,0)).reduce((pv,cv)=>pv+cv,0)).reduce((pv,cv)=>pv+cv,0)
+   const answersCount = useSelector(getAnswersCount)
+   const sections = emptyForm==null?[]:emptyForm.abstractForm.pages.flatMap(p=>p.sections.map(section=>{
+     return  {
+        value: section.id,
+        inputDisplay: section.title[languageSelected],
+        dropdownDisplay: (
+          <Fragment>
+            <strong>{section.title[languageSelected]}</strong>
+          </Fragment>
+        ),
+      }
+    }))
+    const section =useSelector(getLastSectionAnswered)
+    const onChangeSection = value => {
+      document.getElementById(value).scrollIntoView()
+    };
   const Headersections = [
     {
       items: [
@@ -130,7 +104,7 @@ function App() {
       itemLayoutAlign="top"
       hasDividers
       fullWidth={true}
-    /><EuiProgress size="s" max={100} value={10} color="primary" position="absolute" /></div>
+    /><EuiProgress size="s" max={total} value={answersCount} color="primary" position="absolute" /></div>
       ],
       //@ts-ignore
       borders:"none",

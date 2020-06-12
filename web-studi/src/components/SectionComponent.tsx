@@ -9,12 +9,13 @@ import QuestionComponent from './QuestionComponent';
 const SectionComponent = props => {
   const section:Section = props.section
   const languageCode =  useSelector(getLanguage)
+  //console.log(section.id)
   return (
     <div>
       <EuiSpacer size="xl" />
       <EuiPanel className={styles.form} betaBadgeLabel={section.title[languageCode]}>
       {section.questions.map(question=>(
-        <QuestionComponent key={question.id} question={question}></QuestionComponent>
+        <QuestionComponent key={question.id} question={question} sectionId={section.id}></QuestionComponent>
       ))}
       </EuiPanel>
     </div>

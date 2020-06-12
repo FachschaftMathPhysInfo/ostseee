@@ -18,27 +18,33 @@ const SingleChoiceQuestion = props => {
   const languageCode = useSelector(getLanguage)
   const options = question.options.map(opt=>{
     return {
-      id:`${opt.value}`,
+      id:`${opt.id}:${props.concerns}`,
       label:opt.label[languageCode]
     }
   })
-  const answer = useSelector(getAnswer(question.id,props.concerns))
+  const answerid = useSelector(getAnswer(question.id,props.concerns))
+  const answer = `${question.options.filter(o=>`${o.value}`==answerid.values[0])[0]?.id}:${props.concerns}`
   const dispatch = useDispatch()
-  const setSelected= function(option){
-    dispatch(changeAnswer(question.id,props.concerns,option))
+  const setSelected=(qid,concerns)=>(option:string)=>{
+    console.log(qid,concerns,option)
+    const val = question.options.filter((opt)=>opt.id==option.split(':')[0])[0].value
+    dispatch(changeAnswer(props.sectionId,qid,concerns,[val]))
   }
   const notApplicable = (notApp)=>{
-    dispatch(changeAnswer(question.id,props.concerns,"",notApp))
+    dispatch(changeAnswer(question.id,props.concerns,[""],notApp))
   }
-  const checked = answer.NotApplicable
+  const checked = answerid?.NotApplicable
+  const prof = props.prof
   return (
     <>
+    <h3><b>{prof?.lastname}</b></h3>
+    {prof!=null?<EuiSpacer size="s"></EuiSpacer>:<></>}
      <EuiRadioGroup 
      disabled={checked}
       options={options}
-      idSelected={answer.values}
-      onChange={(option)=> setSelected(option)}
-      name={question.id}
+      idSelected={answer}
+      onChange={setSelected(question.id,props.concerns)}
+      name={`${question.id}:${props.concerns}`}
       
     />
     <EuiSpacer size="m"></EuiSpacer>{

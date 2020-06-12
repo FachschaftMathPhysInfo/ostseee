@@ -38,7 +38,8 @@ export const changeAnswer = (sectionId,questionId,concerns,value,notApplicable=f
     questionId,
     sectionId,
     value,
-    concerns
+    concerns,
+    notApplicable
   }
 }
 export const changeLanguage = langCode =>{

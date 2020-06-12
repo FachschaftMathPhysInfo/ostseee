@@ -31,9 +31,9 @@ const SingleChoiceQuestion = props => {
     dispatch(changeAnswer(props.sectionId,qid,concerns,[val]))
   }
   const notApplicable = (notApp)=>{
-    dispatch(changeAnswer(question.id,props.concerns,[""],notApp))
+    dispatch(changeAnswer(props.sectionId,question.id,props.concerns,[""],notApp))
   }
-  const checked = answerid?.NotApplicable
+  const checked = answerid?.notApplicable
   const prof = props.prof
   return (
     <>
@@ -54,7 +54,7 @@ const SingleChoiceQuestion = props => {
         label={{"de":"keine Angabe","en":"n.a."}[languageCode]}
         checked={checked}
         //@ts-ignore
-        onChange={e => {setChecked(e.target.checked);notApplicable(e.target.checked)}}
+        onChange={e => {notApplicable(e.target.checked)}}
       />:<></>}
       </>
   );

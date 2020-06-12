@@ -34,9 +34,9 @@ const SelectQuestion = props => {
   const answer = useSelector(getAnswer(question.id,props.concerns))
   //const selected = question.options.filter(o=>`${o.value}`== answer.values[0])[0]?.label[languageCode]
 const selected = answer.values[0]
-  const checked = answer.NotApplicable
+  const checked = answer.notApplicable
   const notApplicable = (notApp)=>{
-    dispatch(changeAnswer(question.id,props.concerns,[""],notApp))
+    dispatch(changeAnswer(props.sectionId,question.id,props.concerns,[""],notApp))
   }
   return (
    <>

@@ -19,5 +19,6 @@ type EmptyForm struct {
 
 	AbstractForm AbstractForm `json:"abstractForm,omitempty"`
 
-	Course Course `json:"course,omitempty"`
+	Course     Course `json:"course,omitempty"`
+	ModuleName string `json:"moduleName"`
 }

@@ -1,4 +1,4 @@
-import { Question, EmptyForm } from "ostseee-web-common"
+import { Question, EmptyForm, QuestionVisualizerEnum } from "ostseee-web-common"
 import CommentQuestion from "./questions/CommentQuestion"
 import React, { Fragment } from "react"
 import MultipleChoiceQuestion from "./questions/MultipleChoiceQuestion"
@@ -8,20 +8,24 @@ import { EuiDescribedFormGroup } from "@elastic/eui"
 import { getLanguage } from "../selectors/language"
 import {useSelector} from "react-redux"
 import { getEmptyForm } from "../selectors/emptyform"
-import { getTutor } from "../selectors/answers"
+import { getTutorId } from "../selectors/answers"
 import { EuiSpacer } from "@elastic/eui"
+import TutorSelect from "./questions/TutorSelect"
 const QuestionComponent= props=>{
     const question:Question= props.question
     //check for concerns/regards
     const emptyForm: EmptyForm = useSelector(getEmptyForm)
-    let concerns = useSelector(getTutor)
+    let concerns = useSelector(getTutorId)
     
     if (question.regards=="course"){
         concerns= emptyForm.course.id
     }
    // console.log(props.sectionId)
     let comp=(concernsId,prof)=>( <SingleChoiceQuestion sectionId={props.sectionId} question={question} prof={prof} concerns={concernsId}></SingleChoiceQuestion>)
-    
+    //@ts-ignore
+    if(question.visualizer=="tutor_overview"){
+        comp=(concernsId,prof)=>( <TutorSelect sectionId={props.sectionId} question={question} prof={prof} concerns={concernsId}></TutorSelect>)
+    }
     if(question.isComment){
         comp= (concernsId,prof)=>(<CommentQuestion sectionId={props.sectionId} question={question} prof={prof} concerns={concernsId}></CommentQuestion>)
     }
@@ -31,9 +35,9 @@ const QuestionComponent= props=>{
     if(question.hasOtherOption){
         comp= (concernsId,prof)=>(<SelectQuestion sectionId={props.sectionId} question={question} prof={prof} concerns={concernsId}></SelectQuestion>)
     }
-    let comps = [<div  key={`${question.id}:${concerns}`}>{comp(concerns,null)}</div>]
+    let comps = [<div  key={`${question.id}:${concerns}`} id={`${question.id}:${concerns}`}>{comp(concerns,null)}</div>]
     if(question.regards == "lecturer"){
-        comps =emptyForm.profs.map(prof=>(<div  key={`${question.id}:${prof.id}`}>{comp(prof.id,prof)}<EuiSpacer size="l"></EuiSpacer></div>))
+        comps =emptyForm.profs.map(prof=>(<div  key={`${question.id}:${prof.id}`} id={`${question.id}:${prof.id}`}>{comp(prof.id,prof)}<EuiSpacer size="l"></EuiSpacer></div>))
     }
     const languageCode = useSelector(getLanguage)
 

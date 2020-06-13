@@ -165,7 +165,7 @@ const Questionaire = props => {
           </EuiText>
                     <EuiText style={{ textAlign: "left" }}> Diese Umfrage betrifft folgende Veranstaltung: </EuiText>
                     <EuiSpacer size="l" />
-                    <EuiText><b>Physik I</b> bei <b>{emptyForm.profs.map(p=>p.lastname).join(", ")}</b></EuiText>
+                    <EuiText><b>{emptyForm.moduleName}</b> bei <b>{emptyForm.profs.map(p=>p.lastname).join(", ")}</b></EuiText>
                     <br></br>
                     <EuiCard
                         layout="vertical"

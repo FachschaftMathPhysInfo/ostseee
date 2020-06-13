@@ -28,7 +28,7 @@ const SingleChoiceQuestion = props => {
   const setSelected=(qid,concerns)=>(option:string)=>{
     console.log(qid,concerns,option)
     const val = question.options.filter((opt)=>opt.id==option.split(':')[0])[0].value
-    dispatch(changeAnswer(props.sectionId,qid,concerns,[val]))
+    dispatch(changeAnswer(props.sectionId,qid,concerns,[`${val}`]))
   }
   const notApplicable = (notApp)=>{
     dispatch(changeAnswer(props.sectionId,question.id,props.concerns,[""],notApp))

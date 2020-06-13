@@ -36,10 +36,13 @@ const SelectQuestion = props => {
 const selected = answer.values[0]
   const checked = answer.notApplicable
   const notApplicable = (notApp)=>{
-    dispatch(changeAnswer(props.sectionId,question.id,props.concerns,[""],notApp))
+    dispatch(changeAnswer(props.sectionId,question.id,props.concerns,[],notApp))
   }
+  const prof = props.prof
   return (
    <>
+   <h3><b>{prof?.lastname}</b></h3>
+    {prof!=null?<EuiSpacer size="s"></EuiSpacer>:<></>}
      <EuiSuperSelect fullWidth
       options={options}
       valueOfSelected={selected}

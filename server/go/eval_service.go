@@ -218,6 +218,8 @@ func (ev *EvalService) RenderInvitationToEmptyForm(invitationID uuid.UUID) (Empt
 	emptyForm.Profs, _ = ev.EvalRepository.FindAllCourseProfsForCourse(inv.CourseId) //BUG(henrik): we need the id of courseProf
 	emptyForm.Tutors = privaticeTutors(ev.FindAllCourseTutors(inv.CourseId))
 	emptyForm.Course, _ = ev.FindCourse(inv.CourseId)
+	module, _ := ev.FindModule(emptyForm.Course.ModuleId)
+	emptyForm.ModuleName = module.Name
 	emptyForm.Course.Tutors = []Tutor{} //protect Identity
 	form, _ := ev.EvalRepository.FindForm(emptyForm.Course.FormId)
 	emptyForm.AbstractForm = form.AbstractForm
@@ -300,7 +302,7 @@ func (ev *EvalService) ValidateAndSaveQuestionaire(invitationId uuid.UUID, quest
 		quest := questions[answer.QuestionId]
 		//now check - if load was sucessfull
 		if quest.Id == uuid.Nil {
-			return fmt.Errorf("Question not found")
+			return fmt.Errorf("Question not found: %s", answer.QuestionId.String())
 		}
 		// check
 		if !quest.HasNotApplicableOption && answer.NotApplicable {
@@ -310,16 +312,18 @@ func (ev *EvalService) ValidateAndSaveQuestionaire(invitationId uuid.UUID, quest
 			return fmt.Errorf("len(answer.Values)>1 on single choice")
 		}
 		if !quest.IsComment && !quest.HasOtherOption {
-			//check if all values are in options
-			for _, val := range answer.Values {
-				if !contains(quest.Options, val) {
-					return fmt.Errorf("Wrong value supplied")
+			if !answer.NotApplicable && (quest.Visualizer != "tutor_overview") { //BUG(henrik): add isTutorselect!
+				//check if all values are in options
+				for _, val := range answer.Values {
+					if !contains(quest.Options, val) {
+						return fmt.Errorf("Wrong value supplied to %s: %s", quest.Title["de"], val)
+					}
 				}
 			}
 		}
 		//Check if concerns is valid, does not check
 		if !isIn(answer.Concerns, validUUIDs) {
-			return fmt.Errorf("Answer is not concerning to  specific object")
+			return fmt.Errorf("Answer %s is not concerning to  specific object (Question:%i)", answer.Concerns, quest.Title)
 		}
 		if len(courseProfs) <= 1 || quest.Regards != "lecturer" {
 			delete(questions, answer.QuestionId)

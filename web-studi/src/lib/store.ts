@@ -22,15 +22,27 @@ const localizeReducer =(state,action)=>{
 export const CHANGE_ANSWER = "CHANGE_ANSWER"
 const initialAnswerState = {
   answers:{},
-  section:""
+  section:"",
+  tutorId:""
 }
+export const CHANGE_TUTOR ="CHANGE_TUTOR"
 const answersReducer =(state=initialAnswerState,action)=>{
   if(action.type==CHANGE_ANSWER){
     console.log(action)
-    state.answers[`${action.questionId}:${action.concerns}`]= {values:action.value,notApplicable:action.notApplicable}
+    state.answers[`${action.questionId}:${action.concerns}`]= {values:action.value,concerns:action.concerns, notApplicable:action.notApplicable}
     state.section = action.sectionId
   }
+  if(action.type==CHANGE_TUTOR){
+    console.log(CHANGE_TUTOR,action)
+    state.tutorId=action.tutorId
+  }
   return state
+}
+export const changeTutor=(tutorId)=>{
+  return {
+    type:CHANGE_TUTOR,
+    tutorId
+  }
 }
 export const changeAnswer = (sectionId,questionId,concerns,value,notApplicable=false) =>{
   return {
@@ -61,7 +73,7 @@ var authorizeRequest = function(token) {
       //req.header.authorization = "Bearer " + token;
       //req.url = BASE_PATH+req.url
       networkOptions.headers["Access-Control-Allow-Origin"]="*";
-      let BASE_P = "/v1/";
+      let BASE_P = "/v1";
       return superagentInterface(BASE_P+url,method,networkOptions);
     }
   };

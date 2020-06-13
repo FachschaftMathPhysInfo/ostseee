@@ -1,7 +1,10 @@
 export const getAnswer = (questionId,concerns)=>(state) => {
     return state.answers.answers[`${questionId}:${concerns}`]||{notApplicable:false,values:""}
   };
-export const getTutor=(state)=>{
+export const getAnswers=(state)=>{
+    return state.answers.answers
+}
+export const getTutorId=(state)=>{
     return state.answers.tutorId;
 }
 export const getAnswersCount=(state)=>{

@@ -9,6 +9,7 @@ import {useDispatch,useSelector} from 'react-redux'
 import { Question } from 'ostseee-web-common';
 import { getAnswer } from '../../selectors/answers';
 import { changeAnswer } from '../../lib/store';
+import { EuiSpacer } from '@elastic/eui';
 const CommentQuestion = props => {
   const question : Question = props.question
   const languageCode = useSelector(getLanguage)
@@ -18,13 +19,17 @@ const CommentQuestion = props => {
   const onChange = text => {
     dispatch(changeAnswer(props.sectionId,question.id,props.concerns,[text]))
   };
+  const prof = props.prof
   return (
-    
+    <>
+    <h3><b>{prof?.lastname}</b></h3>
+    {prof!=null?<EuiSpacer size="s"></EuiSpacer>:<></>}
     <EuiFormRow
       fullWidth
     >
       <EuiTextArea fullWidth value={val} onChange={e=>onChange(e.target.value)}/>
     </EuiFormRow>
+    </>
   );
 };
 

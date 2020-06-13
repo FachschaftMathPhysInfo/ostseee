@@ -143,7 +143,8 @@ export enum QuestionRegardsEnum {
 export enum QuestionVisualizerEnum {
     Histogram = 'histogram',
     Lines = 'lines',
-    Comments = 'comments'
+    Comments = 'comments',
+    TutorOverview = 'tutor_overview'
 }
 
 

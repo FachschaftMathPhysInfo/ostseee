@@ -829,6 +829,9 @@ components:
       properties:
         id:
           type: string
+        moduleName:
+          type: string
+          description: Name of the module evaluated.
         profs:
           type: array
           items:
@@ -921,7 +924,7 @@ components:
           description: Some questions need a not applicable option.
         visualizer:
           type: string
-          enum: [histogram, lines,comments]
+          enum: [histogram, lines,comments,tutor_overview]
           description: Defines how results should be displayed.
         options:
           type: array

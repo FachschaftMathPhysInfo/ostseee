@@ -10,8 +10,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
+	"time"
 
 	// WARNING!
 	// Change this to a fully-qualified import path
@@ -32,12 +34,16 @@ func initDB() *gorm.DB {
 		databaseConnectionType = "sqlite3"
 	}
 	databaseConnectionString := os.Getenv("DB_CONNECTION_STRING")
+	log.Println(databaseConnectionString)
 	if databaseConnectionString == "" {
 		databaseConnectionString = "test3.sqlite"
 	}
+	err := fmt.Errorf("initial connect failed")
 	db, err := gorm.Open(databaseConnectionType, databaseConnectionString)
-	if err != nil {
-		panic(err)
+	for err != nil {
+		db, err = gorm.Open(databaseConnectionType, databaseConnectionString)
+		time.Sleep(500 * time.Millisecond)
+		log.Println(err)
 	}
 	if migrateDB, aviable := os.LookupEnv("MIGRATE_DB"); aviable && migrateDB == "1" {
 		db.AutoMigrate(&sw.Faculty{})

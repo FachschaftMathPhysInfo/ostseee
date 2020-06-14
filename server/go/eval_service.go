@@ -182,6 +182,9 @@ func (ev *EvalService) FindOrGenerateCourseInvitations(courseId uuid.UUID, begin
 	return invs, nil
 }
 func privaticeTutors(tutors []Tutor) []Tutor {
+	if len(tutors) == 0 {
+		tutors = make([]Tutor, 0)
+	}
 	for i := range tutors {
 		tutors[i].Censored = false
 		tutors[i].CensoredDate = ""

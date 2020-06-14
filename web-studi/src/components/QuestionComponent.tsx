@@ -1,4 +1,4 @@
-import { Question, EmptyForm, QuestionVisualizerEnum } from "ostseee-web-common"
+import { Question, EmptyForm, QuestionVisualizerEnum, QuestionRegardsEnum } from "ostseee-web-common"
 import CommentQuestion from "./questions/CommentQuestion"
 import React, { Fragment } from "react"
 import MultipleChoiceQuestion from "./questions/MultipleChoiceQuestion"
@@ -20,6 +20,9 @@ const QuestionComponent= props=>{
     if (question.regards=="course"){
         concerns= emptyForm.course.id
     }
+    if(question.regards == QuestionRegardsEnum.Lecturer){
+        concerns = emptyForm.profs[0]?.id
+    }
    // console.log(props.sectionId)
     let comp=(concernsId,prof)=>( <SingleChoiceQuestion sectionId={props.sectionId} question={question} prof={prof} concerns={concernsId}></SingleChoiceQuestion>)
     //@ts-ignore
@@ -37,16 +40,17 @@ const QuestionComponent= props=>{
     }
     let comps = [<div  key={`${question.id}:${concerns}`} id={`${question.id}:${concerns}`}>{comp(concerns,null)}</div>]
     if(question.regards == "lecturer"){
+        concerns = emptyForm.profs[0]?.id
         comps =emptyForm.profs.map(prof=>(<div  key={`${question.id}:${prof.id}`} id={`${question.id}:${prof.id}`}>{comp(prof.id,prof)}<EuiSpacer size="l"></EuiSpacer></div>))
     }
     const languageCode = useSelector(getLanguage)
 
     return (<EuiDescribedFormGroup fullWidth gutterSize="xl"
     title={<h3>{question.title[languageCode]} </h3>}
-    description={question.isMulti?(<Fragment>
+    description={concerns!=""?(question.isMulti&&(<Fragment>
         Mehrfachauswahl möglich
-      </Fragment>):<></>}
-  >{comps
+      </Fragment>)):<>Kein Tutor ausgewählt.</>}
+  >{concerns!=""&&comps
    }</EuiDescribedFormGroup>
     )
 }

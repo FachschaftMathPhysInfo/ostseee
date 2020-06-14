@@ -90,13 +90,15 @@ const Form = (props) => {
       
       {!(isFinished&&status ==204)?
       <><EuiSpacer size="xl"></EuiSpacer>
-      {unanswered.length!=0&&<EuiCallOut title="Nicht alle Fragen beantwortet" color="warning" iconType="alert">
+      {unanswered.length!=0&&<><EuiCallOut title="Nicht alle Fragen beantwortet" color="warning" iconType="alert">
        <> <EuiText>Du kannst die Umfrage schon absenden, du hast aber folgende Fragen nicht beantwortet:</EuiText>
         
         <ul>
     {unanswered.map(q=>(<li key={q.link}><a href={`#${q.link}`}>{q.question.title[languageCode]}</a></li>))}
         </ul></>
-        </EuiCallOut>}
+        </EuiCallOut>
+        <EuiSpacer size="xl"></EuiSpacer></>
+        }
       <EuiButton fill iconType="exit" onClick={e => submitForm()} disabled={isPending}>
         Evaluation abschicken!
   </EuiButton></>:<></>}

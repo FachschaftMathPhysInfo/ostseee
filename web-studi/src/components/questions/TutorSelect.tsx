@@ -9,7 +9,7 @@ import { changeTutor, changeAnswer } from "../../lib/store";
 const TutorSelect = props=>{
     const emptyForm:EmptyForm = useSelector(getEmptyForm)
     const tutorId = useSelector(getTutorId)
-    const options = emptyForm.tutors.map(tut=>{return (tut.id===tutorId)?{
+    const options = emptyForm.tutors?.map(tut=>{return (tut.id===tutorId)?{
         label:tut.name,
         id: tut.id,
         checked:"on"

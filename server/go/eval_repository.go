@@ -248,7 +248,7 @@ func (ev *EvalRepository) SaveTutor(tutor Tutor) Tutor {
 }
 
 func (ev *EvalRepository) DeleteAllInvitationsOfCourse(courseId uuid.UUID) error {
-	ev.DB.Where("course_id LIKE ?", courseId).Delete(Invitation{})
+	ev.DB.Where("course_id = ?", courseId).Delete(Invitation{})
 	return nil
 }
 
@@ -260,7 +260,7 @@ func (ev *EvalRepository) SaveInvitation(invitation Invitation) Invitation {
 
 func (ev *EvalRepository) FindCourseInvitations(courseId uuid.UUID) ([]Invitation, error) {
 	var invs []Invitation
-	ev.DB.Where("course_id LIKE ?", courseId).Find(&invs)
+	ev.DB.Where("course_id = ?", courseId).Find(&invs)
 	return invs, nil
 }
 
@@ -275,7 +275,9 @@ func (ev *EvalRepository) FindInvitation(id uuid.UUID) (Invitation, error) {
 //FindAllCourseProfsForCourse returns all courseProfs profs with id = courseProfId
 func (ev *EvalRepository) FindAllCourseProfsForCourse(courseId uuid.UUID) ([]Prof, error) {
 	var courseprofs []CourseProf
-	ev.DB.Where("course_id LIKE ?", courseId).Find(&courseprofs)
+	var filter CourseProf
+	filter.CourseId = courseId
+	ev.DB.Where(&filter).Find(&courseprofs)
 	profs := make([]Prof, len(courseprofs))
 	for i, cp := range courseprofs {
 		profs[i], _ = ev.FindProf(cp.ProfId)

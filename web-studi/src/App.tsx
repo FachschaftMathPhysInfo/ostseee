@@ -46,6 +46,7 @@ import { getEmptyForm } from './selectors/emptyform';
 import {useSelector} from 'react-redux'
 import { getAnswersCount, getLastSectionAnswered } from './selectors/answers';
 import { EmptyForm } from 'ostseee-web-common';
+import translate from './lib/translate';
 function App() {
 
   
@@ -75,10 +76,10 @@ function App() {
    const sections = emptyForm==null?[]:emptyForm.abstractForm.pages.flatMap(p=>p.sections.map(section=>{
      return  {
         value: section.id,
-        inputDisplay: section.title[languageSelected],
+        inputDisplay: translate(section.title,languageSelected),
         dropdownDisplay: (
           <Fragment>
-            <strong>{section.title[languageSelected]}</strong>
+            <strong>{translate(section.title,languageSelected)}</strong>
           </Fragment>
         ),
       }

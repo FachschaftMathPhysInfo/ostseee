@@ -13,11 +13,12 @@ import {useSelector, useDispatch} from 'react-redux'
 import { getAnswer } from '../../selectors/answers';
 import { changeAnswer } from '../../lib/store';
 import { EuiSpacer } from '@elastic/eui';
+import translate from '../../lib/translate';
 const MultipleChoiceQuestion = props => {
   const question : Question = props.question
   const languageCode = useSelector(getLanguage)
   const options = question.options.map(opt=>{return {
-    label: opt.label[languageCode],
+    label: translate(opt.label,languageCode),
     id:  `${opt.id}:${props.concerns}`
   }})
   const answer = useSelector(getAnswer(question.id,props.concerns))||{values:[]}

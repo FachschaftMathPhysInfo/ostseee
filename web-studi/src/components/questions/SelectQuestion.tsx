@@ -15,13 +15,14 @@ import { htmlIdGenerator } from '@elastic/eui';
 import { EuiCheckbox } from '@elastic/eui';
 import { changeAnswer } from '../../lib/store';
 import { getAnswer } from '../../selectors/answers';
+import translate from '../../lib/translate';
 const SelectQuestion = props => {
   const question : Question = props.question
   const languageCode = useSelector(getLanguage)
   let options = question.options.map(option=>{
     return {
       value: `${option.value}`,
-    inputDisplay: (<EuiText>{option.label[languageCode]}</EuiText>),
+    inputDisplay: (<EuiText>{translate(option.label,languageCode)}</EuiText>),
     }
   })
   
@@ -32,8 +33,7 @@ const SelectQuestion = props => {
     dispatch(changeAnswer(props.sectionId, qid,concerns,[val]))
   }
   const answer = useSelector(getAnswer(question.id,props.concerns))
-  //const selected = question.options.filter(o=>`${o.value}`== answer.values[0])[0]?.label[languageCode]
-const selected = answer.values[0]
+  const selected = answer.values[0]
   const checked = answer.notApplicable
   const notApplicable = (notApp)=>{
     dispatch(changeAnswer(props.sectionId,question.id,props.concerns,[],notApp))
@@ -53,7 +53,7 @@ const selected = answer.values[0]
       question.hasNotApplicableOption?
     <EuiCheckbox
         id={htmlIdGenerator()()}
-        label={{"de":"keine Angabe","en":"n.a."}[languageCode]}
+        label={translate({"de":"keine Angabe","en":"n.a."},languageCode)}
         checked={checked}
         //@ts-ignore
         onChange={e => {notApplicable(e.target.checked)}}

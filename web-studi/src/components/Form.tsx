@@ -13,6 +13,7 @@ import { submitQuestionaire } from '../mutations/questionaire';
 import { EuiCallOut } from '@elastic/eui';
 import { EuiText } from '@elastic/eui';
 import { getLanguage } from '../selectors/language';
+import translate from '../lib/translate';
 const Form = (props) => {
   let emptyForm: EmptyForm = props.emptyForm
   const languageCode = useSelector(getLanguage)
@@ -94,7 +95,7 @@ const Form = (props) => {
        <> <EuiText>Du kannst die Umfrage schon absenden, du hast aber folgende Fragen nicht beantwortet:</EuiText>
         
         <ul>
-    {unanswered.map(q=>(<li key={q.link}><a href={`#${q.link}`}>{q.question.title[languageCode]}</a></li>))}
+    {unanswered.map(q=>(<li key={q.link}><a href={`#${q.link}`}>{translate(q.question.title,languageCode)}</a></li>))}
         </ul></>
         </EuiCallOut>
         <EuiSpacer size="xl"></EuiSpacer></>

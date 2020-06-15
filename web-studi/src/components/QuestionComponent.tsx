@@ -11,6 +11,7 @@ import { getEmptyForm } from "../selectors/emptyform"
 import { getTutorId } from "../selectors/answers"
 import { EuiSpacer } from "@elastic/eui"
 import TutorSelect from "./questions/TutorSelect"
+import translate from "../lib/translate"
 const QuestionComponent= props=>{
     const question:Question= props.question
     //check for concerns/regards
@@ -46,7 +47,7 @@ const QuestionComponent= props=>{
     const languageCode = useSelector(getLanguage)
 
     return (<EuiDescribedFormGroup fullWidth gutterSize="xl"
-    title={<h3>{question.title[languageCode]} </h3>}
+    title={<h3>{translate(question.title,languageCode)} </h3>}
     description={concerns!=""?(question.isMulti&&(<Fragment>
         Mehrfachauswahl möglich
       </Fragment>)):<>Kein Tutor ausgewählt.</>}

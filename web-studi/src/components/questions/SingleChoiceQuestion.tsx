@@ -13,13 +13,14 @@ import { getLanguage } from '../../selectors/language';
 import {useSelector, useDispatch} from 'react-redux'
 import { getAnswer } from '../../selectors/answers';
 import { changeAnswer } from '../../lib/store';
+import translate from '../../lib/translate';
 const SingleChoiceQuestion = props => {
   const question:Question = props.question
   const languageCode = useSelector(getLanguage)
   const options = question.options.map(opt=>{
     return {
       id:`${opt.id}:${props.concerns}`,
-      label:opt.label[languageCode]
+      label:translate(opt.label,languageCode)
     }
   })
   const answerid = useSelector(getAnswer(question.id,props.concerns))
@@ -51,7 +52,7 @@ const SingleChoiceQuestion = props => {
       question.hasNotApplicableOption?
     <EuiCheckbox
         id={htmlIdGenerator()()}
-        label={{"de":"keine Angabe","en":"n.a."}[languageCode]}
+        label={translate({"de":"keine Angabe","en":"n.a."},languageCode)}
         checked={checked}
         //@ts-ignore
         onChange={e => {notApplicable(e.target.checked)}}

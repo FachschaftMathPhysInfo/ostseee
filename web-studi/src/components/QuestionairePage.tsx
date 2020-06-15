@@ -11,10 +11,11 @@ import { EmptyForm } from "ostseee-web-common";
 import { EuiLoadingContent } from "@elastic/eui";
 import { getLanguage } from "../selectors/language";
 import { EuiPortal } from "@elastic/eui";
+import { EuiCallOut } from "@elastic/eui";
 const Questionaire = props => {
     const languageCode =   useSelector(getLanguage )
     const {questionaireId} = useParams();
-    useRequest(emptyFormGet(questionaireId));
+    const [{isPending,status}]=useRequest(emptyFormGet(questionaireId));
     const emptyForm : EmptyForm = useSelector(getEmptyForm);
     const [isFlyoutPrivacyVisible, setIsFlyoutPrivacyVisible] = useState(false);
 
@@ -131,10 +132,31 @@ const Questionaire = props => {
         },
       ];
       
-      if(emptyForm=== undefined){
+      if(isPending){
         return (
           <div>
+            <EuiPage>
+              <EuiPageContent><EuiPageHeader><h1>Lade...</h1></EuiPageHeader>
     <EuiLoadingContent lines={3} />
+    </EuiPageContent>
+    </EuiPage>
+  </div>
+        )
+      }
+      if(status!=200){
+        return (
+          <div>
+            <EuiPage>
+        <EuiPageContent>
+          <EuiCallOut title="Fehler beim Laden" iconType="alert" color="warning">Die eingegebene Seite ist nicht verfügbar. Dies kann einen der folgenden Gründe haben:<ul>
+            <li>Der Umfragetoken ist ungültig</li>
+            <li>Die Umfrage ist beendet</li>
+            <li>Technische Schwierigkeiten</li>
+            </ul>
+            Bei Technischen Schwierigkeiten wende dich an `evaluation@mathphys.info`. Bitte sende aber <b>nicht</b> deinen Token mit!
+            </EuiCallOut>
+    </EuiPageContent>
+    </EuiPage>
   </div>
         )
       }

@@ -12,6 +12,7 @@ import { getTutorId } from "../selectors/answers"
 import { EuiSpacer } from "@elastic/eui"
 import TutorSelect from "./questions/TutorSelect"
 import translate from "../lib/translate"
+import translation from '../data/translation.json'
 const QuestionComponent= props=>{
     const question:Question= props.question
     //check for concerns/regards
@@ -49,8 +50,8 @@ const QuestionComponent= props=>{
     return (<EuiDescribedFormGroup fullWidth gutterSize="xl"
     title={<h3>{translate(question.title,languageCode)} </h3>}
     description={concerns!=""?(question.isMulti&&(<Fragment>
-        Mehrfachauswahl möglich
-      </Fragment>)):<>Kein Tutor ausgewählt.</>}
+        {translate(translation["eval.multiple"],languageCode)}
+      </Fragment>)):<>{translate(translation["eval.no.tutor"],languageCode)}</>}
   >{concerns!=""&&comps
    }</EuiDescribedFormGroup>
     )

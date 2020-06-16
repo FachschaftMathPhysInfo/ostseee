@@ -12,6 +12,8 @@ import { EuiLoadingContent } from "@elastic/eui";
 import { getLanguage } from "../selectors/language";
 import { EuiPortal } from "@elastic/eui";
 import { EuiCallOut } from "@elastic/eui";
+import translate from "../lib/translate";
+import translation from "../data/translation.json";
 const Questionaire = props => {
     const languageCode =   useSelector(getLanguage )
     const {questionaireId} = useParams();
@@ -136,7 +138,7 @@ const Questionaire = props => {
         return (
           <div>
             <EuiPage>
-              <EuiPageContent><EuiPageHeader><h1>Lade...</h1></EuiPageHeader>
+              <EuiPageContent><EuiPageHeader><h1>{translate(translation["eval.loading"],languageCode)}</h1></EuiPageHeader>
     <EuiLoadingContent lines={3} />
     </EuiPageContent>
     </EuiPage>
@@ -148,12 +150,12 @@ const Questionaire = props => {
           <div>
             <EuiPage>
         <EuiPageContent>
-          <EuiCallOut title="Fehler beim Laden" iconType="alert" color="warning">Die eingegebene Seite ist nicht verfügbar. Dies kann einen der folgenden Gründe haben:<ul>
-            <li>Der Umfragetoken ist ungültig</li>
-            <li>Die Umfrage ist beendet</li>
-            <li>Technische Schwierigkeiten</li>
+          <EuiCallOut title={translate(translation["eval.error.loading"],languageCode)} iconType="alert" color="warning">{translate(translation["eval.error.loading.intro"],languageCode)}<ul>
+            <li>{translate(translation["eval.error.invalid.token"],languageCode)}</li>
+            <li>{translate(translation["eval.error.ended.survey"],languageCode)}</li>
+            <li>{translate(translation["eval.error.difficulties"],languageCode)}</li>
             </ul>
-            Bei Technischen Schwierigkeiten wende dich an `evaluation@mathphys.info`. Bitte sende aber <b>nicht</b> deinen Token mit!
+            {translate(translation["eval.error.outro"],languageCode)}
             </EuiCallOut>
     </EuiPageContent>
     </EuiPage>
@@ -165,7 +167,7 @@ const Questionaire = props => {
             <EuiPageHeader>
                 <EuiPageHeaderSection>
                     <EuiTitle size="l">
-                        <h1>Evaluation im Sommersemester</h1>
+                        <h1></h1>
                     </EuiTitle>
                 </EuiPageHeaderSection>
                 <EuiPageHeaderSection>
@@ -176,18 +178,17 @@ const Questionaire = props => {
                 <EuiPageContentHeader>
                     <EuiPageContentHeaderSection>
                         <EuiTitle>
-                            <h2>Willkommen!</h2>
+                            <h2>{translate(translation["eval.welcome"],languageCode)}</h2>
                         </EuiTitle>
                     </EuiPageContentHeaderSection>
                 </EuiPageContentHeader>
                 <EuiPageContentBody>
                     <EuiText style={{ textAlign: "left" }}>
-                        Diese Evaluation wird von der Studienkommission in Zusammenarbeit mit der Fachschaft MathPhysInfo durchgeführt.
-                        Sie soll helfen, die Lehre zu verbessern bzw.  Lehrveranstaltungen guter Qualität zu erhalten. Bitte lese die Fragen sorgfältig durch und beantworte sie anschließend.
-          </EuiText>
-                    <EuiText style={{ textAlign: "left" }}> Diese Umfrage betrifft folgende Veranstaltung: </EuiText>
+                      {translate(translation["eval.introduction"],languageCode)}
+                      </EuiText>
+                    <EuiText style={{ textAlign: "left" }}>{translate(translation["eval.concerns"],languageCode)} </EuiText>
                     <EuiSpacer size="l" />
-                    <EuiText><b>{emptyForm.moduleName}</b> bei <b>{emptyForm.profs.map(p=>p.lastname).join(", ")}</b></EuiText>
+                    <EuiText><b>{emptyForm.moduleName}</b> {translate(translation["eval.by"],languageCode)} <b>{emptyForm.profs.map(p=>p.lastname).join(", ")}</b></EuiText>
                     <br></br>
                     <EuiCard
                         layout="vertical"
@@ -208,15 +209,16 @@ const Questionaire = props => {
 
                     <EuiSpacer size="xl" />
                     <a href="#abschnitt"><EuiButton fill iconType="arrowDown">
-                        Evaluation beginnen
+                    {translate(translation["eval.begin"],languageCode)}
+                        
   </EuiButton></a>
                     <EuiSpacer size="xl" />
                     <EuiFlexGroup gutterSize="s" alignItems="center">
                         <EuiFlexItem grow={false}>
-                            <EuiButton onClick={toggleFlyoutPrivacy}>Datenschutz</EuiButton>
+                          <EuiButton onClick={toggleFlyoutPrivacy}>{translate(translation["eval.privacy"],languageCode)}</EuiButton>
                         </EuiFlexItem>
                         <EuiFlexItem grow={false}>
-                            <EuiButton onClick={toggleFlyoutLegal}>Impressum</EuiButton>
+                            <EuiButton onClick={toggleFlyoutLegal}>{translate(translation["eval.legal"],languageCode)}</EuiButton>
                         </EuiFlexItem>
                     </EuiFlexGroup>
                 </EuiPageContentBody>

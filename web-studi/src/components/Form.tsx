@@ -14,6 +14,8 @@ import { EuiCallOut } from '@elastic/eui';
 import { EuiText } from '@elastic/eui';
 import { getLanguage } from '../selectors/language';
 import translate from '../lib/translate';
+import translation from '../data/translation.json';
+import { lang } from 'moment';
 const Form = (props) => {
   let emptyForm: EmptyForm = props.emptyForm
   const languageCode = useSelector(getLanguage)
@@ -86,13 +88,13 @@ const Form = (props) => {
             <EuiSpacer size="xl"></EuiSpacer>
             <EuiSpacer size="xl"></EuiSpacer>
             <SectionComponent section={sec}  />
-          </div>))):<><h1>Umfrage erfolgreich abgesendet!</h1></>
+        </div>))):<><h1>{translate(translation["eval.send.success"],languageCode)}</h1></>
       }
       
       {!(isFinished&&status ==204)?
       <><EuiSpacer size="xl"></EuiSpacer>
-      {unanswered.length!=0&&<><EuiCallOut title="Nicht alle Fragen beantwortet" color="warning" iconType="alert">
-       <> <EuiText>Du kannst die Umfrage schon absenden, du hast aber folgende Fragen nicht beantwortet:</EuiText>
+      {unanswered.length!=0&&<><EuiCallOut title={translate(translation["eval.not.all.questions.answered.title"],languageCode)} color="warning" iconType="alert">
+      <> <EuiText>{translate(translation["eval.not.all.questions.answered.intro"],languageCode)}</EuiText>
         
         <ul>
     {unanswered.map(q=>(<li key={q.link}><a href={`#${q.link}`}>{translate(q.question.title,languageCode)}</a></li>))}
@@ -101,7 +103,7 @@ const Form = (props) => {
         <EuiSpacer size="xl"></EuiSpacer></>
         }
       <EuiButton fill iconType="exit" onClick={e => submitForm()} disabled={isPending}>
-        Evaluation abschicken!
+        {translate(translation["eval.submit"],languageCode)}
   </EuiButton></>:<></>}
     </div>
   );

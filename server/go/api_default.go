@@ -587,6 +587,13 @@ func (ev *EvalAPI) ProfsProfIdPatch(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
+	id, err := uuid.FromString(c.Param("profId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	prof.Id = id
 	co, err := ev.EvalService.SaveProf(prof)
 	if err != nil {
 		log.Println(err)

@@ -38,7 +38,7 @@ const ModulesOverview = props => {
 
   return (
     <>
-      <h1>module Overview</h1>
+      <h1>Module Overview</h1>
       <EuiBasicTable
         items={Modules}  // adjust for server request
         columns={columns}

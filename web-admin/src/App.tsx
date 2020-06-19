@@ -1,8 +1,14 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useRef, Fragment } from 'react';
 import mathphysinfoLogo from './images/logos/mathphysinfo.svg';
 import {
+  EuiButton,
+  EuiIcon,
+  EuiImage,
   EuiHeader,
   EuiHeaderLogo,
+  EuiHeaderSection,
+  EuiHeaderSectionItem,
+  EuiHeaderSectionItemButton,
   EuiPage,
   EuiPageBody,
   EuiPageContent,
@@ -10,7 +16,11 @@ import {
   EuiPageContentHeader,
   EuiPageContentHeaderSection,
   EuiPageHeader,
-  EuiPageHeaderSection,
+  EuiPageHeaderSection,  
+  //@ts-ignore
+  EuiNavDrawerGroup,
+    //@ts-ignore
+  EuiNavDrawer,
   EuiSpacer,
   EuiText,
   EuiTitle,
@@ -24,154 +34,140 @@ import FormsOverview from './components/FormsOverview';
 import ProfOverview from './components/ProfOverview';
 import ModulesOverview from './components/ModulesOverview';
 import TermsOverview from './components/TermsOverview';
+import { EuiCollapsibleNavGroup } from '@elastic/eui';
+import { EuiCollapsibleNav } from '@elastic/eui';
+import EuiCustomLink from './EuiCustomLink';
+import { Route, Switch, useHistory } from 'react-router';
+import ProfDetail from './components/ProfDetail';
+import TutorsOverview from './components/TutorsOverview';
 
 
 function App({store}) {
+  
+  const navDrawerRef = useRef(null);
+  const history = useHistory();
 
-  const tabs = [
+  const termLink = [
     {
-      id: 'lecture--id',
-      name: 'Veranstaltungen',
-      content: (
-        <Fragment>
-          <EuiSpacer />
-          <EuiTitle>
-            <h3>Evaluierte Veranstaltungen</h3>
-          </EuiTitle>
-          <EuiText>
-            Hier kannst du die Liste aller zu evaluierenden Veranstaltungen sehen und sie bearbeiten.
-            <ModulesOverview store={store}/>
+      label: 'Semester',
+      iconType: 'calendar',
+      onClick: ()=>{history.push("/terms")}
+    },
+  ]
 
-          </EuiText>
-        </Fragment>
-      ),
-    },
+  const moduleLink = [
     {
-      id: 'term--id',
-      name: 'Semester',
-      content: (
-        <Fragment>
-          <EuiSpacer />
-          <EuiTitle>
-            <h3>Semester</h3>
-          </EuiTitle>
-          <EuiText>
-            Hier können alle vergangenen Semester ausgewählt werden.
-            <TermsOverview store={store}/>
-          </EuiText>
-        </Fragment>
-      ),
+      label: 'Veranstaltungen',
+      iconType: 'managementApp',
+      onClick: ()=>{history.push("/modules")}
     },
+  ]
+  const profLink = [
     {
-      id: 'prof--id',
-      name:"ProfessorInnen",
-      content: (
-        <Fragment>
-          <EuiSpacer />
-          <EuiTitle>
-            <h3>ProfessorInnen</h3>
-          </EuiTitle>
-          <EuiText>
-            Eine Liste aller zu evaluierenden ProfessorInnen.
-            <ProfOverview store={store}/>
-          </EuiText>
-        </Fragment>
-      ),
-    },
-    {
-      id: 'tutor--id',
-      name: 'TutorInnen',
-      content: (
-        <Fragment>
-          <EuiSpacer />
-          <EuiTitle>
-            <h3>TutorInnen</h3>
-          </EuiTitle>
-          <EuiText>
-            Eine Liste aller zu evaluierenden TutorInnen.
-          </EuiText>
-        </Fragment>
-      ),
-    },
-    {
-      id: 'form--id',
-      name: 'Bögen',
-      content: (
-        <Fragment>
-          <EuiSpacer />
-          <EuiTitle>
-            <h3>Ausgefüllte Bögen</h3>
-          </EuiTitle>
-          <EuiText>
-            Hier erscheinen die fertig asugefüllten Bögen zu allen Veranstaltungen.
-            <FormsOverview store={store}/>
-          </EuiText>
-        </Fragment>
-      ),
-    },
-    {
-      id: 'report--id',
-      name: 'Berichte',
-      content: (
-        <Fragment>
-          <EuiSpacer />
-          <EuiTitle>
-            <h3>Berichte</h3>
-          </EuiTitle>
-          <EuiText>
-            Beschreibung
-          </EuiText>
-        </Fragment>
-      ),
-    },
-    {
-      id: 'hitme--id',
-      name: 'Hitmes',
-      content: (
-        <Fragment>
-          <EuiSpacer />
-          <EuiTitle>
-            <h3>Hitmes</h3>
-          </EuiTitle>
-          <EuiText>
-            Freitextkommentare sollen hier sortiert werden
-          </EuiText>
-        </Fragment>
-      ),
+      label: 'Professoren',
+      iconType: 'user',
+      onClick:()=>{history.push("/profs")}
     },
   ];
 
+  const tutorLink = [
+    {
+      label: 'Tutoren',
+      iconType: 'training',
+      onClick: ()=>{history.push("/tutors")}
+    },
+  ];
+
+  const formLink = [
+    {
+      label: 'Bögen',
+      iconType: 'reportingApp',
+      onClick: ()=>{history.push("/forms")}
+    },
+  ];
+
+  const reportLink = [
+    {
+      label: 'Berichte',
+      iconType: 'notebookApp',
+      onClick: ()=>{history.push("/reports")}
+    },
+  ];
+
+  const hitmeLink = [
+    {
+      label: 'HitMe',
+      iconType: 'pencil',
+      onClick: ()=>{history.push("/hitme")}
+    },
+  ];
+
+  const [navIsOpen,setNavIsOpen] = useState(false);
+  const navbar = (<EuiCollapsibleNav isOpen={navIsOpen}  
+    onClose={() => setNavIsOpen(false)}
+    isDocked={true}
+    button={
+      <EuiHeaderSectionItemButton
+        aria-label="Toggle main navigation"
+        onClick={() => setNavIsOpen(!navIsOpen)}>
+        <EuiIcon type={'menu'} size="m" aria-hidden="true" />
+      </EuiHeaderSectionItemButton>
+    }>
+    <EuiCollapsibleNavGroup >
+      <EuiNavDrawerGroup listItems={termLink} />
+      <EuiNavDrawerGroup listItems={moduleLink} />
+      <EuiNavDrawerGroup listItems={profLink} />
+      <EuiNavDrawerGroup listItems={tutorLink} />
+      <EuiNavDrawerGroup listItems={formLink} />
+      <EuiNavDrawerGroup listItems={reportLink} />
+      <EuiNavDrawerGroup listItems={hitmeLink} />
+    </EuiCollapsibleNavGroup>
+    </EuiCollapsibleNav>)
+  const leftbar=[navbar,(<EuiHeaderLogo iconType={mathphysinfoLogo}></EuiHeaderLogo>)]
+
   return (
     <div className="App">
-      <EuiHeader>
-        <EuiHeaderLogo iconType={mathphysinfoLogo}></EuiHeaderLogo>
+      <EuiHeader sections={[
+              {
+                items: leftbar,
+                borders: 'none',
+              },]}>
+        
       </EuiHeader>
 
-      <EuiPage>
-        <EuiPageBody component="div">
-          <EuiPageHeader>
-            <EuiPageHeaderSection>
-              <EuiTitle size="l">
-                <h1>Ostseee (Was heißt das eigentlich?)</h1>
-              </EuiTitle>
-            </EuiPageHeaderSection>
-            <EuiPageHeaderSection>Ausgewähltes Semester <br/> Sommer 2020</EuiPageHeaderSection>
-          </EuiPageHeader>
-          <EuiPageContent>
-            <EuiPageContentBody>
-            <EuiTabbedContent
-              expand={true}
-              tabs={tabs}
-              initialSelectedTab={tabs[0]}
-              autoFocus="selected"
-              color="success"
-              onTabClick={tab => {console.log('clicked tab', tab);}}
-            />
-
-            </EuiPageContentBody>
-          </EuiPageContent>
-        </EuiPageBody>
-      </EuiPage>
+      <Switch>
+        <Route path="/about">
+          About
+        </Route>
+        <Route path="/modules">
+          <ModulesOverview/>
+        </Route>
+        <Route path="/terms">
+          <TermsOverview/>
+        </Route>
+        <Route path="/forms">
+          <FormsOverview/>
+        </Route>
+        <Route path="/tutors">
+        </Route>
+        <Route path="/profs">
+          <ProfOverview/>
+        </Route>
+        <Route path="/reports">
+        </Route>
+        <Route path="/hitme">
+          HitMe
+        </Route>
+        <Route path="/profs/:profId">
+          <ProfDetail></ProfDetail>
+        </Route>
+        {/* default */}
+        <Route path="/">
+          willkommen
+          <EuiCustomLink to={`/profs/${32}`}>Hier</EuiCustomLink>
+        </Route>
+      </Switch>
+      
     </div>
   );
 }

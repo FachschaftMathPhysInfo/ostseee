@@ -10,6 +10,7 @@ import * as euiVars from '@elastic/eui/dist/eui_theme_light.json';
 import store, { getQueries } from './lib/store';
 import { Provider } from 'react-redux';
 import { Provider as ReduxQueryProvider } from 'redux-query-react';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 
 ReactDOM.render(
@@ -18,8 +19,9 @@ ReactDOM.render(
     <ThemeProvider theme={euiVars}>
       <Provider store={store}>
         <ReduxQueryProvider queriesSelector={getQueries}>
-      
-            <App store={store}></App>
+          <Router >
+          <App store={store}></App>
+          </Router>
         </ReduxQueryProvider>
       </Provider>
     </ThemeProvider>

@@ -914,6 +914,9 @@ components:
         hasOtherOption:
           type: boolean
           description: Some questions have an option that allows custom answers
+        isSlider:
+          type: boolean
+          description: "Renders this as a slider. Note: Doesnot work with hasOtherOption"
         regards:
          type: string
          enum: [course,lecturer,tutor]

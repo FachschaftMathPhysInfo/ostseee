@@ -167,7 +167,7 @@ const Questionaire = props => {
             <EuiPageHeader>
                 <EuiPageHeaderSection>
                     <EuiTitle size="l">
-                        <h1></h1>
+                        <h1>{translate(translation["eval.title"],languageCode)}</h1>
                     </EuiTitle>
                 </EuiPageHeaderSection>
                 <EuiPageHeaderSection>

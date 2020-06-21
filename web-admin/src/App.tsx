@@ -30,7 +30,7 @@ import './App.css';
 import store from './lib/store';
 
 //@ts-ignore
-import FormsOverview from './components/FormsOverview';
+import FormsOverview from './components/FormsOverView';
 import ProfOverview from './components/ProfOverview';
 import ModulesOverview from './components/ModulesOverview';
 import TermsOverview from './components/TermsOverview';

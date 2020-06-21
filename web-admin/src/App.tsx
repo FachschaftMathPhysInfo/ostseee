@@ -41,6 +41,7 @@ import { Route, Switch, useHistory } from 'react-router';
 import ProfDetail from './components/ProfDetail';
 import TutorsOverview from './components/TutorsOverview';
 import CoursesOverview from './components/CoursesOverview';
+import FacultiesOverview from './components/FacultiesOverView';
 
 
 function App({store}) {
@@ -48,13 +49,22 @@ function App({store}) {
   const navDrawerRef = useRef(null);
   const history = useHistory();
 
+
+  const facultyLink = [
+    {
+      label: 'Fakultäten',
+      iconType: 'node',
+      onClick: ()=>{history.push("/faculties")}
+    },
+  ];
+
   const termLink = [
     {
       label: 'Semester',
       iconType: 'calendar',
       onClick: ()=>{history.push("/terms")}
     },
-  ]
+  ];
 
   const moduleLink = [
     {
@@ -124,6 +134,7 @@ function App({store}) {
       </EuiHeaderSectionItemButton>
     }>
     <EuiCollapsibleNavGroup >
+      <EuiNavDrawerGroup listItems={facultyLink} />
       <EuiNavDrawerGroup listItems={termLink} />
       <EuiNavDrawerGroup listItems={moduleLink} />
       <EuiNavDrawerGroup listItems={courseLink} />
@@ -149,6 +160,9 @@ function App({store}) {
       <Switch>
         <Route path="/about">
           About
+        </Route>
+        <Route path="/faculties">
+          <FacultiesOverview/>
         </Route>
         <Route path="/modules">
           <ModulesOverview/>

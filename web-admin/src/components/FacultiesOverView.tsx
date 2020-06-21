@@ -6,6 +6,7 @@ import {
   EuiBasicTable,
   EuiSpacer,
   EuiText,
+  EuiInMemoryTable,
 } from "@elastic/eui";
 
 import { getQueries } from '../lib/store';
@@ -25,19 +26,21 @@ const FacultiesOverview = props => {
       name: 'Faculty',
       sortable: true,
     },
-    {
-      field: 'course', 
-      name: 'Course',
-      truncateText: true,
-    },
   ];
+
+  const sorting = {
+    sort: {
+      field: "name",
+      direction: "asc",
+    },
+  };
 
   return (
     <>
-      <h1>Faculty Overview</h1>
-      <EuiBasicTable
+      <EuiInMemoryTable
         items={Faculties}  // adjust for server request
         columns={columns}
+        sorting={sorting}
       />
       <FacultyCreateDialog></FacultyCreateDialog>
     </>

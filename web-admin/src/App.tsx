@@ -43,6 +43,7 @@ import ProfDetail from './components/ProfDetail';
 import TutorsOverview from './components/TutorsOverview';
 import CoursesOverview from './components/CoursesOverview';
 import FacultiesOverview from './components/FacultiesOverView';
+import FacultyCreateDialog from './components/FacultyCreateDialog';
 
 
 function App({store}) {
@@ -142,6 +143,9 @@ function App({store}) {
       <Switch>
         <Route path="/about">
           About
+        </Route>
+        <Route path="/faculties/new">
+          <FacultyCreateDialog/>
         </Route>
         <Route path="/faculties">
           <FacultiesOverview/>

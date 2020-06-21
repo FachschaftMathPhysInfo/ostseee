@@ -7,6 +7,7 @@ import {
   EuiSpacer,
   EuiText,
   EuiInMemoryTable,
+  EuiButton,
 } from "@elastic/eui";
 
 import { getQueries } from '../lib/store';
@@ -15,10 +16,15 @@ import FacultyCreateDialog from './FacultyCreateDialog';
 import * as facultyQueryConfigs from '../query-configs/faculties';
 import * as facultysSelectors from '../selectors/faculties';
 import { Faculty } from 'ostseee-web-common';
+import { useHistory } from 'react-router';
+
+
 
 const FacultiesOverview = props => {
   useRequest(facultyQueryConfigs.facultiesGet());
   const Faculties = useSelector(facultysSelectors.getFaculties);
+
+  const history = useHistory();
 
   const columns = [
     {
@@ -42,7 +48,11 @@ const FacultiesOverview = props => {
         columns={columns}
         sorting={sorting}
       />
-      <FacultyCreateDialog></FacultyCreateDialog>
+      
+      <EuiButton fill iconType="plusInCircle"  
+                onClick={() => history.push("/faculties/new")}>
+          Create Faculty
+        </EuiButton>
     </>
   );
 };

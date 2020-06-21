@@ -6,6 +6,8 @@ import {
   EuiBasicTable,
   EuiSpacer,
   EuiText,
+  EuiInMemoryTable,
+  EuiButtonIcon,
 } from "@elastic/eui";
 
 import { getQueries } from '../lib/store';
@@ -20,25 +22,50 @@ const ProfOverview = props => {
 
   const columns = [
     {
-      field: 'name',  // for further arguments, see https://elastic.github.io/eui/#/tabular-content/tables
-      name: 'Prof',
+      field: 'title',  // for further arguments, see https://elastic.github.io/eui/#/tabular-content/tables
+      name: 'Title',
       sortable: true,
     },
     {
-      field: 'course', 
-      name: 'Course',
-      truncateText: true,
+      field: 'firstname', 
+      name: 'Firstname',
+      sortable: true,
+    },
+    {
+      field: 'lastname', 
+      name: 'Lastname',
+      sortable: true,
+    },
+    {
+      field: 'censored', 
+      name: 'censored',
+      sortable: true,
+    },
+    {
+      field: 'email', 
+      name: 'email',
+      sortable: true,
+    },
+    {
+      field: '', 
+      name: 'Details',
+      render: ()=> {return <EuiButtonIcon iconType="arrowRight"/>}
     },
   ];
 
+  const sorting = {
+    sort: {
+      field: "lastname",
+      direction: "asc",
+    },
+  };
+
   return (
-    <>
-      <h1>Prof Overview</h1>
-      <EuiBasicTable
+    <EuiInMemoryTable
         items={Profs}  // adjust for server request
         columns={columns}
+        sorting={sorting}
       />
-    </>
   );
 };
 

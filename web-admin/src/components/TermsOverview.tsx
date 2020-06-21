@@ -20,9 +20,6 @@ const TermsOverview = props => {
   useRequest(termQueryConfigs.termsGet());
   const Terms = useSelector(termSelectors.getTerms);
 
-  const [sortField, setSortField] = useState('begin');
-  const [sortDirection, setSortDirection] = useState('desc');
-
   const columns = [
     {
       field: 'name',  // for further arguments, see https://elastic.github.io/eui/#/tabular-content/tables
@@ -47,8 +44,8 @@ const TermsOverview = props => {
 
   const sorting = {
     sort: {
-      field: sortField,
-      direction: sortDirection,
+      field: "begin",
+      direction: "desc",
     },
   };
   

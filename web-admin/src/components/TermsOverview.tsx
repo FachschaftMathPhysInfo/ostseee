@@ -7,6 +7,8 @@ import {
   EuiSpacer,
   EuiText,
   EuiInMemoryTable,
+  SortDirection,
+  EuiTableDataType,
 } from "@elastic/eui";
 
 import { getQueries } from '../lib/store';
@@ -24,28 +26,29 @@ const TermsOverview = props => {
     {
       field: 'name',  // for further arguments, see https://elastic.github.io/eui/#/tabular-content/tables
       name: 'Term name',
+      dataType: 'string' as EuiTableDataType,
       sortable: true,
     },
     {
       field: 'begin', 
       name: 'Begin date',
       sortable: true,
-      dataType: 'date',
+      dataType: 'date'as EuiTableDataType,
       render: date => { return date.toLocaleDateString('de-DE') },
     },
     {
       field: 'end', 
       name: 'End date',
       sortable: true,
-      dataType: 'date',
-      render: date => { return date.toLocaleDateString('de-DE') },
+      dataType: 'date' as EuiTableDataType,
+      render: date => { return (date.toLocaleDateString('de-DE')) },
     },
   ];
 
   const sorting = {
     sort: {
       field: "begin",
-      direction: "desc",
+      direction: SortDirection.DESC,
     },
   };
   

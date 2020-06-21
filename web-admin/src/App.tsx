@@ -32,7 +32,7 @@ import './App.css';
 import store from './lib/store';
 
 //@ts-ignore
-import FormsOverview from './components/FormsOverView';
+import FormsOverview from './components/FormsOverview';
 import ProfOverview from './components/ProfOverview';
 import ModulesOverview from './components/ModulesOverview';
 import TermsOverview from './components/TermsOverview';
@@ -55,6 +55,7 @@ function App({store}) {
     {
       label: 'Fakultäten',
       iconType: 'node',
+      isActive:false,
       onClick: (e)=>{history.push("/faculties"); setActiveItem(0)},
     },
     {

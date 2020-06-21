@@ -57,7 +57,7 @@ function App({store}) {
 
   const moduleLink = [
     {
-      label: 'Veranstaltungen',
+      label: 'Module',
       iconType: 'managementApp',
       onClick: ()=>{history.push("/modules")}
     },

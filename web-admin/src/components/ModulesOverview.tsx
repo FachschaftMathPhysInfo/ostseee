@@ -6,6 +6,8 @@ import {
   EuiBasicTable,
   EuiSpacer,
   EuiText,
+  EuiInMemoryTable,
+  EuiButtonIcon,
 } from "@elastic/eui";
 
 import { getQueries } from '../lib/store';
@@ -21,27 +23,34 @@ const ModulesOverview = props => {
   const columns = [
     {
       field: 'name',  // for further arguments, see https://elastic.github.io/eui/#/tabular-content/tables
-      name: 'Module',
+      name: 'Module Name',
       sortable: true,
     },
     {
       field: 'description', 
-      name: 'Desscription',
+      name: 'Description',
       truncateText: true,
     },
     {
-      field: 'tutors', 
-      name: 'Tutors',
-      truncateText: true,
+      field: '', 
+      name: 'Details',
+      render: ()=> {return <EuiButtonIcon iconType="arrowRight"/>}
     },
   ];
 
+  const sorting = {
+    sort: {
+      field: "name",
+      direction: "asc",
+    },
+  };
+
   return (
     <>
-      <h1>Module Overview</h1>
-      <EuiBasicTable
+      <EuiInMemoryTable
         items={Modules}  // adjust for server request
         columns={columns}
+        sorting = {sorting}
       />
     </>
   );

@@ -16,6 +16,10 @@ import { getQueries } from '../lib/store';
 import * as courseQueryConfigs from '../query-configs/courses';
 import * as courseSelectors from '../selectors/courses';
 import { Module } from 'ostseee-web-common';
+import ModuleDisplay from './ModuleDisplay'
+import TermDisplay from './TermDisplay';
+import CourseProfsDisplay from './CourseProfsDisplay';
+import EuiCustomLink from '../EuiCustomLink';
 
 const CoursesOverview = props => {
   useRequest(courseQueryConfigs.coursesGet());
@@ -23,25 +27,64 @@ const CoursesOverview = props => {
 
   const columns = [
     {
-      field: 'termid',  // for further arguments, see https://elastic.github.io/eui/#/tabular-content/tables
+      field: 'id', 
+      name: 'Id',
+      truncateText: true,
+      render: (data:string)=> {return <EuiCustomLink to={`/courses/${data}`}>{ data.slice(0,5)}</EuiCustomLink>}
+    },
+    {
+      field: 'termId',  // for further arguments, see https://elastic.github.io/eui/#/tabular-content/tables
       name: 'Term',
       sortable: true,
+      render: (data)=> {return <TermDisplay id={data}></TermDisplay>}
     },
     {
-      field: 'moduleid', 
+      field: 'moduleId', 
       name: 'Module',
       truncateText: true,
+      render: (data)=> {return <ModuleDisplay id={data}></ModuleDisplay>}
     },
     {
-      field: '', 
-      name: 'Details',
-      render: ()=> {return <EuiButtonIcon iconType="arrowRight"/>}
+      field: 'id', 
+      name: 'Profs',
+      truncateText: true,
+      render: (data)=> {return <CourseProfsDisplay id={data}></CourseProfsDisplay>}
+    },
+    {
+      field: 'numberOfStudents', 
+      name: '# Students',
+      truncateText: true
+    },
+    {
+      field: 'language', 
+      name: 'Sprache',
+      truncateText: true
+    },
+    {
+      field: 'location', 
+      name: 'Ort',
+      truncateText: true
+    },
+    {
+      field: 'thirdPartyKey', 
+      name: '3rd-Party Key',
+      truncateText: true
+    },
+    {
+      field: 'progress', 
+      name: 'Progress',
+      truncateText: true
+    },
+    {
+      field: 'clearance', 
+      name: 'Freigabe',
+      truncateText: true
     },
   ];
 
   const sorting = {
     sort: {
-      field: "termid",
+      field: "termId",
       direction: SortDirection.ASC,
     },
   };

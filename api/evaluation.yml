@@ -352,6 +352,19 @@ paths:
           description: OK
   /courseprofs:
     get:
+      parameters:
+        - in: query
+          name: courseId
+          schema:
+            type: string
+          required: false
+          description: Possible Id of course to filter
+        - in: query
+          name: profId
+          schema:
+            type: string
+          required: false
+          description: Possible Id of id to filter
       responses:
         '200':
           description: OK

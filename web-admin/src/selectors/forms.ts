@@ -4,6 +4,8 @@ export const getForms = state => {
   return state.entities.Forms || emptyArray;
 };
 
-export const getItem = (state, itemId) => {
-  return (state.entities.itemsById || {})[itemId];
+//singular
+export const getForm =(itemId)=> (state) => {
+  return (state.entities.FormsById||{})[itemId];
+  //return (state.entities.itemsById || {})[itemId];
 };

@@ -12,3 +12,20 @@ export const formsGet =()=>{
         },
       },});
 }
+
+export const formGet=(formId)=>{
+  return t.formsFormIdGet({formId},{
+    transform:(val: any)=>{
+        return {FormsById:val};
+    },
+    update: {
+    FormsById: (prev, next) => {
+      if(prev==undefined){
+        prev = {};
+      }
+      // Discard previous `response` value (we don't need it anymore).
+      prev[next.id]= next
+      return prev;
+    },
+  },})
+}

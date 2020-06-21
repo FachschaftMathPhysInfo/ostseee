@@ -12,3 +12,19 @@ export const modulesGet =()=>{
         },
       },});
 }
+export const moduleGet=(id)=>{
+  return t.modulesModuleIdGet({moduleId:id},{
+    transform:(val: any)=>{
+        return {ModulesById:val};
+    },
+    update: {
+    ModulesById: (prev, next) => {
+      if(prev==undefined){
+        prev = {};
+      }
+      // Discard previous `response` value (we don't need it anymore).
+      prev[next.id]= next
+      return prev;
+    },
+  },})
+}

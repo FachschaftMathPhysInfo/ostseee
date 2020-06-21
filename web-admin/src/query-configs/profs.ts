@@ -14,20 +14,20 @@ export const profsGet =()=>{
       },});
 }
 
-export const profGet =(id)=>{
-  return t.profsProfIdGet({
-      profId: id,
+
+export const profGet=(id)=>{
+  return t.profsProfIdGet({profId:id},{
+    transform:(val: any)=>{
+        return {ProfsById:val};
     },
-    {
-      transform:(val: any)=>{
-        console.log(val);
-          return {Prof:val};
-      },
-      update: {
-      Prof: (prev, next) => {
-        // Discard previous `response` value (we don't need it anymore).
-        console.log(next);
-        return next;
-      },
-    },});
+    update: {
+      ProfsById: (prev, next) => {
+      if(prev==undefined){
+        prev = {};
+      }
+      // Discard previous `response` value (we don't need it anymore).
+      prev[next.id]= next
+      return prev;
+    },
+  },})
 }

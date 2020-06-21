@@ -80,6 +80,11 @@ export interface CourseprofsCourseProfIdReportGetRequest {
     courseProfId: string;
 }
 
+export interface CourseprofsGetRequest {
+    courseId?: string;
+    profId?: string;
+}
+
 export interface CourseprofsPostRequest {
     courseProf: CourseProf;
 }
@@ -419,9 +424,20 @@ export function courseprofsCourseProfIdReportGet<T>(requestParameters: Coursepro
 
 /**
  */
-function courseprofsGetRaw<T>( requestConfig: runtime.TypedQueryConfig<T, Array<CourseProf>> = {}): QueryConfig<T> {
+function courseprofsGetRaw<T>(requestParameters: CourseprofsGetRequest, requestConfig: runtime.TypedQueryConfig<T, Array<CourseProf>> = {}): QueryConfig<T> {
     let queryParameters = null;
 
+    queryParameters = {};
+
+
+    if (requestParameters.courseId !== undefined) {
+        queryParameters['courseId'] = requestParameters.courseId;
+    }
+
+
+    if (requestParameters.profId !== undefined) {
+        queryParameters['profId'] = requestParameters.profId;
+    }
 
     const headerParameters = {};
 
@@ -453,8 +469,8 @@ function courseprofsGetRaw<T>( requestConfig: runtime.TypedQueryConfig<T, Array<
 
 /**
 */
-export function courseprofsGet<T>( requestConfig?: runtime.TypedQueryConfig<T, Array<CourseProf>>): QueryConfig<T> {
-    return courseprofsGetRaw( requestConfig);
+export function courseprofsGet<T>(requestParameters: CourseprofsGetRequest, requestConfig?: runtime.TypedQueryConfig<T, Array<CourseProf>>): QueryConfig<T> {
+    return courseprofsGetRaw(requestParameters, requestConfig);
 }
 
 /**

@@ -25,6 +25,7 @@ import {
   EuiText,
   EuiTitle,
   EuiTabbedContent,
+  EuiCollapsibleNav,
 } from "@elastic/eui";
 import './App.css';
 import store from './lib/store';
@@ -35,7 +36,6 @@ import ProfOverview from './components/ProfOverview';
 import ModulesOverview from './components/ModulesOverview';
 import TermsOverview from './components/TermsOverview';
 import { EuiCollapsibleNavGroup } from '@elastic/eui';
-import { EuiCollapsibleNav } from '@elastic/eui';
 import EuiCustomLink from './EuiCustomLink';
 import { Route, Switch, useHistory } from 'react-router';
 import ProfDetail from './components/ProfDetail';
@@ -124,8 +124,9 @@ function App({store}) {
 
   const [navIsOpen,setNavIsOpen] = useState(false);
   const navbar = (<EuiCollapsibleNav isOpen={navIsOpen}  
-    onClose={() => setNavIsOpen(false)}
-    isDocked={true}
+    onClose={() => setNavIsOpen(false)} 
+    isDocked={navIsOpen}
+    hideButtonIfDocked={false}
     button={
       <EuiHeaderSectionItemButton
         aria-label="Toggle main navigation"
@@ -145,11 +146,12 @@ function App({store}) {
       <EuiNavDrawerGroup listItems={hitmeLink} />
     </EuiCollapsibleNavGroup>
     </EuiCollapsibleNav>)
+    
   const leftbar=[navbar,(<EuiHeaderLogo iconType={mathphysinfoLogo}></EuiHeaderLogo>)]
 
   return (
     <div className="App">
-      <EuiHeader sections={[
+      <EuiHeader position="fixed" sections={[
               {
                 items: leftbar,
                 borders: 'none',

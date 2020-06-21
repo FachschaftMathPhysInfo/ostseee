@@ -6,11 +6,12 @@ import * as profQueryConfigs from '../query-configs/profs';
 import * as profSelectors from '../selectors/profs';
 import './Prof.css';
 
+
 const ProfDetail = props => {
     
     let {profId} = useParams();
-    useRequest(profQueryConfigs.profGet(profId));
-    const Prof = useSelector(profSelectors.getProf)[0];
+    const [data, second] = useRequest(profQueryConfigs.profGet(profId));
+    const Prof = useSelector(profSelectors.getProf(profId))
     
     if(Prof){
         return (

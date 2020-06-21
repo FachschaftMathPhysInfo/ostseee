@@ -89,7 +89,7 @@ export interface Course  {
      * @type {Array<Tutor>}
      * @memberof Course
      */
-    tutors: Array<Tutor>;
+    tutors?: Array<Tutor>;
 }
 
 export function CourseFromJSON(json: any): Course {
@@ -104,7 +104,7 @@ export function CourseFromJSON(json: any): Course {
         'thirdPartyKey': !exists(json, 'thirdPartyKey') ? undefined : json['thirdPartyKey'],
         'progress': json['progress'],
         'clearance': json['clearance'],
-        'tutors': (json['tutors'] as Array<any>).map(TutorFromJSON),
+        'tutors': !exists(json, 'tutors') ? undefined : (json['tutors'] as Array<any>).map(TutorFromJSON),
     };
 }
 
@@ -123,7 +123,7 @@ export function CourseToJSON(value?: Course): any {
         'thirdPartyKey': value.thirdPartyKey,
         'progress': value.progress,
         'clearance': value.clearance,
-        'tutors': (value.tutors as Array<any>).map(TutorToJSON),
+        'tutors': value.tutors === undefined ? undefined : (value.tutors as Array<any>).map(TutorToJSON),
     };
 }
 

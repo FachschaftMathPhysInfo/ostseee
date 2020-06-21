@@ -40,6 +40,7 @@ import EuiCustomLink from './EuiCustomLink';
 import { Route, Switch, useHistory } from 'react-router';
 import ProfDetail from './components/ProfDetail';
 import TutorsOverview from './components/TutorsOverview';
+import CoursesOverview from './components/CoursesOverview';
 
 
 function App({store}) {
@@ -61,7 +62,16 @@ function App({store}) {
       iconType: 'managementApp',
       onClick: ()=>{history.push("/modules")}
     },
-  ]
+  ];
+
+  const courseLink = [
+    {
+      label: 'Veranstaltungen',
+      iconType: 'folderOpen',
+      onClick: ()=>{history.push("/courses")}
+    },
+  ];
+
   const profLink = [
     {
       label: 'Professoren',
@@ -116,6 +126,7 @@ function App({store}) {
     <EuiCollapsibleNavGroup >
       <EuiNavDrawerGroup listItems={termLink} />
       <EuiNavDrawerGroup listItems={moduleLink} />
+      <EuiNavDrawerGroup listItems={courseLink} />
       <EuiNavDrawerGroup listItems={profLink} />
       <EuiNavDrawerGroup listItems={tutorLink} />
       <EuiNavDrawerGroup listItems={formLink} />
@@ -141,6 +152,9 @@ function App({store}) {
         </Route>
         <Route path="/modules">
           <ModulesOverview/>
+        </Route>
+        <Route path="/courses">
+          <CoursesOverview/>
         </Route>
         <Route path="/terms">
           <TermsOverview/>

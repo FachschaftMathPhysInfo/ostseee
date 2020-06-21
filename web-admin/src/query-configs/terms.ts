@@ -12,3 +12,19 @@ export const termsGet =()=>{
         },
       },});
 }
+export const termGet=(id)=>{
+  return t.termsTermIdGet({termId:id},{
+    transform:(val: any)=>{
+        return {TermsById:val};
+    },
+    update: {
+      TermsById: (prev, next) => {
+      if(prev==undefined){
+        prev = {};
+      }
+      // Discard previous `response` value (we don't need it anymore).
+      prev[next.id]= next
+      return prev;
+    },
+  },})
+}

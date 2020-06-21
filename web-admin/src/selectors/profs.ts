@@ -4,7 +4,7 @@ export const getProfs = state => {
   return state.entities.Profs || emptyArray;
 };
 //singular
-export const getProf = (state, itemId) => {
-  return state.entities.Profs.filter(item=> item.id == itemId)[0];
+export const getProf =(itemId)=> (state) => {
+  return (state.entities.ProfsById||{})[itemId];
   //return (state.entities.itemsById || {})[itemId];
 };

@@ -12,3 +12,20 @@ export const profsGet =()=>{
         },
       },});
 }
+
+export const profGet=(id)=>{
+  return t.profsProfIdGet({profId:id},{
+    transform:(val: any)=>{
+        return {ProfsById:val};
+    },
+    update: {
+      ProfsById: (prev, next) => {
+      if(prev==undefined){
+        prev = {};
+      }
+      // Discard previous `response` value (we don't need it anymore).
+      prev[next.id]= next
+      return prev;
+    },
+  },})
+}

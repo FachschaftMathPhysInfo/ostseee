@@ -168,10 +168,12 @@ func (ev *EvalRepository) SaveCourseProf(courseprof CourseProf) CourseProf {
 }
 
 // FindAllCourseProfs returns all courseprofs
-func (ev *EvalRepository) FindAllCourseProfs() []CourseProf {
-	//BUG(henrik): return only subset
+func (ev *EvalRepository) FindAllCourseProfs(courseId uuid.UUID, profId uuid.UUID) []CourseProf {
 	var courseprofs []CourseProf
-	ev.DB.Find(&courseprofs)
+	var filter CourseProf
+	filter.CourseId = courseId
+	filter.ProfId = profId
+	ev.DB.Where(&filter).Find(&courseprofs)
 
 	return courseprofs
 }

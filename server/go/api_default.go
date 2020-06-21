@@ -89,7 +89,14 @@ func (ev *EvalAPI) CourseprofsCourseProfIdReportGet(c *gin.Context) {
 
 // CourseprofsGet -
 func (ev *EvalAPI) CourseprofsGet(c *gin.Context) {
-	c.JSON(http.StatusOK, ev.EvalService.FindAllCourseProfs())
+	type CourseProfParams struct {
+		CourseId string `form:"courseId"`
+		ProfId   string `form:"profId"`
+	}
+	var courseProfparams CourseProfParams
+	c.Bind(&courseProfparams)
+
+	c.JSON(http.StatusOK, ev.EvalService.FindAllCourseProfs(uuid.FromStringOrNil(courseProfparams.CourseId), uuid.FromStringOrNil(courseProfparams.ProfId)))
 }
 
 // CourseprofsPost -

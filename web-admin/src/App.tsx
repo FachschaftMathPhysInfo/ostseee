@@ -44,6 +44,7 @@ import TutorsOverview from './components/TutorsOverview';
 import CoursesOverview from './components/CoursesOverview';
 import FacultiesOverview from './components/FacultiesOverView';
 import FacultyCreateDialog from './components/FacultyCreateDialog';
+import CourseDetail from './components/CourseDetail';
 
 
 function App({store}) {
@@ -133,6 +134,7 @@ function App({store}) {
 
   return (
     <div className="App">
+      <EuiPage>
       <EuiHeader position="fixed" sections={[
               {
                 items: leftbar,
@@ -140,7 +142,7 @@ function App({store}) {
               },]}>
         
       </EuiHeader>
-
+<EuiPageBody component="div">
       <Switch>
         <Route path="/about">
           About
@@ -154,9 +156,13 @@ function App({store}) {
         <Route path="/modules">
           <ModulesOverview/>
         </Route>
+        <Route path="/courses/:courseId">
+          <CourseDetail></CourseDetail>
+        </Route>
         <Route path="/courses">
           <CoursesOverview/>
         </Route>
+        
         <Route path="/terms">
           <TermsOverview/>
         </Route>
@@ -182,7 +188,8 @@ function App({store}) {
           <EuiCustomLink to={`/profs/${32}`}>Hier</EuiCustomLink>
         </Route>
       </Switch>
-      
+      </EuiPageBody>
+      </EuiPage>
     </div>
   );
 }

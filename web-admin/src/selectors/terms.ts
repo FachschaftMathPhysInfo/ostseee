@@ -4,7 +4,8 @@ export const getTerms = state => {
   return state.entities.Terms || emptyArray;
 };
 //singular
-export const getTerm = (state, itemId) => {
-  return state.entities.Terms.filter(item=> item.id == itemId)[0];
+//singular
+export const getTerm =(itemId)=> (state) => {
+  return (state.entities.TermsById||{})[itemId];
   //return (state.entities.itemsById || {})[itemId];
 };

@@ -111,8 +111,8 @@ func (ev *EvalService) SaveCourseProf(courseprof CourseProf) (CourseProf, error)
 	return ev.EvalRepository.SaveCourseProf(courseprof), nil
 }
 
-func (ev *EvalService) FindAllCourseProfs() []CourseProf {
-	return ev.EvalRepository.FindAllCourseProfs()
+func (ev *EvalService) FindAllCourseProfs(courseId uuid.UUID, profId uuid.UUID) []CourseProf {
+	return ev.EvalRepository.FindAllCourseProfs(courseId, profId)
 }
 
 func (ev *EvalService) DeleteCourseProf(id uuid.UUID) error {

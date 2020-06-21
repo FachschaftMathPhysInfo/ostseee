@@ -12,19 +12,22 @@ import { useHistory } from 'react-router';
 
 const FacultyCreateDialog = props => {
     //@ts-ignore
-const [{isPending},createFaculty2 ]= useMutation((name)=>{return createFaculty(name)});
+const [{isPending, status},createFaculty2 ]= useMutation((name)=>{return createFaculty(name)});
 const [name, setName] = useState('');
   
 const history = useHistory();
+if(status === 200 || status === 204){
+  history.push("/faculties");
+}
+//TODO: fehlerfälle müssen noch abgefangen werden und dem User mitgeteilt werden.
 
   return (
     <>
     <EuiForm component="form" style={{padding: 30}}>
-      {isPending}
       <EuiFormRow label="Offizieller Fakultätsname">
         <EuiFieldText placeholder="Fakultätsname" value={name} onChange={(e)=>setName(e.target.value)}></EuiFieldText>
       </EuiFormRow>
-        <EuiButton fill onClick={()=> {createFaculty2(name); history.push("/faculties");}} disabled={isPending}>Erstellen</EuiButton>
+        <EuiButton fill onClick={()=> {createFaculty2(name);}} disabled={isPending}>Erstellen</EuiButton>
       </EuiForm>
     </>
   );

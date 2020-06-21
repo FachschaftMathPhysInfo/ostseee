@@ -26,6 +26,7 @@ import {
   EuiTitle,
   EuiTabbedContent,
   EuiCollapsibleNav,
+  EuiListGroupItem,
 } from "@elastic/eui";
 import './App.css';
 import store from './lib/store';
@@ -50,83 +51,70 @@ function App({store}) {
   const history = useHistory();
 
 
-  const facultyLink = [
+  let links = [
     {
       label: 'Fakultäten',
       iconType: 'node',
-      onClick: ()=>{history.push("/faculties")}
+      onClick: (e)=>{history.push("/faculties"); setActiveItem(0)},
     },
-  ];
-
-  const termLink = [
     {
       label: 'Semester',
       iconType: 'calendar',
-      onClick: ()=>{history.push("/terms")}
+      onClick: ()=>{history.push("/terms"); setActiveItem(1)},
     },
-  ];
-
-  const moduleLink = [
     {
       label: 'Module',
       iconType: 'managementApp',
-      onClick: ()=>{history.push("/modules")}
+      onClick: ()=>{history.push("/modules"); setActiveItem(2)}
     },
-  ];
-
-  const courseLink = [
     {
       label: 'Veranstaltungen',
       iconType: 'folderOpen',
-      onClick: ()=>{history.push("/courses")}
+      onClick: ()=>{history.push("/courses"); setActiveItem(3)}
     },
-  ];
-
-  const profLink = [
     {
       label: 'Professoren',
       iconType: 'user',
-      onClick:()=>{history.push("/profs")}
+      onClick:()=>{history.push("/profs"); setActiveItem(4)},
     },
-  ];
-
-  const tutorLink = [
     {
       label: 'Tutoren',
       iconType: 'training',
-      onClick: ()=>{history.push("/tutors")}
+      onClick: ()=>{history.push("/tutors"); setActiveItem(5)}
     },
-  ];
-
-  const formLink = [
     {
       label: 'Bögen',
       iconType: 'reportingApp',
-      onClick: ()=>{history.push("/forms")}
+      onClick: ()=>{history.push("/forms"); setActiveItem(6)}
     },
-  ];
-
-  const reportLink = [
     {
       label: 'Berichte',
       iconType: 'notebookApp',
-      onClick: ()=>{history.push("/reports")}
+      onClick: ()=>{history.push("/reports"); setActiveItem(7)}
     },
-  ];
-
-  const hitmeLink = [
     {
       label: 'HitMe',
       iconType: 'pencil',
-      onClick: ()=>{history.push("/hitme")}
+      onClick: ()=>{history.push("/hitme"); setActiveItem(8)}
     },
   ];
 
-  const [navIsOpen,setNavIsOpen] = useState(false);
+  const [navIsOpen,setNavIsOpen] = useState(true);
+
+  const [navLinks,setNavLinks] = useState(links);
+
+  const setActiveItem = (selectedItemNumber) =>{
+    let linksCopy = [...links];
+    linksCopy.forEach((item) => item.isActive=false);
+    linksCopy[selectedItemNumber].isActive=true;
+    setNavLinks(linksCopy);
+  }
+  
   const navbar = (<EuiCollapsibleNav isOpen={navIsOpen}  
     onClose={() => setNavIsOpen(false)} 
     isDocked={navIsOpen}
     hideButtonIfDocked={false}
+    
     button={
       <EuiHeaderSectionItemButton
         aria-label="Toggle main navigation"
@@ -134,16 +122,8 @@ function App({store}) {
         <EuiIcon type={'menu'} size="m" aria-hidden="true" />
       </EuiHeaderSectionItemButton>
     }>
-    <EuiCollapsibleNavGroup >
-      <EuiNavDrawerGroup listItems={facultyLink} />
-      <EuiNavDrawerGroup listItems={termLink} />
-      <EuiNavDrawerGroup listItems={moduleLink} />
-      <EuiNavDrawerGroup listItems={courseLink} />
-      <EuiNavDrawerGroup listItems={profLink} />
-      <EuiNavDrawerGroup listItems={tutorLink} />
-      <EuiNavDrawerGroup listItems={formLink} />
-      <EuiNavDrawerGroup listItems={reportLink} />
-      <EuiNavDrawerGroup listItems={hitmeLink} />
+    <EuiCollapsibleNavGroup>
+      <EuiNavDrawerGroup listItems={navLinks} gutterSize="m" showToolTips/>
     </EuiCollapsibleNavGroup>
     </EuiCollapsibleNav>)
     

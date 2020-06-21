@@ -44,7 +44,7 @@ import TutorsOverview from './components/TutorsOverview';
 import CoursesOverview from './components/CoursesOverview';
 import FacultiesOverview from './components/FacultiesOverView';
 import FacultyCreateDialog from './components/FacultyCreateDialog';
-
+import ProfEdit from './components/ProfEdit';
 
 function App({store}) {
   
@@ -165,6 +165,12 @@ function App({store}) {
         </Route>
         <Route path="/tutors">
         </Route>
+        <Route path="/profs/:profId/edit">
+          <ProfEdit></ProfEdit>
+        </Route>
+        <Route path="/profs/:profId">
+          <ProfDetail></ProfDetail>
+        </Route>
         <Route path="/profs">
           <ProfOverview/>
         </Route>
@@ -172,9 +178,6 @@ function App({store}) {
         </Route>
         <Route path="/hitme">
           HitMe
-        </Route>
-        <Route path="/profs/:profId">
-          <ProfDetail></ProfDetail>
         </Route>
         {/* default */}
         <Route path="/">

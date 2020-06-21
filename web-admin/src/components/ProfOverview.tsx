@@ -16,11 +16,13 @@ import { getQueries } from '../lib/store';
 import * as profQueryConfigs from '../query-configs/profs';
 import * as profSelectors from '../selectors/profs';
 import { Prof } from 'ostseee-web-common';
+import { useHistory } from 'react-router';
 
 const ProfOverview = props => {
   useRequest(profQueryConfigs.profsGet());
   const Profs = useSelector(profSelectors.getProfs);
-
+  const history = useHistory();
+  
   const columns = [
     {
       field: 'title',  // for further arguments, see https://elastic.github.io/eui/#/tabular-content/tables
@@ -61,11 +63,21 @@ const ProfOverview = props => {
     },
   };
 
+  const getRowProps = (item) => {
+    const { id } = item;
+    return {
+      'data-test-subj': `row-${id}`,
+      className: 'customRowClass',
+      onClick: () => history.push("/profs/"+id),
+    };
+  };
+
   return (
     <EuiInMemoryTable
         items={Profs}  // adjust for server request
         columns={columns}
         sorting={sorting}
+        rowProps={getRowProps}
       />
   );
 };

@@ -736,7 +736,6 @@ components:
         - language
         - progress
         - clearance
-        - tutors
     Prof:
       type: object
       properties:

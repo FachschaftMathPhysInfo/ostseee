@@ -8,6 +8,7 @@ import {
   EuiText,
   EuiInMemoryTable,
   EuiButtonIcon,
+  SortDirection,
 } from "@elastic/eui";
 
 import { getQueries } from '../lib/store';
@@ -41,7 +42,7 @@ const CoursesOverview = props => {
   const sorting = {
     sort: {
       field: "termid",
-      direction: "asc",
+      direction: SortDirection.ASC,
     },
   };
 

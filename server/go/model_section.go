@@ -15,6 +15,7 @@ type Section struct {
 	Base
 
 	TitledObject
+	Position  int32      `json:"position"`
 	PageId    uuid.UUID  `gorm:"type:uuid" json:"-"`
 	Questions []Question `gorm:"foreignkey:SectionId" json:"questions"`
 }

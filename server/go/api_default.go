@@ -84,7 +84,19 @@ func (ev *EvalAPI) CourseprofsCourseProfIdPatch(c *gin.Context) {
 
 // CourseprofsCourseProfIdReportGet - Get a courseProf report
 func (ev *EvalAPI) CourseprofsCourseProfIdReportGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	courseprofId, err := uuid.FromString(c.Param("courseProfId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	report, err := ev.EvalService.GenerateCourseProfReport(courseprofId)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, report)
 }
 
 // CourseprofsGet -
@@ -199,7 +211,19 @@ func (ev *EvalAPI) CoursesCourseIdPatch(c *gin.Context) {
 
 // CoursesCourseIdReportGet - Get a course report
 func (ev *EvalAPI) CoursesCourseIdReportGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	courseId, err := uuid.FromString(c.Param("courseId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	report, err := ev.EvalService.GenerateCourseReport(courseId)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, report)
 }
 
 // CoursesCourseIdTutorsGet -
@@ -318,7 +342,25 @@ func (ev *EvalAPI) CoursesCourseIdTutorsTutorIdPatch(c *gin.Context) {
 
 // CoursesCourseIdTutorsTutorIdReportGet - Get a tutor report
 func (ev *EvalAPI) CoursesCourseIdTutorsTutorIdReportGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	courseId, err := uuid.FromString(c.Param("courseId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	tutorId, err := uuid.FromString(c.Param("tutorId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	report, err := ev.EvalService.GenerateTutorReport(courseId, tutorId)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, report)
 }
 
 // CoursesGet -
@@ -552,6 +594,13 @@ func (ev *EvalAPI) ProfsProfIdPatch(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
+	id, err := uuid.FromString(c.Param("profId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	prof.Id = id
 	co, err := ev.EvalService.SaveProf(prof)
 	if err != nil {
 		log.Println(err)

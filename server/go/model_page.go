@@ -14,6 +14,7 @@ import uuid "github.com/satori/go.uuid"
 // Page - Group of sections that belong together
 type Page struct {
 	Base
+	Position       int32     `json:"position"`
 	AbstractFormId uuid.UUID `gorm:"type:uuid" json:"-"`
 	Sections       []Section `gorm:"foreignkey:PageId" json:"sections"`
 }

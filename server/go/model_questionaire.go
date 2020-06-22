@@ -15,5 +15,5 @@ import uuid "github.com/satori/go.uuid"
 type Questionaire struct {
 	Base
 	CourseId uuid.UUID
-	Answers  []Answer `json:"answers"`
+	Answers  []Answer `gorm:"-" json:"answers"`
 }

@@ -15,6 +15,7 @@ import uuid "github.com/satori/go.uuid"
 type Option struct {
 	Base
 	LabeledObject
+	Position   int32     `json:"position"`
 	Value      int32     `json:"value"`
 	QuestionId uuid.UUID `gorm:"type:uuid" json:"-"`
 }

@@ -36,6 +36,12 @@ export interface Option  {
      * @memberof Option
      */
     value: number;
+    /**
+     * Used to determine position in array
+     * @type {number}
+     * @memberof Option
+     */
+    position?: number;
 }
 
 export function OptionFromJSON(json: any): Option {
@@ -43,6 +49,7 @@ export function OptionFromJSON(json: any): Option {
         'id': !exists(json, 'id') ? undefined : json['id'],
         'label': json['label'],
         'value': json['value'],
+        'position': !exists(json, 'position') ? undefined : json['position'],
     };
 }
 
@@ -54,6 +61,7 @@ export function OptionToJSON(value?: Option): any {
         'id': value.id,
         'label': value.label,
         'value': value.value,
+        'position': value.position,
     };
 }
 

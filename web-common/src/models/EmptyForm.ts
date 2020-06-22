@@ -40,6 +40,12 @@ export interface EmptyForm  {
      */
     id?: string;
     /**
+     * Name of the module evaluated.
+     * @type {string}
+     * @memberof EmptyForm
+     */
+    moduleName?: string;
+    /**
      * 
      * @type {Array<Prof>}
      * @memberof EmptyForm
@@ -68,6 +74,7 @@ export interface EmptyForm  {
 export function EmptyFormFromJSON(json: any): EmptyForm {
     return {
         'id': !exists(json, 'id') ? undefined : json['id'],
+        'moduleName': !exists(json, 'moduleName') ? undefined : json['moduleName'],
         'profs': !exists(json, 'profs') ? undefined : (json['profs'] as Array<any>).map(ProfFromJSON),
         'tutors': !exists(json, 'tutors') ? undefined : (json['tutors'] as Array<any>).map(TutorFromJSON),
         'abstractForm': !exists(json, 'abstractForm') ? undefined : AbstractFormFromJSON(json['abstractForm']),
@@ -81,6 +88,7 @@ export function EmptyFormToJSON(value?: EmptyForm): any {
     }
     return {
         'id': value.id,
+        'moduleName': value.moduleName,
         'profs': value.profs === undefined ? undefined : (value.profs as Array<any>).map(ProfToJSON),
         'tutors': value.tutors === undefined ? undefined : (value.tutors as Array<any>).map(TutorToJSON),
         'abstractForm': AbstractFormToJSON(value.abstractForm),

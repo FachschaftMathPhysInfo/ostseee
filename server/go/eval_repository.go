@@ -47,7 +47,16 @@ func (ev *EvalRepository) SaveForm(form Form) Form {
 //FindAllForms loads all forms and their abstractForms
 func (ev *EvalRepository) FindAllForms() []Form {
 	var forms []Form
-	ev.DB.Set("gorm:auto_preload", true).Find(&forms)
+
+	ev.DB.Preload("AbstractForm").Preload("AbstractForm.Pages", func(db *gorm.DB) *gorm.DB {
+		return db.Order("pages.position ASC")
+	}).Preload("AbstractForm.Pages.Sections", func(db *gorm.DB) *gorm.DB {
+		return db.Order("sections.position ASC")
+	}).Preload("AbstractForm.Pages.Sections.Questions", func(db *gorm.DB) *gorm.DB {
+		return db.Order("questions.position ASC")
+	}).Preload("AbstractForm.Pages.Sections.Questions.Options", func(db *gorm.DB) *gorm.DB {
+		return db.Order("options.position ASC")
+	}).Find(&forms)
 	return forms
 }
 
@@ -55,7 +64,16 @@ func (ev *EvalRepository) FindForm(id uuid.UUID) (Form, error) {
 	var form Form
 	filter := &Form{}
 	filter.Id = id
-	ev.DB.Set("gorm:auto_preload", true).Where(filter).First(&form)
+
+	ev.DB.Preload("AbstractForm").Preload("AbstractForm.Pages", func(db *gorm.DB) *gorm.DB {
+		return db.Order("pages.position ASC")
+	}).Preload("AbstractForm.Pages.Sections", func(db *gorm.DB) *gorm.DB {
+		return db.Order("sections.position ASC")
+	}).Preload("AbstractForm.Pages.Sections.Questions", func(db *gorm.DB) *gorm.DB {
+		return db.Order("questions.position ASC")
+	}).Preload("AbstractForm.Pages.Sections.Questions.Options", func(db *gorm.DB) *gorm.DB {
+		return db.Order("options.position ASC")
+	}).Where(filter).First(&form)
 	return form, nil
 }
 
@@ -232,7 +250,7 @@ func (ev *EvalRepository) SaveTutor(tutor Tutor) Tutor {
 }
 
 func (ev *EvalRepository) DeleteAllInvitationsOfCourse(courseId uuid.UUID) error {
-	ev.DB.Where("course_id LIKE ?", courseId).Delete(Invitation{})
+	ev.DB.Where("course_id = ?", courseId).Delete(Invitation{})
 	return nil
 }
 
@@ -244,7 +262,7 @@ func (ev *EvalRepository) SaveInvitation(invitation Invitation) Invitation {
 
 func (ev *EvalRepository) FindCourseInvitations(courseId uuid.UUID) ([]Invitation, error) {
 	var invs []Invitation
-	ev.DB.Where("course_id LIKE ?", courseId).Find(&invs)
+	ev.DB.Where("course_id = ?", courseId).Find(&invs)
 	return invs, nil
 }
 
@@ -259,7 +277,9 @@ func (ev *EvalRepository) FindInvitation(id uuid.UUID) (Invitation, error) {
 //FindAllCourseProfsForCourse returns all courseProfs profs with id = courseProfId
 func (ev *EvalRepository) FindAllCourseProfsForCourse(courseId uuid.UUID) ([]Prof, error) {
 	var courseprofs []CourseProf
-	ev.DB.Where("course_id LIKE ?", courseId).Find(&courseprofs)
+	var filter CourseProf
+	filter.CourseId = courseId
+	ev.DB.Where(&filter).Find(&courseprofs)
 	profs := make([]Prof, len(courseprofs))
 	for i, cp := range courseprofs {
 		profs[i], _ = ev.FindProf(cp.ProfId)
@@ -305,4 +325,42 @@ func (ev *EvalRepository) InvalidateInvitationAndCommitQuestionaire(invitationId
 	// Or commit on success
 	tx.Commit()
 	return nil
+}
+
+func (ev *EvalRepository) CountOfQuestionaires(courseId uuid.UUID) int {
+	var filter Questionaire
+	filter.CourseId = courseId
+	var count int
+	ev.DB.Table("questionaires").Where(&filter).Count(&count)
+	return count
+}
+
+type Pair struct {
+	Value string
+	Freq  int
+}
+
+func (ev *EvalRepository) CountPerOption(questionId uuid.UUID, objectId uuid.UUID) ([]Pair, error) {
+	var res []Pair
+	ev.DB.Table("single_answers").Where("not_applicable <> True AND question_id = ? AND concerns = ?", questionId, objectId).Select("value, count(*) as freq").Group("value").Scan(&res)
+	return res, nil
+}
+
+func (ev *EvalRepository) FindAllSingleAnswers(questionId, objectId uuid.UUID) []SingleAnswer {
+	var filter SingleAnswer
+	filter.QuestionId = questionId
+	filter.Concerns = objectId
+	var results []SingleAnswer
+	ev.DB.Where(&filter).Find(&results)
+	return results
+}
+
+func (ev *EvalRepository) CountNotApplicable(questionId uuid.UUID, objectId uuid.UUID) int {
+	var filter SingleAnswer
+	filter.QuestionId = questionId
+	filter.Concerns = objectId
+	filter.NotApplicable = true
+	var count int
+	ev.DB.Table("single_answers").Where(&filter).Count(&count)
+	return count
 }

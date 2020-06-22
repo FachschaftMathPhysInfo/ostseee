@@ -10,7 +10,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"os"
+	"time"
 
 	// WARNING!
 	// Change this to a fully-qualified import path
@@ -21,34 +24,48 @@ import (
 	//
 	sw "github.com/fachschaftmathphys/ostseee/server/go"
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
 func initDB() *gorm.DB {
-	db, err := gorm.Open("sqlite3", "test3.sqlite")
-	if err != nil {
-		panic(err)
+	databaseConnectionType := os.Getenv("DB_CONNECTION_TYPE")
+	if databaseConnectionType == "" {
+		databaseConnectionType = "sqlite3"
 	}
-
-	db.AutoMigrate(&sw.Faculty{})
-	db.AutoMigrate(&sw.Form{})
-	db.AutoMigrate(&sw.AbstractForm{})
-	db.AutoMigrate(&sw.Page{})
-	db.AutoMigrate(&sw.Section{})
-	db.AutoMigrate(&sw.Question{})
-	db.AutoMigrate(&sw.Option{})
-	db.AutoMigrate(&sw.Term{})
-	db.AutoMigrate(&sw.Module{})
-	db.AutoMigrate(&sw.Prof{})
-	db.AutoMigrate(&sw.Course{})
-	db.AutoMigrate(&sw.CourseProf{})
-	db.AutoMigrate(&sw.CourseProfReport{})
-	db.AutoMigrate(&sw.CourseReport{})
-	db.AutoMigrate(&sw.Tutor{})
-	db.AutoMigrate(&sw.TutorReport{})
-	db.AutoMigrate(&sw.Invitation{})
-	db.AutoMigrate(&sw.SingleAnswer{})
-
+	databaseConnectionString := os.Getenv("DB_CONNECTION_STRING")
+	log.Println(databaseConnectionString)
+	if databaseConnectionString == "" {
+		databaseConnectionString = "test3.sqlite"
+	}
+	err := fmt.Errorf("initial connect failed")
+	db, err := gorm.Open(databaseConnectionType, databaseConnectionString)
+	for err != nil {
+		db, err = gorm.Open(databaseConnectionType, databaseConnectionString)
+		time.Sleep(500 * time.Millisecond)
+		log.Println(err)
+	}
+	if migrateDB, aviable := os.LookupEnv("MIGRATE_DB"); aviable && migrateDB == "1" {
+		db.AutoMigrate(&sw.Faculty{})
+		db.AutoMigrate(&sw.Form{})
+		db.AutoMigrate(&sw.AbstractForm{})
+		db.AutoMigrate(&sw.Page{})
+		db.AutoMigrate(&sw.Section{})
+		db.AutoMigrate(&sw.Question{})
+		db.AutoMigrate(&sw.Option{})
+		db.AutoMigrate(&sw.Term{})
+		db.AutoMigrate(&sw.Module{})
+		db.AutoMigrate(&sw.Prof{})
+		db.AutoMigrate(&sw.Course{})
+		db.AutoMigrate(&sw.CourseProf{})
+		db.AutoMigrate(&sw.CourseProfReport{})
+		db.AutoMigrate(&sw.CourseReport{})
+		db.AutoMigrate(&sw.Tutor{})
+		db.AutoMigrate(&sw.TutorReport{})
+		db.AutoMigrate(&sw.Invitation{})
+		db.AutoMigrate(&sw.Questionaire{})
+		db.AutoMigrate(&sw.SingleAnswer{})
+	}
 	return db
 }
 

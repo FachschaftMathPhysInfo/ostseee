@@ -868,8 +868,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Page'
-      required:
-        - pages
       description: Describes an abstract form
     Page:
       type: object

@@ -35,13 +35,13 @@ export interface AbstractForm  {
      * @type {Array<Page>}
      * @memberof AbstractForm
      */
-    pages: Array<Page>;
+    pages?: Array<Page>;
 }
 
 export function AbstractFormFromJSON(json: any): AbstractForm {
     return {
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'pages': (json['pages'] as Array<any>).map(PageFromJSON),
+        'pages': !exists(json, 'pages') ? undefined : (json['pages'] as Array<any>).map(PageFromJSON),
     };
 }
 
@@ -51,7 +51,7 @@ export function AbstractFormToJSON(value?: AbstractForm): any {
     }
     return {
         'id': value.id,
-        'pages': (value.pages as Array<any>).map(PageToJSON),
+        'pages': value.pages === undefined ? undefined : (value.pages as Array<any>).map(PageToJSON),
     };
 }
 

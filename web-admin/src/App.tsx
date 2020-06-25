@@ -48,6 +48,7 @@ import FacultyCreateDialog from './components/FacultyCreateDialog';
 import ProfEdit from './components/ProfEdit';
 import ProfNew from './components/ProfNew';
 import CourseDetail from './components/CourseDetail';
+import CourseNew from './components/CourseNew';
 
 function App({store}) {
   
@@ -154,6 +155,9 @@ function App({store}) {
         </Route>
         <Route path="/faculties">
           <FacultiesOverview/>
+        </Route>
+        <Route path="/modules/new">
+          <CourseNew/>
         </Route>
         <Route path="/modules">
           <ModulesOverview/>

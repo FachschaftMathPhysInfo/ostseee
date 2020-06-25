@@ -16,7 +16,7 @@ const ProfNew = props => {
 
     return (
         <>
-            <ProfEditor prof={{}} onComplete={()=>history.goBack()}></ProfEditor>
+            <ProfEditor  onComplete={()=>history.goBack()}></ProfEditor>
         </>
     )
     

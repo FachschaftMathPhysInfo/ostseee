@@ -13,6 +13,8 @@ import FormDisplay from "./FormDisplay";
 import { invitationGet } from "../query-configs/invitations";
 import moment from "moment";
 import InvitationList from "../lib/invitationlist";
+import ModuleSelect from "./ModuleSelect";
+import TermSelect from "./TermSelect";
 const CourseDetail = props => {
     let { courseId } = useParams();
     const [{ isPending }] = useRequest(courseGet(courseId));
@@ -86,6 +88,8 @@ const CourseDetail = props => {
                     </EuiFormRow>
                     <EuiButton onClick={(e)=>console.log(getInvitations(beginDate,endDate))}>Lade Invitations</EuiButton>
                     <EuiCode language="json">{JSON.stringify(invs)}</EuiCode>
+                    <ModuleSelect id={course.moduleId} ></ModuleSelect>
+                    <TermSelect id={course.termId} ></TermSelect>
                 </EuiTextAlign></EuiPageContentBody>
         </EuiPageContent>
     )

@@ -1,4 +1,4 @@
-import { useParams } from "react-router"
+import { useParams, useHistory } from "react-router"
 import React, { useState, useEffect } from "react";
 import { useSelector } from 'react-redux';
 import { useRequest, useMutation } from "redux-query-react";
@@ -12,20 +12,23 @@ import moment from "moment";
 
 const ProfEditor = props => {
 
-    const prof: Prof = props.prof||{};
+    const prof: Prof = props.prof;
     console.log(prof)
-    const [title, setTitle] = useState(prof.title||'');
-    const [firstname, setFirstname] = useState(prof.firstname||'');
-    const [lastname, setLastname] = useState(prof.lastname||'');
-    const [email, setEmail] = useState(prof.email||'');
-    const [censored, setCensored] = useState(prof.censored||false);
-    const [censoredDate, setCensoredDate] = useState(moment(prof.censoredDate||Date()));
+    const [title, setTitle] = useState(prof?.title||'');
+    const [firstname, setFirstname] = useState(prof?.firstname||'');
+    const [lastname, setLastname] = useState(prof?.lastname||'');
+    const [email, setEmail] = useState(prof?.email||'');
+    const [censored, setCensored] = useState(prof?.censored||false);
+    const [censoredDate, setCensoredDate] = useState(moment(prof?.censoredDate||Date()));
 
     //TODO: bug, anscheinend wird die Seite ständig neu geladen und die Werte im Form sind nicht änderbar
     //Es fehlt noch der Patch Request über eine mutation, sodass die Sachen auch im backend geupdated werden.
     //@ts-ignore
-    const [{isPending},submit]=useMutation(( title, firstname, lastname, email, censored, censoredDate)=>props.prof?editProf(prof.id, title, firstname, lastname, email, censored, censoredDate):newProf(prof.id, title, firstname, lastname, email, censored, censoredDate))
+    const [{isPending,isFinished,status},submit]=useMutation(( title, firstname, lastname, email, censored, censoredDate)=>props.prof?editProf(prof.id, title, firstname, lastname, email, censored, censoredDate):newProf(prof.id, title, firstname, lastname, email, censored, censoredDate))
     
+    if (isFinished&&status==200){
+        props.onComplete()
+    }
     return (
         <>
         <EuiForm component="form" style={{padding: 30}}>

@@ -1,10 +1,11 @@
-import { useParams } from "react-router"
+import { useParams, useHistory } from "react-router"
 import React from "react";
 import { useSelector } from 'react-redux';
 import { useRequest } from "redux-query-react";
 import * as profQueryConfigs from '../query-configs/profs';
 import * as profSelectors from '../selectors/profs';
 import './Prof.css';
+import { EuiButton } from "@elastic/eui";
 
 
 const ProfDetail = props => {
@@ -12,7 +13,7 @@ const ProfDetail = props => {
     let {profId} = useParams();
     const [data, second] = useRequest(profQueryConfigs.profGet(profId));
     const Prof = useSelector(profSelectors.getProf(profId))
-    
+    const history = useHistory()
     if(Prof){
         return (
             <>
@@ -42,6 +43,7 @@ const ProfDetail = props => {
                         <td>{Prof.censoredDate.toLocaleDateString()}</td>
                     </tr>
                 </table>
+                <EuiButton iconType="pencil" onClick={()=>history.push(`/profs/${Prof.id}/edit`)}>Bearbeiten</EuiButton>
             </>
         )
     }

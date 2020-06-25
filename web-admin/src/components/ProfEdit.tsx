@@ -1,4 +1,4 @@
-import { useParams } from "react-router"
+import { useParams, useHistory } from "react-router"
 import React, { useState, useEffect } from "react";
 import { useSelector } from 'react-redux';
 import { useRequest, useMutation } from "redux-query-react";
@@ -16,11 +16,12 @@ const ProfEdit = props => {
     const [{ isPending }] = useRequest(profQueryConfigs.profGet(profId));
     const prof: Prof = useSelector(profSelectors.getProf(profId));
     console.log(prof)
- 
+    const history=useHistory()
+
     if (isPending) return (<>Lade</>)
     return (
         <>
-        <ProfEditor prof={prof||{}}></ProfEditor>
+        <ProfEditor prof={prof||{}} onComplete={()=>history.goBack()}></ProfEditor>
     </>
 )
     

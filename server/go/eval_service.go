@@ -9,6 +9,8 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
+const MIN_QUESTIONAIRES int = 5
+
 type EvalService struct {
 	EvalRepository EvalRepository
 }
@@ -376,7 +378,8 @@ func filterOption(options []Option, value string, HasOtherOption bool) (map[stri
 		r["en"] = value
 		return r, nil
 	}
-	fmt.Println(value)
+	fmt.Println("opt", options)
+	fmt.Println("val", value)
 	return map[string]string{}, fmt.Errorf("hasOtherOption not enabled and not in option")
 }
 
@@ -404,7 +407,7 @@ func (ev *EvalService) generateResult(question Question, objectId uuid.UUID) (Re
 	resultpairs := make([]ResultPair, len(counts))
 	for i, pair := range counts {
 		label, err := filterOption(question.Options, pair.Value, question.HasOtherOption)
-		if err != nil {
+		if err != nil && pair.Value != "" {
 			return Result{}, err
 		}
 		resultpairs[i].Label = label
@@ -432,8 +435,8 @@ func (ev *EvalService) GenerateTutorReport(courseId, tutorId uuid.UUID) (TutorRe
 	if err != nil {
 		return TutorReport{}, err
 	}
-	if ev.EvalRepository.CountOfQuestionaires(courseId) < 5 { //TODO(henrik): Factor in Tutor,
-		return TutorReport{}, fmt.Errorf("less than 5 questionaires")
+	if ev.EvalRepository.CountOfQuestionaires(courseId) < MIN_QUESTIONAIRES { //TODO(henrik): Factor in Tutor,
+		return TutorReport{}, fmt.Errorf("less than %d questionaires", MIN_QUESTIONAIRES)
 	}
 	tutor, err := ev.EvalRepository.FindTutor(courseId, tutorId)
 	if err != nil {
@@ -467,8 +470,8 @@ func (ev *EvalService) GenerateCourseReport(courseId uuid.UUID) (CourseReport, e
 	if err != nil {
 		return CourseReport{}, err
 	}
-	if ev.EvalRepository.CountOfQuestionaires(courseId) < 5 {
-		return CourseReport{}, fmt.Errorf("less than 5 questionaires")
+	if ev.EvalRepository.CountOfQuestionaires(courseId) < MIN_QUESTIONAIRES {
+		return CourseReport{}, fmt.Errorf("less than %d questionaires", MIN_QUESTIONAIRES)
 	}
 	if err != nil {
 		return CourseReport{}, err
@@ -512,8 +515,8 @@ func (ev *EvalService) GenerateCourseProfReport(courseprofId uuid.UUID) (CourseP
 	if err != nil {
 		return CourseProfReport{}, err
 	}
-	if ev.EvalRepository.CountOfQuestionaires(course.Id) < 5 { //TODO(henrik): Do we have to calc how many questions are correct answered
-		return CourseProfReport{}, fmt.Errorf("less than 5 questionaires")
+	if ev.EvalRepository.CountOfQuestionaires(course.Id) < MIN_QUESTIONAIRES { //TODO(henrik): Do we have to calc how many questions are correct answered
+		return CourseProfReport{}, fmt.Errorf("less than %d questionaires", MIN_QUESTIONAIRES)
 	}
 
 	// load form

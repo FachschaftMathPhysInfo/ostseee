@@ -13,3 +13,4 @@ There are no default values yet!
 | DB_CONNECTION_TYPE | Sets the dialect of the connection (e.g. postgres or sqlite3) | sqlite3 |
 | DB_CONNECTION_STRING | Connection string, depends on DB_CONNECTION_TYPE | test3.sqlite |
 | MIGRATE_DB | If MIGRATE_DB=1 then the db will be automigrated | 0 or 1 |
+| DB_LOG | If DB_LOG=1 then the log will be verbose | 0 or 1 |

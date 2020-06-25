@@ -503,6 +503,13 @@ func (ev *EvalAPI) ModulesModuleIdPatch(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
+	id, err := uuid.FromString(c.Param("moduleId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	module.Id = id
 	m, err := ev.EvalService.SaveModule(module)
 	if err != nil {
 		log.Println(err)
@@ -699,6 +706,13 @@ func (ev *EvalAPI) TermsTermIdPatch(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
+	id, err := uuid.FromString(c.Param("termId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	term.Id = id
 	t, err := ev.EvalService.SaveTerm(term)
 	if err != nil {
 		log.Println(err)

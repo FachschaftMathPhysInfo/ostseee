@@ -1042,6 +1042,9 @@ components:
         visualizer:
           type: string
           description: indicate, how result is displayed.
+        notApplicableCount:
+          type: number
+          description: gives the number of not applicable.
         values:
           type: array
           items:

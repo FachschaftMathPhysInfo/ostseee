@@ -61,6 +61,12 @@ export interface Question  {
      */
     hasOtherOption: boolean;
     /**
+     * Renders this as a slider. Note: Doesnot work with hasOtherOption
+     * @type {boolean}
+     * @memberof Question
+     */
+    isSlider?: boolean;
+    /**
      * Question either concerns course, lecturer or tutor.
      * @type {string}
      * @memberof Question
@@ -100,6 +106,7 @@ export function QuestionFromJSON(json: any): Question {
         'isMulti': json['isMulti'],
         'isComment': json['isComment'],
         'hasOtherOption': json['hasOtherOption'],
+        'isSlider': !exists(json, 'isSlider') ? undefined : json['isSlider'],
         'regards': json['regards'],
         'hasNotApplicableOption': !exists(json, 'hasNotApplicableOption') ? undefined : json['hasNotApplicableOption'],
         'visualizer': json['visualizer'],
@@ -119,6 +126,7 @@ export function QuestionToJSON(value?: Question): any {
         'isMulti': value.isMulti,
         'isComment': value.isComment,
         'hasOtherOption': value.hasOtherOption,
+        'isSlider': value.isSlider,
         'regards': value.regards,
         'hasNotApplicableOption': value.hasNotApplicableOption,
         'visualizer': value.visualizer,

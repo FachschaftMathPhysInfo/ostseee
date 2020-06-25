@@ -42,10 +42,11 @@ import { Route, Switch, useHistory } from 'react-router';
 import ProfDetail from './components/ProfDetail';
 import TutorsOverview from './components/TutorsOverview';
 import CoursesOverview from './components/CoursesOverview';
-import FacultiesOverview from './components/FacultiesOverView';
+import FacultiesOverview from './components/FacultiesOverview';
 import FacultyCreateDialog from './components/FacultyCreateDialog';
 
 import ProfEdit from './components/ProfEdit';
+import ProfNew from './components/ProfNew';
 import CourseDetail from './components/CourseDetail';
 
 function App({store}) {
@@ -171,6 +172,9 @@ function App({store}) {
           <FormsOverview/>
         </Route>
         <Route path="/tutors">
+        </Route>
+        <Route path="/profs/new">
+          <ProfNew></ProfNew>
         </Route>
         <Route path="/profs/:profId/edit">
           <ProfEdit></ProfEdit>

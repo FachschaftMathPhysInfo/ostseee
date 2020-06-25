@@ -4,6 +4,7 @@ import { Provider as ReduxQueryProvider, useRequest } from 'redux-query-react';
 
 import {
   EuiBasicTable,
+  EuiButton,
   EuiSpacer,
   EuiText,
   EuiInMemoryTable,
@@ -73,12 +74,18 @@ const ProfOverview = props => {
   };
 
   return (
-    <EuiInMemoryTable
-        items={Profs}  // adjust for server request
-        columns={columns}
-        sorting={sorting}
-        rowProps={getRowProps}
-      />
+    <>
+      <EuiInMemoryTable
+          items={Profs}  // adjust for server request
+          columns={columns}
+          sorting={sorting}
+          rowProps={getRowProps}
+        />
+      <EuiButton fill iconType="plusInCircle"  
+                onClick={() => history.push("/profs/new")}>
+          Professor neu anlegen
+        </EuiButton>   
+    </>
   );
 };
 

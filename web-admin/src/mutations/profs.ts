@@ -26,7 +26,7 @@ export const editProf =(profId:string, title:string, firstname:string, lastname:
     });
 }
 
-export const newProf =(profId:string, title:string, firstname:string, lastname:string, email:string, censored:boolean, censoredDate:Date)=>{
+export const newProf =(title:string, firstname:string, lastname:string, email:string, censored:boolean, censoredDate:Date)=>{
   return t.profsPost({
       prof:{title, firstname, lastname, email, censored, censoredDate}
   },{

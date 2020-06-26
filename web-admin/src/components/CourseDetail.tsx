@@ -15,10 +15,11 @@ import moment from "moment";
 import InvitationList from "../lib/invitationlist";
 import ModuleSelect from "./ModuleSelect";
 import TermSelect from "./TermSelect";
+import { getCourse } from "../selectors/courses";
 const CourseDetail = props => {
     let { courseId } = useParams();
     const [{ isPending }] = useRequest(courseGet(courseId));
-    const course: Course = useSelector(state => state.entities.Course)
+    const course: Course = useSelector(getCourse(courseId))
     //@ts-ignore
     const [{ isPending: isPending2, status }, getInvitations] = useMutation((begin, end) => { return invitationGet(courseId, begin, end) });
     const [beginDate,handleChangeBegin] = useState(moment());

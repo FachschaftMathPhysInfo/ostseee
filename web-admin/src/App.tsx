@@ -52,6 +52,7 @@ import CourseNew from './components/CourseNew';
 import TermEdit from './components/TermEdit';
 import TermNew from './components/TermNew';
 import TermDetail from './components/TermDetail';
+import CourseEdit from './components/CourseEdit';
 
 function App({store}) {
   
@@ -168,6 +169,9 @@ function App({store}) {
         </Route>
         <Route path="/courses/new">
           <CourseNew/>
+        </Route>
+        <Route path="/courses/:courseId/edit">
+          <CourseEdit></CourseEdit>
         </Route>
         <Route path="/courses/:courseId">
           <CourseDetail></CourseDetail>

@@ -15,12 +15,14 @@ export const coursesGet =()=>{
 export const courseGet =(courseId)=>{
   return t.coursesCourseIdGet({courseId},{
       transform:(val: any)=>{
-          return {Course:val};
+          return {CoursesById:val};
       },
       update: {
-      Course: (prev, next) => {
+      CoursesById: (prev, next) => {
         // Discard previous `response` value (we don't need it anymore).
-        return next;
+        prev = prev ||{};
+        prev[next.id]= next;
+        return prev;
       },
     },});
 }

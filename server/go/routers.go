@@ -58,6 +58,12 @@ func NewRouter(Db *gorm.DB) *gin.Engine {
 			"/distributor/lti_config",
 			evalAPI.LTIConfig,
 		},
+		{
+			"LTILaunch",
+			http.MethodGet,
+			"/distributor/lti_launch",
+			evalAPI.LTILaunch,
+		},
 	}
 	var securedRoutes = Routes{
 		{

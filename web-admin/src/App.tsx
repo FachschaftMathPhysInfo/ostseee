@@ -157,10 +157,14 @@ function App({store}) {
           <FacultiesOverview/>
         </Route>
         <Route path="/modules/new">
-          <CourseNew/>
+          {//<CourseNew/>
+          }
         </Route>
         <Route path="/modules">
           <ModulesOverview/>
+        </Route>
+        <Route path="/courses/new">
+          <CourseNew/>
         </Route>
         <Route path="/courses/:courseId">
           <CourseDetail></CourseDetail>

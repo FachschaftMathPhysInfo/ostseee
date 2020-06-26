@@ -5,10 +5,13 @@ import { useRequest, useMutation } from "redux-query-react";
 import * as profQueryConfigs from '../query-configs/profs';
 import * as profSelectors from '../selectors/profs';
 import './Prof.css';
-import { EuiForm, EuiFormRow, EuiFieldText, EuiCheckbox, EuiButton, EuiDatePicker } from "@elastic/eui";
-import { editCourse, newCourse, CourseProgressEnum } from "../mutations/courses";
-import { Course } from "ostseee-web-common";
+import { EuiForm, EuiFormRow, EuiFieldText, EuiCheckbox, EuiButton, EuiDatePicker, EuiSelect } from "@elastic/eui";
+import { editCourse, newCourse } from "../mutations/courses";
+import { Course, CourseProgressEnum } from "ostseee-web-common";
 import moment from "moment";
+import ModuleSelect from "./ModuleSelect";
+import FormSelect from "./FormSelect";
+import TermSelect from "./TermSelect";
 
 const CourseEditor = props => {
 
@@ -20,9 +23,12 @@ const CourseEditor = props => {
     const [location, setLocation] = useState(course?.location||'');
     const [numberOfStudents, setNumberOfStudents] = useState(course?.numberOfStudents||0);
     const [language, setLanguage] = useState(course?.language||'');
-    const [progress, setProgress] = useState(course?.progress||CourseProgressEnum.created);
+    const [progress, setProgress] = useState(course?.progress||CourseProgressEnum.Created);
     const [clearance, setClearance] = useState(course?.clearance||'');
-
+    const options = Object.keys(CourseProgressEnum).map(progress=>{return {
+value:CourseProgressEnum[progress],
+text: CourseProgressEnum[progress]
+    }})
     //TODO: bug, anscheinend wird die Seite ständig neu geladen und die Werte im Form sind nicht änderbar
     //Es fehlt noch der Patch Request über eine mutation, sodass die Sachen auch im backend geupdated werden.
     //@ts-ignore
@@ -35,29 +41,28 @@ const CourseEditor = props => {
         <>
         <EuiForm component="form" style={{padding: 30}}>
         <EuiFormRow label="Modul">
-            <EuiFieldText placeholder="Titel" value={moduleId} onChange={(e)=>setModuleId(e.target.value)}></EuiFieldText>
+                       <ModuleSelect id={moduleId} onChange={(e)=>{console.log(e);setModuleId(e)}}></ModuleSelect>
         </EuiFormRow>
-        <EuiFormRow label="Vorname">
-            <EuiFieldText placeholder="Vorname" value={formId} onChange={(e)=>setFormId(e.target.value)}></EuiFieldText>
+        <EuiFormRow label="Form">
+            <FormSelect  id={formId} onChange={(e)=>setFormId(e)}></FormSelect>
         </EuiFormRow>
-        <EuiFormRow label="Nachname">
-            <EuiFieldText placeholder="Nachname" value={termId} onChange={(e)=>setTermId(e.target.value)}></EuiFieldText>
+        <EuiFormRow label="Term">
+            <TermSelect id={termId} onChange={(e)=>setTermId(e)}></TermSelect>
         </EuiFormRow>
-        <EuiFormRow label="Email">
-            <EuiFieldText placeholder="Email" value={location} onChange={(e)=>setLocation(e.target.value)}></EuiFieldText>
+        <EuiFormRow label="Ort">
+            <EuiFieldText placeholder="Ort" value={location} onChange={(e)=>setLocation(e.target.value)}></EuiFieldText>
         </EuiFormRow>
-        <EuiFormRow label="Zensiert">
-            <EuiFieldText placeholder="Zensiert" value={numberOfStudents} onChange={e => setNumberOfStudents(parseInt(e.target.value, 10))} />
+        <EuiFormRow label="# Students">
+            <EuiFieldText placeholder="# Students" value={numberOfStudents} onChange={e => setNumberOfStudents(parseInt(e.target.value, 10))} />
         </EuiFormRow>
-        <EuiFormRow label="Zensiert">
-            <EuiFieldText placeholder="Zensiert" value={language} onChange={e => setLanguage(e.target.value)} />
+        <EuiFormRow label="Sprache (Kürzel)">
+            <EuiFieldText placeholder="Sprache" value={language} onChange={e => setLanguage(e.target.value)} />
         </EuiFormRow>        
-        <EuiFormRow label="Zensiert">
-            <EuiFieldText placeholder="Zensiert" value={progress} onChange={e => setProgress(CourseProgressEnum.created)} />
-            {/* Enum Input hard coded
-            Replace by selection if necessary */}
-        </EuiFormRow>        <EuiFormRow label="Zensiert">
-            <EuiFieldText placeholder="Zensiert" value={clearance} onChange={e => setClearance(e.target.value)} />
+        <EuiFormRow label="Fortschritt">
+            <EuiSelect options = {options} value={progress} onChange={(e)=>setProgress(e.target.value as CourseProgressEnum)}></EuiSelect>
+  
+        </EuiFormRow>        <EuiFormRow label="Freigabe">
+            <EuiFieldText placeholder="Freigabe" value={clearance} onChange={e => setClearance(e.target.value)} />
         </EuiFormRow>
         <EuiButton fill onClick={()=> {submit(moduleId, formId, termId, location, numberOfStudents, language, progress, clearance);}} disabled={isPending}>Aktualisieren</EuiButton>
         </EuiForm>

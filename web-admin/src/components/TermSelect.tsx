@@ -1,5 +1,5 @@
 import { EuiSuperSelect, EuiButtonIcon } from "@elastic/eui"
-import React from "react"
+import React, { useState } from "react"
 import { profsGet } from "ostseee-web-common"
 import { getTerms } from "../selectors/terms"
 import {useSelector} from "react-redux"
@@ -10,6 +10,7 @@ const TermSelect = props =>{
     const onChange =props.onChange||((e)=>{console.log(e);})
     const  [{ isPending, status }, refresh] = useRequest(termsGet())
     const terms = useSelector(getTerms)
+    const [id, setid] = useState(props.id)
     const options = terms.map(opt=>{return {
         value:opt.id,
         inputDisplay:opt.name
@@ -19,8 +20,8 @@ const TermSelect = props =>{
     }
     return (<><EuiSuperSelect
         options={options}
-        valueOfSelected={props.id}
-        onChange={value => onChange(value)}
+        valueOfSelected={id}
+        onChange={value => {setid(value);onChange(value)}}
         append={[<EuiButtonIcon iconType="refresh" onClick={()=>refresh()}></EuiButtonIcon>]}
         >
 

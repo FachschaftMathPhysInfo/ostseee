@@ -1,18 +1,13 @@
 import * as t from 'ostseee-web-common';
 import { prettyInterval } from '@elastic/eui/src/components/date_picker/super_date_picker/pretty_interval';
+import { CourseProgressEnum } from 'ostseee-web-common';
 
-export enum CourseProgressEnum {
-  "created",
-  "announced",
-  "inEval",
-  "processing",
-  "published"
-}
 
-export const editCourse =(moduleId: string, formId: string, termId: string, location: string, numberOfStudents: number, language:string, progress: CourseProgressEnum, clearance: string)=>{
+
+export const editCourse =(courseId:string,moduleId: string, formId: string, termId: string, location: string, numberOfStudents: number, language:string, progress: CourseProgressEnum, clearance: string)=>{
   return t.coursesCourseIdPatch({
-      moduleId:moduleId,
-      course:{moduleId, formId, termId, location, numberOfStudents, language, progress, clearance}
+      courseId,
+      course:{id:courseId,moduleId, formId, termId, location, numberOfStudents, language, progress, clearance}
   },{
       transform:(val: any)=>{
           return {Courses:[val],CourseById:val};

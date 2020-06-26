@@ -18,8 +18,8 @@ const TermEditor = props => {
     const term: Term = props.term;
     console.log(term)
     const [name, setName] = useState(term?.name||'');
-    const [begin, setBegin] = useState(moment(term?.begin||Date()));
-    const [end, setEnd] = useState(moment(term?.end||Date()));
+    const [begin, setBegin] = useState(moment(term?.begin));
+    const [end, setEnd] = useState(moment(term?.end));
 
     //TODO: bug, anscheinend wird die Seite ständig neu geladen und die Werte im Form sind nicht änderbar
     //Es fehlt noch der Patch Request über eine mutation, sodass die Sachen auch im backend geupdated werden.

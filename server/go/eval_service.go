@@ -545,3 +545,18 @@ func (ev *EvalService) GenerateCourseProfReport(courseprofId uuid.UUID) (CourseP
 	result := CourseProfReport{CourseId: course.Id, Generated: time.Now(), Sections: generatedSections, CourseProfId: courseprofId, CourseReport: coursereport}
 	return result, nil
 }
+
+func (ev *EvalService) GetInvitationForLTI(infos LTIInfos) (string, error) {
+	if !infos.IsLearner {
+		return "", fmt.Errorf("You are not allowed to participate.")
+	}
+	course, _ := ev.EvalRepository.FindCourseByThirdPartyKey("lti:" + infos.CourseId)
+	if course.Id == uuid.Nil {
+		return "", fmt.Errorf("This course is not registered with our service.")
+	}
+	inv, err := ev.EvalRepository.GetInvitationForLTIAssignment(course.Id, infos.UserId)
+	if err != nil {
+		return "", fmt.Errorf("Some error occured!")
+	}
+	return inv, nil
+}

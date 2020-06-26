@@ -52,6 +52,12 @@ func NewRouter(Db *gorm.DB) *gin.Engine {
 			"/v1/questionaire/:invitationId",
 			evalAPI.QuestionaireInvitationIdPost,
 		},
+		{
+			"LTIConfig",
+			http.MethodGet,
+			"/distributor/lti_config",
+			evalAPI.LTIConfig,
+		},
 	}
 	var securedRoutes = Routes{
 		{

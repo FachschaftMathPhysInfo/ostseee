@@ -1,6 +1,7 @@
 package openapi
 
 import (
+	"crypto/sha1"
 	"fmt"
 
 	"github.com/jinzhu/gorm"
@@ -116,6 +117,14 @@ func (ev *EvalRepository) FindCourse(id uuid.UUID) (Course, error) {
 	var course Course
 	filter := &Course{}
 	filter.Id = id
+	ev.DB.Where(filter).First(&course)
+	return course, nil
+}
+
+func (ev *EvalRepository) FindCourseByThirdPartyKey(thirdPartyKey string) (Course, error) {
+	var course Course
+	filter := &Course{}
+	filter.ThirdPartyKey = thirdPartyKey
 	ev.DB.Where(filter).First(&course)
 	return course, nil
 }
@@ -363,4 +372,23 @@ func (ev *EvalRepository) CountNotApplicable(questionId uuid.UUID, objectId uuid
 	var count int
 	ev.DB.Table("single_answers").Where(&filter).Count(&count)
 	return count
+}
+func sha1Hash(text string) string {
+	h := sha1.New()
+	h.Write([]byte(text))
+	return fmt.Sprintf("%x", h.Sum(nil))
+}
+func (ev *EvalRepository) GetInvitationForLTIAssignment(courseId uuid.UUID, userId string) (string, error) {
+	var filter LTIAssignment
+	filter.CustomerHash = sha1Hash(courseId.String() + userId)
+	var lti LTIAssignment
+	ev.DB.Where(&filter).First(&lti)
+	if lti.InvitationId != uuid.Nil {
+		return lti.InvitationId.String(), nil
+	}
+	var inv Invitation
+	ev.DB.Joins("LEFT JOIN lti_assignments t2 ON invitations.ID = t2.invitation_id WHERE t2.invitation_id IS NULL").First(&inv)
+	filter.InvitationId = inv.Id
+	ev.DB.Save(&filter)
+	return inv.Id.String(), nil
 }

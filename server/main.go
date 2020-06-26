@@ -65,6 +65,7 @@ func initDB() *gorm.DB {
 		db.AutoMigrate(&sw.Invitation{})
 		db.AutoMigrate(&sw.Questionaire{})
 		db.AutoMigrate(&sw.SingleAnswer{})
+		db.AutoMigrate(&sw.LTIAssignment{})
 	}
 	if os.Getenv("DB_LOG") == "1" {
 		return db.LogMode(true)
@@ -77,6 +78,5 @@ func main() {
 	db := initDB()
 	defer db.Close()
 	router := sw.NewRouter(db)
-
 	log.Fatal(router.Run(":8080"))
 }

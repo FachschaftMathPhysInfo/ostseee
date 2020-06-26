@@ -12,8 +12,11 @@ package openapi
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
+	lti "github.com/henrixapp/go-lti"
+	"github.com/henrixapp/go-lti/types"
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -725,4 +728,53 @@ func (ev *EvalAPI) TermsTermIdPatch(c *gin.Context) {
 // TermsTermIdReportGet - Get a term report
 func (ev *EvalAPI) TermsTermIdReportGet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
+}
+
+type Cartridge struct {
+	Title           string `xml:"blti:title"`
+	Description     string `xml:"blti:description"`
+	LaunchUrl       string `xml:"blti:launch_url"`
+	SecureLaunchUrl string `xml:"blti:secure_launch_url"`
+	Icon            string `xml:"blti:icon"`
+}
+type LTIConfig struct {
+	Cartridge Cartridge `xml:"cartridge_basiclti_link"`
+	Blti      string    `xml:"xmlns:blti,attr"`
+}
+
+func (ev *EvalAPI) LTIConfig(c *gin.Context) {
+
+	c.XML(http.StatusOK, LTIConfig{Blti: "http://www.imsglobal.org/xsd/imsbasiclti_v1p0", Cartridge: Cartridge{Title: "Evaluation", Description: "Evaluation", LaunchUrl: "https://" + c.Request.Host + "/distributor/lti_launch", SecureLaunchUrl: "https://" + c.Request.Host + "/distributor/lti_launch", Icon: "https://" + c.Request.Host + "/logo192.png"}})
+}
+
+//LTILaunch Performs a search in database  for a course with the given ID and returns a invitation.
+func (ev *EvalAPI) LTILaunch(c *gin.Context) {
+	// Create a new LTIToolProvider
+	ltiRequest, err := lti.NewLTIToolProvider(c.Request)
+	if err != nil {
+		log.Println("err:", err)
+		return
+	}
+	// Validate LTI request
+	valid, err := ltiRequest.ValidateRequest(os.Getenv("LTI_SECRET_KEY"), true, false, true, func(path string) string {
+		return path
+	})
+
+	var res LTIInfos
+	res.CourseId = ltiRequest.LTIHeaders.ContextID
+	res.UserId = ltiRequest.LTIHeaders.UserId
+	res.IsLearner = ltiRequest.LTIHeaders.Roles.HasInstitutionRole(types.InstLearner)
+	if valid == true {
+		inv, err := ev.EvalService.GetInvitationForLTI(res)
+		if err != nil {
+			log.Println(err)
+			c.String(http.StatusBadRequest, err.Error())
+		}
+		c.Redirect(http.StatusMovedPermanently, "https://"+c.Request.Host+"/questionaire/"+inv)
+	} else {
+		log.Println(err)
+		// Redirect to return URL
+		//returnUrl, _ := ltiRequest.CreateReturnURL()
+		c.String(http.StatusBadRequest, "Couldn't validate your request.")
+	}
 }

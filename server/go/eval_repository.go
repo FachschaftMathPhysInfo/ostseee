@@ -3,7 +3,6 @@ package openapi
 import (
 	"crypto/sha1"
 	"fmt"
-	"log"
 
 	"github.com/jinzhu/gorm"
 	uuid "github.com/satori/go.uuid"
@@ -392,7 +391,9 @@ func (ev *EvalRepository) GetInvitationForLTIAssignment(courseId uuid.UUID, user
 	}
 	var inv Invitation
 	ev.DB.Joins("LEFT JOIN lti_assignments t2 ON invitations.ID = t2.invitation_id WHERE t2.invitation_id IS NULL AND invitations.course_id = ? ", courseId).First(&inv)
-	log.Println(inv)
+	if inv.Id == uuid.Nil {
+		return "", fmt.Errorf("not enough unused invitations")
+	}
 	filter.InvitationId = inv.Id
 	ev.DB.Save(&filter)
 	return inv.Id.String(), nil

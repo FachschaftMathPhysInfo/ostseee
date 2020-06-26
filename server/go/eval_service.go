@@ -556,6 +556,7 @@ func (ev *EvalService) GetInvitationForLTI(infos LTIInfos) (string, error) {
 	}
 	inv, err := ev.EvalRepository.GetInvitationForLTIAssignment(course.Id, infos.UserId)
 	if err != nil {
+		log.Println(err)
 		return "", fmt.Errorf("Some error occured!")
 	}
 	return inv, nil

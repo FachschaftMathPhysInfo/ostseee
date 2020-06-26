@@ -44,16 +44,15 @@ const FacultiesOverview = props => {
 
   return (
     <>
+      <EuiButton fill iconType="plusInCircle"  
+                onClick={() => history.push("/faculties/new")}>
+          Create Faculty
+        </EuiButton>
       <EuiInMemoryTable
         items={Faculties}  // adjust for server request
         columns={columns}
         sorting={sorting}
       />
-      
-      <EuiButton fill iconType="plusInCircle"  
-                onClick={() => history.push("/faculties/new")}>
-          Create Faculty
-        </EuiButton>
     </>
   );
 };

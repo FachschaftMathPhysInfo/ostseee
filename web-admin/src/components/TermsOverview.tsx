@@ -4,6 +4,7 @@ import { Provider as ReduxQueryProvider, useRequest } from 'redux-query-react';
 
 import {
   EuiBasicTable,
+  EuiButton,
   EuiSpacer,
   EuiText,
   EuiInMemoryTable,
@@ -17,10 +18,12 @@ import * as termQueryConfigs from '../query-configs/terms';
 import * as termSelectors from '../selectors/terms';
 import { Term } from 'ostseee-web-common';
 import { useState } from 'react';
+import { useHistory } from 'react-router';
 
 const TermsOverview = props => {
   useRequest(termQueryConfigs.termsGet());
   const Terms = useSelector(termSelectors.getTerms);
+  const history = useHistory();
 
   const columns = [
     {
@@ -51,14 +54,29 @@ const TermsOverview = props => {
       direction: SortDirection.DESC,
     },
   };
+
+  const getRowProps = (item) => {
+    const { id } = item;
+    return {
+      'data-test-subj': `row-${id}`,
+      className: 'customRowClass',
+      onClick: () => history.push("/terms/"+id),
+    };
+  };
   
   return (
+    <>
+      <EuiButton fill iconType="plusInCircle"  
+                onClick={() => history.push("/terms/new")}>
+          Semester neu anlegen
+      </EuiButton>   
       <EuiInMemoryTable
         items={Terms}  // adjust for server request
         columns={columns}
         sorting={sorting}
+        rowProps={getRowProps}
       />
-    
+    </>
   );
 };
 

@@ -16,7 +16,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	lti "github.com/henrixapp/go-lti"
-	"github.com/henrixapp/go-lti/types"
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -747,6 +746,15 @@ func (ev *EvalAPI) LTIConfig(c *gin.Context) {
 	c.XML(http.StatusOK, LTIConfig{Blti: "http://www.imsglobal.org/xsd/imsbasiclti_v1p0", Cartridge: Cartridge{Title: "Evaluation", Description: "Evaluation", LaunchUrl: "https://" + c.Request.Host + "/distributor/lti_launch", SecureLaunchUrl: "https://" + c.Request.Host + "/distributor/lti_launch", Icon: "https://" + c.Request.Host + "/logo192.png"}})
 }
 
+func stringContains(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
+}
+
 //LTILaunch Performs a search in database  for a course with the given ID and returns a invitation.
 func (ev *EvalAPI) LTILaunch(c *gin.Context) {
 	// Create a new LTIToolProvider
@@ -763,8 +771,7 @@ func (ev *EvalAPI) LTILaunch(c *gin.Context) {
 	var res LTIInfos
 	res.CourseId = ltiRequest.LTIHeaders.ContextID
 	res.UserId = ltiRequest.LTIHeaders.UserId
-	log.Println(ltiRequest.LTIHeaders.Roles)
-	res.IsLearner = ltiRequest.LTIHeaders.Roles.HasContextRole(types.CtxLearner)
+	res.IsLearner = stringContains(ltiRequest.LTIHeaders.Roles.GetUndefinedRoles(), "Learner") //BUG(henrik): Moodle is not standard compliant!
 	if valid == true {
 		inv, err := ev.EvalService.GetInvitationForLTI(res)
 		if err != nil {

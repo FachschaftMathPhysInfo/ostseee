@@ -757,6 +757,7 @@ func (ev *EvalAPI) LTILaunch(c *gin.Context) {
 	}
 	// Validate LTI request
 	log.Println(os.Getenv("LTI_SECRET_KEY"))
+	log.Println(c.Request.Host)
 	valid, err := ltiRequest.ValidateRequest(os.Getenv("LTI_SECRET_KEY"), true, false, true, func(path string) string {
 		log.Println(path)
 		return path

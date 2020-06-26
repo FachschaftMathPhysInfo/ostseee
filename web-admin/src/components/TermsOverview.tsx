@@ -54,17 +54,27 @@ const TermsOverview = props => {
       direction: SortDirection.DESC,
     },
   };
+
+  const getRowProps = (item) => {
+    const { id } = item;
+    return {
+      'data-test-subj': `row-${id}`,
+      className: 'customRowClass',
+      onClick: () => history.push("/terms/"+id),
+    };
+  };
   
   return (
     <>
       <EuiButton fill iconType="plusInCircle"  
                 onClick={() => history.push("/terms/new")}>
           Semester neu anlegen
-        </EuiButton>   
+      </EuiButton>   
       <EuiInMemoryTable
         items={Terms}  // adjust for server request
         columns={columns}
         sorting={sorting}
+        rowProps={getRowProps}
       />
     </>
   );

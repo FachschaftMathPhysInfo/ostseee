@@ -43,11 +43,11 @@ func (ev *EvalService) FindTerm(id uuid.UUID) (Term, error) {
 }
 
 func (ev *EvalService) SaveTerm(term Term) (Term, error) {
-	beginDateTime, err := time.Parse(time.RFC3339, term.Begin)
+	beginDateTime, err := time.Parse("2006-01-02", term.Begin)
 	if err != nil {
 		return Term{}, err
 	}
-	endDateTime, err := time.Parse(time.RFC3339, term.End)
+	endDateTime, err := time.Parse("2006-01-02", term.End)
 	if err != nil {
 		return Term{}, err
 	}

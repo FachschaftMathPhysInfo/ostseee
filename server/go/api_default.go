@@ -756,17 +756,14 @@ func (ev *EvalAPI) LTILaunch(c *gin.Context) {
 		return
 	}
 	// Validate LTI request
-	log.Println(os.Getenv("LTI_SECRET_KEY"))
-	log.Println(c.Request.Host)
 	valid, err := ltiRequest.ValidateRequest(os.Getenv("LTI_SECRET_KEY"), true, false, true, func(path string) string {
-		log.Println(path)
 		return path
 	})
 
 	var res LTIInfos
 	res.CourseId = ltiRequest.LTIHeaders.ContextID
 	res.UserId = ltiRequest.LTIHeaders.UserId
-	res.IsLearner = ltiRequest.LTIHeaders.Roles.HasInstitutionRole(types.InstLearner)
+	res.IsLearner = ltiRequest.LTIHeaders.Roles.HasContextRole(types.CtxLearner)
 	if valid == true {
 		inv, err := ev.EvalService.GetInvitationForLTI(res)
 		if err != nil {

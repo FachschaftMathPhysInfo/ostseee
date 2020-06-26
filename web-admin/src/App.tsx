@@ -49,6 +49,7 @@ import ProfEdit from './components/ProfEdit';
 import ProfNew from './components/ProfNew';
 import CourseDetail from './components/CourseDetail';
 import CourseNew from './components/CourseNew';
+import TermNew from './components/TermNew';
 
 function App({store}) {
   
@@ -173,6 +174,9 @@ function App({store}) {
           <CoursesOverview/>
         </Route>
         
+        <Route path="/terms/new">
+          <TermNew></TermNew>
+        </Route>
         <Route path="/terms">
           <TermsOverview/>
         </Route>

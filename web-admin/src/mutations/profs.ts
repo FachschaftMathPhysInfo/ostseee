@@ -1,5 +1,7 @@
 import * as t from 'ostseee-web-common';
 import { prettyInterval } from '@elastic/eui/src/components/date_picker/super_date_picker/pretty_interval';
+
+
 export const editProf =(profId:string, title:string, firstname:string, lastname:string, email:string, censored:boolean, censoredDate:Date)=>{
     return t.profsProfIdPatch({
         profId:profId,

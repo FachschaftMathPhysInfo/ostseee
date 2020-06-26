@@ -75,16 +75,16 @@ const ProfOverview = props => {
 
   return (
     <>
+      <EuiButton fill iconType="plusInCircle"  
+                onClick={() => history.push("/profs/new")}>
+          Professor neu anlegen
+        </EuiButton>   
       <EuiInMemoryTable
           items={Profs}  // adjust for server request
           columns={columns}
           sorting={sorting}
           rowProps={getRowProps}
         />
-      <EuiButton fill iconType="plusInCircle"  
-                onClick={() => history.push("/profs/new")}>
-          Professor neu anlegen
-        </EuiButton>   
     </>
   );
 };

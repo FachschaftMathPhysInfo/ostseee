@@ -10,12 +10,12 @@ const FormSelect = props =>{
     const onChange =props.onChange||((e)=>{console.log(e);})
     const  [{ isPending, status }, refresh] = useRequest(formsGet())
     const forms = useSelector(getForms)
-    const [id, setid] = useState(props.id)
+    const [id, setid] = useState(props.formId)
     const options = forms.map(opt=>{return {
         value:opt.id,
         inputDisplay:opt.name
     }})
-    if(isPending){
+    if(isPending||id===undefined){
         return <>Loading</>
     }
     return (<><EuiSuperSelect

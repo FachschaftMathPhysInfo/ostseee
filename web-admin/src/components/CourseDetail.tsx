@@ -89,8 +89,6 @@ const CourseDetail = props => {
                     </EuiFormRow>
                     <EuiButton onClick={(e)=>console.log(getInvitations(beginDate,endDate))}>Lade Invitations</EuiButton>
                     <EuiCode language="json">{JSON.stringify(invs)}</EuiCode>
-                    <ModuleSelect id={course.moduleId} ></ModuleSelect>
-                    <TermSelect id={course.termId} ></TermSelect>
                 </EuiTextAlign></EuiPageContentBody>
         </EuiPageContent>
     )

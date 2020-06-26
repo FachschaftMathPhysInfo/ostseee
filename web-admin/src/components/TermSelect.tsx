@@ -10,7 +10,7 @@ const TermSelect = props =>{
     const onChange =props.onChange||((e)=>{console.log(e);})
     const  [{ isPending, status }, refresh] = useRequest(termsGet())
     const terms = useSelector(getTerms)
-    const [id, setid] = useState(props.id)
+    const [id, setid] = useState(props.termId)
     const options = terms.map(opt=>{return {
         value:opt.id,
         inputDisplay:opt.name

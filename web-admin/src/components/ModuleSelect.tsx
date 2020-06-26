@@ -9,7 +9,8 @@ import { modulesGet } from "../query-configs/modules"
 const ModuleSelect = props =>{
     const onChange =props.onChange||((e)=>{console.log(e);})
     const  [{ isPending, status }, refresh] = useRequest(modulesGet())
-    const [id, setid] = useState(props.id)
+    const [id, setid] = useState(props.moduleId)
+    console.log(id)
     const modules = useSelector(getModules)
     const options = modules.map(opt=>{return {
         value:opt.id,

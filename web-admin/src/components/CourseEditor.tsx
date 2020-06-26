@@ -32,10 +32,11 @@ const CourseEditor = props => {
             text: CourseProgressEnum[progress]
         }
     })
+    console.log(moduleId)
     //TODO: bug, anscheinend wird die Seite ständig neu geladen und die Werte im Form sind nicht änderbar
     //Es fehlt noch der Patch Request über eine mutation, sodass die Sachen auch im backend geupdated werden.
     //@ts-ignore
-    const [{ isPending, isFinished, status }, submit] = useMutation((moduleId, formId, termId, location, numberOfStudents, language, progress, clearance) => props.course ? editCourse(moduleId, formId, termId, location, numberOfStudents, language, progress, clearance) : newCourse(moduleId, formId, termId, location, numberOfStudents, language, progress, clearance))
+    const [{ isPending, isFinished, status }, submit] = useMutation((moduleId, formId, termId, location, numberOfStudents, language, progress, clearance,thirdPartyKey) => props.course ? editCourse(course.id,moduleId, formId, termId, location, numberOfStudents, language, progress, clearance,thirdPartyKey) : newCourse(moduleId, formId, termId, location, numberOfStudents, language, progress, clearance,thirdPartyKey))
 
     if (isFinished && status == 200) {
         props.onComplete()
@@ -44,13 +45,13 @@ const CourseEditor = props => {
         <>
             <EuiForm component="form" style={{ padding: 30 }}>
                 <EuiFormRow label="Modul">
-                    <ModuleSelect id={moduleId} onChange={(e) => { console.log(e); setModuleId(e) }}></ModuleSelect>
+                    <ModuleSelect moduleId={moduleId} onChange={(e) => { console.log(e); setModuleId(e) }}></ModuleSelect>
                 </EuiFormRow>
                 <EuiFormRow label="Form">
-                    <FormSelect id={formId} onChange={(e) => setFormId(e)}></FormSelect>
+                    <FormSelect formId={formId} onChange={(e) => setFormId(e)}></FormSelect>
                 </EuiFormRow>
                 <EuiFormRow label="Term">
-                    <TermSelect id={termId} onChange={(e) => setTermId(e)}></TermSelect>
+                    <TermSelect termId={termId} onChange={(e) => setTermId(e)}></TermSelect>
                 </EuiFormRow>
                 <EuiFormRow label="Ort">
                     <EuiFieldText placeholder="Ort" value={location} onChange={(e) => setLocation(e.target.value)}></EuiFieldText>
@@ -71,7 +72,7 @@ const CourseEditor = props => {
                 <EuiFormRow label="3rdPartyKey">
                     <EuiFieldText placeholder="3rdPartyKey" value={thirdPartyKey} onChange={e => setThirdPartyKey(e.target.value)} />
                 </EuiFormRow>
-                <EuiButton fill onClick={() => { submit(moduleId, formId, termId, location, numberOfStudents, language, progress, clearance); }} disabled={isPending}>Aktualisieren</EuiButton>
+                <EuiButton fill onClick={() => { submit(moduleId, formId, termId, location, numberOfStudents, language, progress, clearance,thirdPartyKey); }} disabled={isPending}>Aktualisieren</EuiButton>
             </EuiForm>
         </>
     )

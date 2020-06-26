@@ -4,10 +4,10 @@ import { CourseProgressEnum } from 'ostseee-web-common';
 
 
 
-export const editCourse =(courseId:string,moduleId: string, formId: string, termId: string, location: string, numberOfStudents: number, language:string, progress: CourseProgressEnum, clearance: string)=>{
+export const editCourse =(courseId:string,moduleId: string, formId: string, termId: string, location: string, numberOfStudents: number, language:string, progress: CourseProgressEnum, clearance: string,thirdPartyKey:string)=>{
   return t.coursesCourseIdPatch({
       courseId,
-      course:{id:courseId,moduleId, formId, termId, location, numberOfStudents, language, progress, clearance}
+      course:{id:courseId,moduleId, formId, termId, location, numberOfStudents, language, progress, clearance,thirdPartyKey}
   },{
       transform:(val: any)=>{
           return {Courses:[val],CourseById:val};
@@ -30,10 +30,10 @@ export const editCourse =(courseId:string,moduleId: string, formId: string, term
   });
 }
 
-export const newCourse =(moduleId: string, formId: string, termId: string, location: string, numberOfStudents: number, language:string, progress: CourseProgressEnum, clearance: string)=>{
+export const newCourse =(moduleId: string, formId: string, termId: string, location: string, numberOfStudents: number, language:string, progress: CourseProgressEnum, clearance: string, thirdPartyKey: string)=>{
   
   return t.coursesPost({
-      course:{moduleId, formId, termId, location, numberOfStudents, language, progress, clearance}
+      course:{moduleId, formId, termId, location, numberOfStudents, language, progress, clearance,thirdPartyKey}
   },{
       transform:(val: any)=>{
           return {Courses:[val],CourseById:val};

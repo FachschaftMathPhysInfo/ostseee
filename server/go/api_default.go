@@ -763,6 +763,7 @@ func (ev *EvalAPI) LTILaunch(c *gin.Context) {
 	var res LTIInfos
 	res.CourseId = ltiRequest.LTIHeaders.ContextID
 	res.UserId = ltiRequest.LTIHeaders.UserId
+	log.Println(ltiRequest.LTIHeaders.Roles)
 	res.IsLearner = ltiRequest.LTIHeaders.Roles.HasContextRole(types.CtxLearner)
 	if valid == true {
 		inv, err := ev.EvalService.GetInvitationForLTI(res)

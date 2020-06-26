@@ -387,7 +387,7 @@ func (ev *EvalRepository) GetInvitationForLTIAssignment(courseId uuid.UUID, user
 		return lti.InvitationId.String(), nil
 	}
 	var inv Invitation
-	ev.DB.Joins("LEFT JOIN lti_assignments t2 ON invitations.ID = t2.invitation_id WHERE t2.invitation_id IS NULL").First(&inv)
+	ev.DB.Joins("LEFT JOIN lti_assignments t2 ON invitations.ID = t2.invitation_id WHERE t2.invitation_id IS NULL AND t2.course_id = ? ", courseId).First(&inv)
 	filter.InvitationId = inv.Id
 	ev.DB.Save(&filter)
 	return inv.Id.String(), nil

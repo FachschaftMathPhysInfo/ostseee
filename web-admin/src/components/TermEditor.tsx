@@ -50,7 +50,7 @@ const TermEditor = props => {
                     />
             </EuiFormRow>
             
-            <EuiButton fill onClick={()=> {submit(name, begin.toDate(), end.toDate());}} disabled={isPending}>Aktualisieren</EuiButton>
+            <EuiButton fill onClick={()=> {submit(name, begin.toISOString(), end.toISOString());}} disabled={isPending}>Aktualisieren</EuiButton>
         </EuiForm>
     </>
 )

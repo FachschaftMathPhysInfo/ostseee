@@ -60,7 +60,7 @@ func NewRouter(Db *gorm.DB) *gin.Engine {
 		},
 		{
 			"LTILaunch",
-			http.MethodGet,
+			http.MethodPost,
 			"/distributor/lti_launch",
 			evalAPI.LTILaunch,
 		},

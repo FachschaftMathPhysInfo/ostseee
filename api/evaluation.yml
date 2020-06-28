@@ -1030,6 +1030,8 @@ components:
       properties:
         label:
           $ref: '#/components/schemas/LocalizedString'
+        position:
+          type: integer
         value:
           type: string
     Result:

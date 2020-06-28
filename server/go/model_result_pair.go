@@ -14,5 +14,6 @@ type ResultPair struct {
 	// Map of translations for a given string. A string might contain markdown code.
 	LabeledObject
 
-	Value string `json:"value,omitempty"`
+	Value    string `json:"value,omitempty"`
+	Position int32  `json:"position,omitempty"`
 }

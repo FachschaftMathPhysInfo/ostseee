@@ -3,6 +3,8 @@ package openapi
 import (
 	"fmt"
 	"log"
+	"math"
+	"sort"
 	"strconv"
 	"time"
 
@@ -366,21 +368,21 @@ func reduceToRegardingSection(form AbstractForm, regards string) []Section {
 	return result
 }
 
-func filterOption(options []Option, value string, HasOtherOption bool) (map[string]string, error) {
+func filterOption(options []Option, value string, HasOtherOption bool) (map[string]string, int32, error) {
 	for _, option := range options {
 		if value == strconv.Itoa(int(option.Value)) {
-			return option.Label, nil
+			return option.Label, option.Position, nil
 		}
 	}
 	if HasOtherOption {
 		r := make(map[string]string, 0)
 		r["de"] = value
 		r["en"] = value
-		return r, nil
+		return r, math.MaxInt32, nil
 	}
 	fmt.Println("opt", options)
 	fmt.Println("val", value)
-	return map[string]string{}, fmt.Errorf("hasOtherOption not enabled and not in option")
+	return map[string]string{}, -1, fmt.Errorf("hasOtherOption not enabled and not in option")
 }
 
 func (ev *EvalService) generateResult(question Question, objectId uuid.UUID) (Result, error) {
@@ -406,13 +408,31 @@ func (ev *EvalService) generateResult(question Question, objectId uuid.UUID) (Re
 	}
 	resultpairs := make([]ResultPair, len(counts))
 	for i, pair := range counts {
-		label, err := filterOption(question.Options, pair.Value, question.HasOtherOption)
+		label, position, err := filterOption(question.Options, pair.Value, question.HasOtherOption)
 		if err != nil && pair.Value != "" {
 			return Result{}, err
 		}
 		resultpairs[i].Label = label
 		resultpairs[i].Value = strconv.Itoa(pair.Freq)
+		resultpairs[i].Position = position
 	}
+	for _, opt := range question.Options {
+		contained := false
+		for _, rp := range resultpairs {
+			contained = contained || rp.Position == opt.Position
+		}
+		if !contained {
+			added := ResultPair{
+				Position: opt.Position,
+				Value:    "0"}
+			added.Label = opt.Label
+			resultpairs = append(resultpairs, added)
+		}
+	}
+
+	sort.Slice(resultpairs, func(i, j int) bool {
+		return resultpairs[i].Position < resultpairs[j].Position
+	})
 	result.Values = resultpairs
 	return result, nil
 }

@@ -3,7 +3,6 @@ import * as t from 'ostseee-web-common';
 export const profsGet =()=>{
     return t.profsGet({
         transform:(val: any)=>{
-          console.log(val);
             return {Profs:val};
         },
         update: {
@@ -13,7 +12,6 @@ export const profsGet =()=>{
         },
       },});
 }
-
 
 export const profGet=(id)=>{
   return t.profsProfIdGet({profId:id},{

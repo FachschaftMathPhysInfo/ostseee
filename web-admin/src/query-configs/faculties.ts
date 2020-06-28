@@ -12,3 +12,20 @@ export const facultiesGet =()=>{
         },
       },});
 }
+
+export const facultyGet=(id)=>{
+  return t.facultiesFacultyIdGet({facultyId:id},{
+    transform:(val: any)=>{
+        return {FacultiesById:val};
+    },
+    update: {
+      FacultiesById: (prev, next) => {
+      if(prev==undefined){
+        prev = {};
+      }
+      // Discard previous `response` value (we don't need it anymore).
+      prev[next.id]= next
+      return prev;
+    },
+  },})
+}

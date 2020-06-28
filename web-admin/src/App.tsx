@@ -26,33 +26,38 @@ import {
   EuiTitle,
   EuiTabbedContent,
   EuiCollapsibleNav,
+  EuiCollapsibleNavGroup,
   EuiListGroupItem,
 } from "@elastic/eui";
 import './App.css';
 import store from './lib/store';
+import { Route, Switch, useHistory } from 'react-router';
 
 //@ts-ignore
-import FormsOverview from './components/FormsOverview';
-import ProfOverview from './components/ProfOverview';
-import ModulesOverview from './components/ModulesOverview';
-import TermsOverview from './components/TermsOverview';
-import { EuiCollapsibleNavGroup } from '@elastic/eui';
-import EuiCustomLink from './EuiCustomLink';
-import { Route, Switch, useHistory } from 'react-router';
-import ProfDetail from './components/ProfDetail';
-import TutorsOverview from './components/TutorsOverview';
 import CoursesOverview from './components/CoursesOverview';
 import FacultiesOverview from './components/FacultiesOverview';
-import FacultyCreateDialog from './components/FacultyCreateDialog';
+import FormsOverview from './components/FormsOverview';
+import ModulesOverview from './components/ModulesOverview';
+import ProfOverview from './components/ProfOverview';
+import TermsOverview from './components/TermsOverview';
+import EuiCustomLink from './EuiCustomLink';
+import TutorsOverview from './components/TutorsOverview';
 
 import ProfEdit from './components/ProfEdit';
 import ProfNew from './components/ProfNew';
+import ProfDetail from './components/ProfDetail';
 import CourseDetail from './components/CourseDetail';
 import CourseNew from './components/CourseNew';
 import TermEdit from './components/TermEdit';
 import TermNew from './components/TermNew';
 import TermDetail from './components/TermDetail';
+
 import CourseEdit from './components/CourseEdit';
+
+import FacultyEdit from './components/FacultyEdit';
+import FacultyNew from './components/FacultyNew';
+import FacultyDetail from './components/FacultyDetail';
+
 
 function App({store}) {
   
@@ -155,14 +160,18 @@ function App({store}) {
           About
         </Route>
         <Route path="/faculties/new">
-          <FacultyCreateDialog/>
+          <FacultyNew/>
+        </Route>
+        <Route path="/faculties/:facultyId/edit">
+          <FacultyEdit/>
+        </Route>
+        <Route path="/faculties/:facultyId">
+          <FacultyDetail/>
         </Route>
         <Route path="/faculties">
           <FacultiesOverview/>
         </Route>
         <Route path="/modules/new">
-          {//<CourseNew/>
-          }
         </Route>
         <Route path="/modules">
           <ModulesOverview/>

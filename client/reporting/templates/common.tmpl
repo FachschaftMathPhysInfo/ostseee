@@ -1,0 +1,48 @@
+≤≤ define "result" ≥≥
+    ≤≤if eq (len .Visualizer)  0 ≥≥
+    \paragraph{≤≤ i18n_map .Label ≥≥} unanswered
+    ≤≤ else ≥≥
+    ≤≤if eq .Visualizer  "list" ≥≥
+    \paragraph{≤≤ i18n "comments" ≥≥}
+    \begin{itemize}
+    ≤≤ range .Values ≥≥
+    \item ≤≤ lesc .Value ≥≥
+    ≤≤ end ≥≥
+    \end{itemize}
+    ≤≤else≥≥
+    ≤≤ end ≥≥
+    ≤≤ if eq .Visualizer "horizontal_bars"≥≥
+    \begin{tikzpicture}
+\globalQuestion{
+  ≤≤ i18n_map .Label ≥≥\\
+  {\globalNumberStyle
+  ≤≤i18n "answers"≥≥ ≤≤ countValues .Values ≥≥\\
+  ≤≤i18n "abstinentions"≥≥ ≤≤ .NotApplicableCount ≥≥}
+}
+\singleHorizontalBars{≤≤shortAnswers .Values ≥≥}{≤≤ answers .Values ≥≥}
+\end{tikzpicture}
+    ≤≤ end ≥≥
+      ≤≤ if or (eq .Visualizer "histogram") (eq .Visualizer "histogram_no_cmp") ≥≥
+    \begin{tikzpicture}
+\globalQuestion{
+  ≤≤ i18n_map .Label ≥≥\\
+  {\globalNumberStyle
+  ≤≤i18n "answers"≥≥ ≤≤ countValues .Values ≥≥\\
+  ≤≤i18n "abstinentions"≥≥ ≤≤ .NotApplicableCount ≥≥}
+}
+\singleHistogramPoleLeft{≤≤  lesc (i18n_map (index .Values 0).Label)  ≥≥}
+\singleHistogramHist{≤≤ toPercentage .Values≥≥}
+≤≤/*\singleHistogramErr{<%=sa%>}{<%=ss%>}*/≥≥
+\singleHistogramPoleRight{≤≤ lesc (i18n_map (last .Values ).Label) ≥≥}
+\end{tikzpicture}
+    ≤≤ end ≥≥
+    ≤≤ end ≥≥
+≤≤ end ≥≥
+≤≤ define "sections" ≥≥
+≤≤ range . ≥≥
+    \subsubsection*{≤≤ i18n_map .Label ≥≥}
+    ≤≤ range .Results ≥≥
+        ≤≤ template "result" .≥≥
+    ≤≤ end ≥≥
+ ≤≤ end ≥≥
+ ≤≤ end ≥≥

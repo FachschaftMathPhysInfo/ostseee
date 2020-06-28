@@ -1,0 +1,102 @@
+≤≤ define "preface"≥≥
+Im \termlong{} wurde in Veranstaltungen der Fakultät für Physik und Astronomie die Evaluation durchgeführt. Dazu wurden die Studierenden in den Veranstaltungen gebeten, einen von der Fachschaft in Zusammenarbeit mit den Studienkommissionen sowie der Qualitätssicherungsabteilung der Zentralen Universitätsverwaltung entworfenen Fragebogen auszufüllen. Deutsche und englische Fragebogenversionen unterscheiden sich einzig in der Sprache, es wurden jeweils die Bögen für die jeweilige Veranstaltungssprache ausgeteilt. Den Studierenden wurde während der Veranstaltung Zeit zur Beurteilung der Veranstaltung und ggf. des Übungsbetriebs gegeben. Direkt im Anschluss daran wurden die Bögen wieder von Fachschaftsmitgliedern eingesammelt und anschließend ausgewertet.
+
+\subsubsection{Erläuterungen zur Auswertung}
+
+Da in Vorlesungen keine Anwesenheitspflicht besteht kann die Repräsentativität der Auswertung gering sein, wenn einige Studierende die Veranstaltung nicht mehr besuchen. Dieser Anteil lässt sich mit Hilfe
+der Frage  „Ich schätze, dass im Vergleich zum Beginn der Vorlesung jetzt noch folgender Anteil der Studierenden teilnimmt“ beurteilen. Darüber hinaus kann die Anzahl der zurückgegebenen Fragebögen zur Einschätzung der Aussagekraft der Ergebnisse dienen. Bei einem zu geringen Rücklauf an Bögen je Veranstaltung (kleiner fünf) wurden die Bögen gemäß der Evaluationsordnung der Universität nicht ausgewertet, um die Anonymität der BefragungsteilnehmerInnen zu gewährleisten.
+
+\subsubsection{Die Diagramme}
+
+Die Histogramme hinter den Fragen entsprechen den Feldern auf den Fragebögen. Die Balkendiagramme geben die Häufigkeit wieder, mit der das entsprechende Feld angekreuzt wurde. Die Höhe der Balken ist dabei auf die Gesamtzahl von gültigen Stimmen ohne Enthaltungen normiert, welche unter dem Fragentext vermerkt ist. Enthaltungen werden im Diagramm also \emph{nicht} berücksichtigt.
+
+Die Mittelwertberechnung zu jeder Frage und Veranstaltung ergibt sich aus den jeweils gültigen Stimmen und ist durch den oberen (ausgefüllten) Punkt dargestellt. Der untere (unausgefüllte) Punkt stellt das Mittel über alle abgegebenen Bögen dieses Bogentyps dar. Dabei wurden alle Bögen gleich gewichtet (kleinere Veranstaltungen fallen also schwächer ins Gewicht als große). Berücksichtigt wurden natürlich nur Bögen des aktuellen Semesters. Der jeweilige Balken gibt die Standardabweichung an.
+
+Der Vergleich zwischen dem Mittelwert einer Veranstaltung und dem Gesamtmittel ist in vielen Fällen aussagekräftiger als der Absolutwert des Mittelwertes. Es sollte aber beachtet werden, dass sich die Veranstaltungen aufgrund zum Teil völlig unterschiedlicher Situationen manchmal nicht vergleichen lassen.
+
+\subsubsection{Beispiele}
+\begin{tikzpicture}
+\globalQuestion{
+  Mein Lernzuwachs ist hoch.\\
+  {\globalNumberStyle
+    Antworten: 7,
+    Enthaltungen: 0}
+}
+\singleHistogramPoleLeft{stimme voll zu}
+\singleHistogramHist{14,57,29,0,0}
+\singleHistogramErr{2.1429}{0.6389}[3.9951][1.0779]
+\singleHistogramPoleRight{stimme gar nicht zu}
+
+
+\node at (0.8, 2.2) [text width = 8cm, text ragged left]
+  {\footnotesize rechter Pol};
+\draw (5,2.2) .. controls (12.2,2.2) .. (12.2,0.6);
+
+\node at (0.8, 1.7) [text width = 8cm, text ragged left]
+  {\footnotesize relative Häufigkeit der \emph{Antworten} und Histogramm};
+\draw[decorate,decoration=brace] (5.9,0.9) -- (11.3,0.9);
+\draw (5,1.7) .. controls (8.6,1.7) .. (8.6,0.995);
+
+\node at (0.8, 1.2) [text width = 8cm, text ragged left]
+  {\footnotesize linker Pol};
+\draw (5,1.2) .. controls (5.4,1.2) .. (5.4,0.5);
+
+
+\node at (0.8, -1.7) [text width = 8cm, text ragged left]
+  {\footnotesize Mittelwert und Standardabw. \emph{dieser} Veranstaltung};
+\draw (5,-1.7) .. controls (7.7,-1.7) .. (7.7,-0.9);
+
+\node at (0.8, -2.2) [text width = 8cm, text ragged left]
+  {\footnotesize Mittelwert und Standardabw. \emph{aller} Veranstaltungen mit diesem Bogentyp};
+\draw (5,-2.2) .. controls (9.65,-2.2) .. (9.65,-1.05);
+\end{tikzpicture}
+
+\vspace*{1cm}
+
+\begin{tikzpicture}
+\globalQuestion{
+  Mit welchem \emph{Abschlussziel} studierst Du?\\
+  {\globalNumberStyle
+    Antworten: 7,
+    Enthaltungen: 0}
+}
+
+\singleHorizontalBars{Bachelor,Master}{1,6}
+
+\node at (0.8, -1.5) [text width = 8cm, text ragged left]
+  {\footnotesize Antwortmöglichkeiten};
+\draw (5,-1.5) .. controls (6.7,-1.5) .. (6.7,-0.9);
+
+\node at (0.8, -2.0) [text width = 8cm, text ragged left]
+  {\footnotesize Histogramm};
+\draw (5,-2.0) .. controls (9.65,-2.0) .. (9.65,-1.05);
+
+\node at (0.8, -2.5) [text width = 8cm, text ragged left]
+  {\footnotesize absolute Häufigkeit der \emph{Antworten}};
+\draw (5,-2.5) .. controls (13.1,-2.5) .. (13.1,-1.05);
+\end{tikzpicture}
+
+
+\subsubsection{Zu den Kommentaren}
+
+Nach dem Scannen der Bögen werden die Kommentare von der Fachschaft abgetippt, des Weiteren werden diese bei großen Veranstaltungen in Kategorien eingeteilt und bei sinngleiche Aussagen zusammengefasst und mit der entsprechenden Häufigkeit des Auftretens gekennzeichnet, um eine übersichtliche Darstellung der Kommentare zu ermöglichen.
+Wir behalten uns vor, diskriminierende und beleidigende Kommentare nicht zu übernehmen.
+Die Kommentare sind im Verhältnis zur gesamten HörerInnenzahl zu betrachten.
+
+\subsubsection{Weiterer Umgang mit den Ergebnissen}
+Die Evaluation dient in erster Linie der direkten Rückmeldung an die DozentInnen und TutorInnen.
+Darüber hinaus werden die Ergebnisse aller Veranstaltungen von der Studienkommission gesichtet und besprochen um zur Sicherung der Qualität der Lehre beizutragen. In kritischen Fällen kann so auf eine Nachbesprechung mit einer Lehrperson hingewirkt werden.
+Des Weiteren vergibt die Studienkommission einmal im Semester den Lehrpreis, um in der Lehre engagierte und besonders gut evaluierte Mitglieder der Fakultät zu würdigen.
+Eine Auflistung der PreisträgerInnen der letzten Jahren findet sich auf unserer Website \href{www.mathphys.stura.uni-heidelberg.de/w/lehrpreise/}{www.mathphys.info/w/lehrpreise}.
+
+\subsubsection{Veröffentlichung der Evaluationsergebnisse}
+
+Die Evaluationsergebnisse werden nach dem Semester an bestimmten Orten ausgehängt um den Studierenden das Einsehen dieser zu ermöglichen. Der ausgehängte Gesamtbericht enthält nur die Ergebnisse derjenigen Lehrpersonen, welche hierzu ihre Einverständnis erklärt haben.
+
+\subsubsection{Weitere Annmerkungen zur Evaluation}
+
+Die Evaluation wird im Auftrag der Fakultät für Physik und Astronomie von Mitgliedern der Fachschaft organisiert und durchgeführt. Mehr Informationen finden Sie auf folgender Website \href{www.mathphys.stura.uni-heidelberg.de/w/evaluation}{www.mathphys.info/w/evaluation}.
+Für Anregungen und Fragen können Sie sich gerne per E-Mail an uns wenden \href{mailto:evaluation@mathphys.stura.uni-heidelberg.de}{evaluation@mathphys.info}.
+
+
+≤≤ end ≥≥

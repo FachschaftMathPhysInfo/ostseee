@@ -1,0 +1,21 @@
+≤≤ define "tutor_report"≥≥
+\documentclass[pagesize,halfparskip-,headsepline,cleardoubleempty,table]{scrbook}
+\def\tightlist{} % for pandoc
+  \title{Lehrevaluation ≤≤ .Module.Name ≥≥}
+  \subtitle{im ≤≤ .Term.Name ≥≥}
+  \date{\today}
+  \author{≤≤ .Faculty.Name ≥≥}
+\newcommand{\facultylong}{≤≤ .Faculty.Name≥≥}
+\newcommand{\termlong}{≤≤ .Term.Name ≥≥}
+\newcommand{\termshort}{≤≤ .Term.Name ≥≥}
+≤≤ template "preamble" "ngerman"≥≥
+\begin{document}
+\maketitle
+≤≤ template "preface" ≥≥
+\kurskopf{≤≤ lesc .Module.Name ≥≥}{ ≤≤ getNames .CourseProfs ≥≥ }{0}{≤≤.Course.Id ≥≥}{≤≤i18n "by"≥≥}
+\selectlanguage{≤≤ i18n "tex_lang" ≥≥}
+\subsection*{Tutor ≤≤ .Tutor.Name ≥≥}
+≤≤ template "tutor" .TutorReport ≥≥
+\end{document}
+
+≤≤ end ≥≥

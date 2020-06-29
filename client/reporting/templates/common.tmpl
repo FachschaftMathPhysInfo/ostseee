@@ -1,8 +1,8 @@
 ≤≤ define "result" ≥≥
-    ≤≤if eq (len .Visualizer)  0 ≥≥
-    \paragraph{≤≤ i18n_map .Label ≥≥} unanswered
+    ≤≤if eq (len .Values)  0 ≥≥
+    \paragraph{≤≤ i18n_map .Label ≥≥} ≤≤ i18n "unanswered" ≥≥
     ≤≤ else ≥≥
-    ≤≤if eq .Visualizer  "list" ≥≥
+    ≤≤if and (eq .Visualizer  "list") (gt (len .Values) 0) ≥≥
     \paragraph{≤≤ i18n "comments" ≥≥}
     \begin{itemize}
     ≤≤ range .Values ≥≥
@@ -16,8 +16,8 @@
 \globalQuestion{
   ≤≤ i18n_map .Label ≥≥\\
   {\globalNumberStyle
-  ≤≤i18n "answers"≥≥ ≤≤ countValues .Values ≥≥\\
-  ≤≤i18n "abstinentions"≥≥ ≤≤ .NotApplicableCount ≥≥}
+  ≤≤i18n "answers"≥≥: ≤≤ countValues .Values ≥≥\\
+  ≤≤i18n "abstinentions"≥≥: ≤≤ .NotApplicableCount ≥≥}
 }
 \singleHorizontalBars{≤≤shortAnswers .Values ≥≥}{≤≤ answers .Values ≥≥}
 \end{tikzpicture}
@@ -27,8 +27,8 @@
 \globalQuestion{
   ≤≤ i18n_map .Label ≥≥\\
   {\globalNumberStyle
-  ≤≤i18n "answers"≥≥ ≤≤ countValues .Values ≥≥\\
-  ≤≤i18n "abstinentions"≥≥ ≤≤ .NotApplicableCount ≥≥}
+  ≤≤i18n "answers"≥≥: ≤≤ countValues .Values ≥≥\\
+  ≤≤i18n "abstinentions"≥≥: ≤≤ .NotApplicableCount ≥≥}
 }
 \singleHistogramPoleLeft{≤≤  lesc (i18n_map (index .Values 0).Label)  ≥≥}
 \singleHistogramHist{≤≤ toPercentage .Values≥≥}
@@ -45,4 +45,18 @@
         ≤≤ template "result" .≥≥
     ≤≤ end ≥≥
  ≤≤ end ≥≥
+ ≤≤ end ≥≥
+ ≤≤define "tutor_overview"≥≥
+ \begin{longtable}[l]{lrr}
+    \hline
+    ≤≤i18n "tutorium_overview"≥≥ \\
+    \hline
+    \endhead
+
+  ≤≤ range . ≥≥
+    \hyperref[≤≤.Id≥≥]{≤≤.Name≥≥}
+	& \pageref{≤≤.Id≥≥} \\
+  ≤≤end≥≥
+  \hline
+  \end{longtable}
  ≤≤ end ≥≥

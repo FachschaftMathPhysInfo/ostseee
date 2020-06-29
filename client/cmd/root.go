@@ -83,6 +83,7 @@ func init() {
 	rootCmd.PersistentFlags().String("scheme", "https", "Transport scheme")
 	rootCmd.PersistentFlags().String("host", "eval.mathphys.info", "Host of ostseee")
 	rootCmd.PersistentFlags().String("basepath", "v1", "BasePath")
+	ReportCmd.PersistentFlags().StringVar(&Locale, "locale", "de", "Locale to render")
 	viper.BindPFlag("scheme", rootCmd.PersistentFlags().Lookup("scheme"))
 	viper.BindPFlag("host", rootCmd.PersistentFlags().Lookup("host"))
 	viper.BindPFlag("basepath", rootCmd.PersistentFlags().Lookup("basepath"))
@@ -91,6 +92,7 @@ func init() {
 	termsCmd.AddCommand(termsListCmd)
 	rootCmd.AddCommand(termsCmd)
 	ReportCmd.AddCommand(ReportTutorCmd)
+	ReportCmd.AddCommand(ReportCourseCmd)
 	rootCmd.AddCommand(ReportCmd)
 }
 

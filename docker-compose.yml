@@ -26,8 +26,8 @@ services:
     image: ostseee_proxy:latest
     container_name: ostseee_proxy
     ports:
-      - "127.0.0.1:8081:8081"
-      - "127.0.0.1:8082:8082"
+      - "127.0.0.1:3081:8081"
+      - "127.0.0.1:3082:8082"
     depends_on:
       - ostseee
     networks:

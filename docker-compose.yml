@@ -7,36 +7,31 @@ services:
   db:
     image: bitnami/postgresql:latest
     restart: always
-    environment: # change the PASSWORD and insert it in DB_CONNECTION_STRING
-      POSTGRESQL_PASSWORD: example
-      POSTGRESQL_USERNAME: ostseee
-      POSTGRESQL_DATABASE: ostseee
-      POSTGRES_HOST: 'db'
-    volumes: 
-      - ./data-db:/bitnami/postgresql
+    env_file: db.env
+    volumes:
+      - db-data:/bitnami/postgresql
     networks:
       - app-tier
   ostseee:
     build: server
     image: ostseee:latest
     container_name: ostseee
-    environment:
-      - DB_CONNECTION_TYPE=postgres
-      - DB_CONNECTION_STRING=host=db port=5432 user=ostseee dbname=ostseee password=example sslmode=disable
-      - MIGRATE_DB=1
-      - LTI_SECRET_KEY=secretKey
+    env_file: ./ostsee.env
     networks:
       - app-tier
-    depends_on: 
+    depends_on:
       - db
   web:
     build: .
     image: ostseee_proxy:latest
     container_name: ostseee_proxy
     ports:
-      - "127.0.0.1:8081:8081"
-      - "127.0.0.1:8082:8082"
+      - "127.0.0.1:3081:8081"
+      - "127.0.0.1:3082:8082"
     depends_on:
       - ostseee
     networks:
-      - app-tier    
+      - app-tier
+
+volumes:
+  db-data:

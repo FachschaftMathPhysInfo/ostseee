@@ -24,7 +24,7 @@ const ProfEditor = props => {
     //TODO: bug, anscheinend wird die Seite ständig neu geladen und die Werte im Form sind nicht änderbar
     //Es fehlt noch der Patch Request über eine mutation, sodass die Sachen auch im backend geupdated werden.
     //@ts-ignore
-    const [{isPending,isFinished,status},submit]=useMutation(( title, firstname, lastname, email, censored, censoredDate)=>props.prof?editProf(prof.id, title, firstname, lastname, email, censored, censoredDate):newProf(title, firstname, lastname, email, censored, censoredDate))
+    const [{isPending,isFinished,status},submit]=useMutation((title, firstname, lastname, email, censored, censoredDate)=>props.prof?editProf(prof.id, title, firstname, lastname, email, censored, censoredDate):newProf(title, firstname, lastname, email, censored, censoredDate))
     
     if (isFinished&&status==200){
         props.onComplete()

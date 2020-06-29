@@ -13,6 +13,7 @@ import { EuiSpacer } from "@elastic/eui"
 import TutorSelect from "./questions/TutorSelect"
 import translate from "../lib/translate"
 import translation from '../data/translation.json'
+import SliderQuestion from "./questions/SliderQuestion"
 const QuestionComponent= props=>{
     const question:Question= props.question
     //check for concerns/regards
@@ -30,6 +31,9 @@ const QuestionComponent= props=>{
     //@ts-ignore
     if(question.visualizer=="tutor_overview"){
         comp=(concernsId,prof)=>( <TutorSelect sectionId={props.sectionId} question={question} prof={prof} concerns={concernsId}></TutorSelect>)
+    }
+    if(question.isSlider){
+        comp= (concernsId,prof)=>(<SliderQuestion sectionId={props.sectionId} question={question} prof={prof} concerns={concernsId}></SliderQuestion>)
     }
     if(question.isComment){
         comp= (concernsId,prof)=>(<CommentQuestion sectionId={props.sectionId} question={question} prof={prof} concerns={concernsId}></CommentQuestion>)

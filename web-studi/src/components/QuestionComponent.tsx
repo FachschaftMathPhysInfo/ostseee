@@ -41,9 +41,9 @@ const QuestionComponent= props=>{
     if(question.isMulti){
         comp=(concernsId,prof)=> (<MultipleChoiceQuestion sectionId={props.sectionId} question={question} prof={prof} concerns={concernsId}></MultipleChoiceQuestion>)
     }
-    if(question.hasOtherOption){
-        comp= (concernsId,prof)=>(<SelectQuestion sectionId={props.sectionId} question={question} prof={prof} concerns={concernsId}></SelectQuestion>)
-    }
+    //if(question.hasOtherOption){
+    //    comp= (concernsId,prof)=>(<SelectQuestion sectionId={props.sectionId} question={question} prof={prof} concerns={concernsId}></SelectQuestion>)
+    //}
     let comps = [<div  key={`${question.id}:${concerns}`} id={`${question.id}:${concerns}`}>{comp(concerns,null)}</div>]
     if(question.regards == "lecturer"){
         concerns = emptyForm.profs[0]?.id

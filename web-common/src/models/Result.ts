@@ -43,6 +43,12 @@ export interface Result  {
      */
     visualizer?: string;
     /**
+     * gives the number of not applicable.
+     * @type {number}
+     * @memberof Result
+     */
+    notApplicableCount?: number;
+    /**
      * 
      * @type {Array<ResultPair>}
      * @memberof Result
@@ -55,6 +61,7 @@ export function ResultFromJSON(json: any): Result {
         'id': !exists(json, 'id') ? undefined : json['id'],
         'label': !exists(json, 'label') ? undefined : json['label'],
         'visualizer': !exists(json, 'visualizer') ? undefined : json['visualizer'],
+        'notApplicableCount': !exists(json, 'notApplicableCount') ? undefined : json['notApplicableCount'],
         'values': !exists(json, 'values') ? undefined : (json['values'] as Array<any>).map(ResultPairFromJSON),
     };
 }
@@ -67,6 +74,7 @@ export function ResultToJSON(value?: Result): any {
         'id': value.id,
         'label': value.label,
         'visualizer': value.visualizer,
+        'notApplicableCount': value.notApplicableCount,
         'values': value.values === undefined ? undefined : (value.values as Array<any>).map(ResultPairToJSON),
     };
 }

@@ -26,6 +26,12 @@ export interface ResultPair  {
     label?: { [key: string]: string; };
     /**
      * 
+     * @type {number}
+     * @memberof ResultPair
+     */
+    position?: number;
+    /**
+     * 
      * @type {string}
      * @memberof ResultPair
      */
@@ -35,6 +41,7 @@ export interface ResultPair  {
 export function ResultPairFromJSON(json: any): ResultPair {
     return {
         'label': !exists(json, 'label') ? undefined : json['label'],
+        'position': !exists(json, 'position') ? undefined : json['position'],
         'value': !exists(json, 'value') ? undefined : json['value'],
     };
 }
@@ -45,6 +52,7 @@ export function ResultPairToJSON(value?: ResultPair): any {
     }
     return {
         'label': value.label,
+        'position': value.position,
         'value': value.value,
     };
 }

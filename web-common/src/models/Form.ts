@@ -52,7 +52,7 @@ export interface Form  {
 
 export function FormFromJSON(json: any): Form {
     return {
-        'id': json['id'],
+        'id': !exists(json, 'id') ? undefined : json['id'],
         'name': json['name'],
         'termId': json['termId'],
         'abstractForm': AbstractFormFromJSON(json['abstractForm']),

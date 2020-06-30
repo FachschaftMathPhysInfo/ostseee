@@ -29,7 +29,7 @@ export interface Form  {
      * @type {string}
      * @memberof Form
      */
-    id: string;
+    id?: string;
     /**
      * 
      * @type {string}

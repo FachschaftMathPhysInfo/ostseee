@@ -433,7 +433,18 @@ func (ev *EvalAPI) FacultiesPost(c *gin.Context) {
 
 // FormsFormIdGet - Get a form by ID
 func (ev *EvalAPI) FormsFormIdGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	id := c.Params.ByName("formId")
+	uid, err := uuid.FromString(id)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	form, err := ev.EvalService.FindForm(uid)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, form)
 }
 
 // FormsFormIdPatch - Change a form by ID

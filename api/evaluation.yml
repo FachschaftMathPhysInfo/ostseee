@@ -1017,7 +1017,6 @@ components:
         abstractForm:
           $ref: '#/components/schemas/AbstractForm'
       required:
-        - id
         - name
         - termId
         - abstractForm

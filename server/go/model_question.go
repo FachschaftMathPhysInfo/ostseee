@@ -37,7 +37,7 @@ type Question struct {
 	HasNotApplicableOption bool `json:"hasNotApplicableOption,omitempty"`
 
 	// isSlider: Render as slider.
-	IsSlider bool `json:"hasNotApplicableOption,omitempty"`
+	IsSlider bool `json:"isSlider,omitempty"`
 
 	// Defines how results should be displayed.
 	Visualizer string `json:"visualizer"`

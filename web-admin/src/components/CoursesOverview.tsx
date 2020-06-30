@@ -36,7 +36,7 @@ const CoursesOverview = props => {
       field: 'termId',  // for further arguments, see https://elastic.github.io/eui/#/tabular-content/tables
       name: 'Term',
       sortable: true,
-      render: (data)=> {return <TermDisplay id={data}></TermDisplay>}
+      render: (data)=> {return <TermDisplay termId={data}></TermDisplay>}
     },
     {
       field: 'moduleId', 

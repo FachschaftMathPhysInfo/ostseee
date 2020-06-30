@@ -14,7 +14,10 @@ export const editTerm =(termId: string, name:string, begin: Date, end: Date)=>{
       Terms: (prev, next) => {
         // Discard previous `response` value (we don't need it anymore).
         if(prev){
-          return prev.concat(next);
+          if(prev.findIndex((v=>v.id==next[0].id))>=0)
+          prev[prev.findIndex((v=>v.id==next[0].id))]= next[0];
+          else return prev.concat(next)
+          return prev;
         }
         return next;
         

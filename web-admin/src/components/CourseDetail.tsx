@@ -46,7 +46,7 @@ const CourseDetail = props => {
             <EuiPageContentHeader>
                 <EuiPageContentHeaderSection>
                     <EuiTitle>
-                        <h1><ModuleDisplay id={course.moduleId}></ModuleDisplay> im <code><TermDisplay id={course.termId}></TermDisplay></code></h1>
+                        <h1><ModuleDisplay id={course.moduleId}></ModuleDisplay> im <code><TermDisplay termId={course.termId}></TermDisplay></code></h1>
                     </EuiTitle>
                     <EuiTitle >
                         <h2>bei <CourseProfsDisplay id={course.id}></CourseProfsDisplay></h2>

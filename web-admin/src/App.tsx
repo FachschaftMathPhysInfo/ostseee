@@ -57,6 +57,9 @@ import CourseEdit from './components/CourseEdit';
 import FacultyEdit from './components/FacultyEdit';
 import FacultyNew from './components/FacultyNew';
 import FacultyDetail from './components/FacultyDetail';
+import FormDetail from './components/FormDetail';
+import FormEdit from './components/FormEdit';
+import FormNew from './components/FormNew';
 
 
 function App({store}) {
@@ -199,6 +202,15 @@ function App({store}) {
         </Route>
         <Route path="/terms">
           <TermsOverview/>
+        </Route>
+        <Route path="/forms/new">
+          <FormNew/>
+        </Route>
+        <Route path="/forms/:forms/edit">
+          <FormEdit/>
+        </Route>
+        <Route path="/forms/:formId">
+          <FormDetail/>
         </Route>
         <Route path="/forms">
           <FormsOverview/>

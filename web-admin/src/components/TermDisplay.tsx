@@ -7,14 +7,17 @@ import EuiCustomLink from '../EuiCustomLink';
 import { Module } from 'ostseee-web-common';
 import { getTerm } from '../selectors/terms';
 import { termGet } from '../query-configs/terms';
-const TermDisplay = ({id})=>{
-    const [data, second] = useRequest(termGet(id));
-    const term :Module= useSelector(getTerm(id))
-    if(data.isPending||term==undefined){
+const TermDisplay = ({termId})=>{
+    const [data, second] = useRequest(termGet(termId));
+    const term :Module= useSelector(getTerm(termId))
+    if(data.isPending){
         return (<>Loading</>)
     }
+    if(term==undefined){
+        return <>No such term</>
+    }
     return (
-    <EuiCustomLink to={`/terms/${id}`}>{term.name}</EuiCustomLink>
+    <EuiCustomLink to={`/terms/${termId}`}>{term.name}</EuiCustomLink>
     )
 }
 export default TermDisplay

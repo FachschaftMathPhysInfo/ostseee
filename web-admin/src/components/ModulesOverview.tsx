@@ -1,25 +1,22 @@
 import * as React from 'react';
-import { Provider, useSelector } from 'react-redux';
-import { Provider as ReduxQueryProvider, useRequest } from 'redux-query-react';
+import { useSelector } from 'react-redux';
+import { useRequest } from 'redux-query-react';
+import { useHistory } from 'react-router';
 
 import {
-  EuiBasicTable,
-  EuiSpacer,
-  EuiText,
+  EuiButton,
   EuiInMemoryTable,
   EuiButtonIcon,
   SortDirection,
 } from "@elastic/eui";
 
-import { getQueries } from '../lib/store';
-
 import * as moduleQueryConfigs from '../query-configs/modules';
 import * as moduleSelectors from '../selectors/modules';
-import { Module } from 'ostseee-web-common';
 
 const ModulesOverview = props => {
   useRequest(moduleQueryConfigs.modulesGet());
   const Modules = useSelector(moduleSelectors.getModules);
+  const history = useHistory();
 
   const columns = [
     {
@@ -46,13 +43,27 @@ const ModulesOverview = props => {
     },
   };
 
+  const getRowProps = (item) => {
+    const { id } = item;
+    return {
+      'data-test-subj': `row-${id}`,
+      className: 'customRowClass',
+      onClick: () => history.push("/modules/"+id),
+    };
+  };
+
   return (
     <>
+      <EuiButton fill iconType="plusInCircle"  
+              onClick={() => history.push("/modules/new")}>
+        Neues Modul anlegen
+      </EuiButton>   
       <EuiInMemoryTable
         items={Modules}  // adjust for server request
         columns={columns}
         sorting = {sorting}
-      />
+        rowProps={getRowProps}
+        />
     </>
   );
 };

@@ -390,7 +390,18 @@ func (ev *EvalAPI) CoursesPost(c *gin.Context) {
 
 // FacultiesFacultyIdGet - Get a faculty by ID
 func (ev *EvalAPI) FacultiesFacultyIdGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	id, err := uuid.FromString(c.Param("facultyId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	faculty, err := ev.EvalService.FindFaculty(id)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, faculty)
 }
 
 // FacultiesFacultyIdPatch - Change a faculty by ID

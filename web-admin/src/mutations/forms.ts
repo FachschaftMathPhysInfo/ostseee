@@ -6,10 +6,10 @@ export const newForm =(name: string, termId: string, abstractForm:AbstractForm)=
         form:{name, termId, abstractForm}
     },{
         transform:(val: any)=>{
-            return {Terms:[val],TermById:val};
+            return {Forms:[val],FormsById:val};
         },
         update: {
-        Terms: (prev, next) => {
+        Forms: (prev, next) => {
           // Discard previous `response` value (we don't need it anymore).
           if(prev){
             return prev.concat(next);
@@ -17,7 +17,7 @@ export const newForm =(name: string, termId: string, abstractForm:AbstractForm)=
           return next;
           
         },
-        TermById:(prev,next)=>{
+        FormsById:(prev,next)=>{
           prev=prev || {[next.id]:next}
           prev[next.id]=next
           return prev

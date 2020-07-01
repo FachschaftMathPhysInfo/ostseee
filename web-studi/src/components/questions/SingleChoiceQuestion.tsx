@@ -61,6 +61,7 @@ const SingleChoiceQuestion = props => {
     <EuiSpacer size="m"></EuiSpacer>
     <EuiRadio onChange={e=>onChange(translate({"de":"sonstiges","en":"other"},languageCode))} checked={(answer==`undefined:${props.concerns}`&&answerid.values!="")||false}
     label={(<EuiFieldText 
+      compressed={true}
       id={`${question.id}:${props.concerns}other`}
       placeholder={translate({"de": "Bitte Sonstiges spezifizieren","en": "Please specify other option"},languageCode)}
       onChange={e=>onChange(e.target.value)}

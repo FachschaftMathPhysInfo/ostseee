@@ -37,7 +37,7 @@ const ModuleEditor = props => {
             <EuiFormRow label="Beschreibung">
                 <EuiFieldText placeholder="Beschreibung" value={description} onChange={(e)=>setDescription(e.target.value)}></EuiFieldText>
             </EuiFormRow>
-            <EuiFormRow label="Modul">
+            <EuiFormRow label="Fakultät">
                 <FacultySelect facultyId={facultyId} onChange={(e) => { console.log(e); setFacultyId(e) }}></FacultySelect>
             </EuiFormRow>
             

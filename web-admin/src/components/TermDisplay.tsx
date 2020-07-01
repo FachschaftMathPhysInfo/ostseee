@@ -7,6 +7,7 @@ import EuiCustomLink from '../EuiCustomLink';
 import { Module } from 'ostseee-web-common';
 import { getTerm } from '../selectors/terms';
 import { termGet } from '../query-configs/terms';
+
 const TermDisplay = ({termId})=>{
     const [data, second] = useRequest(termGet(termId));
     const term :Module= useSelector(getTerm(termId))

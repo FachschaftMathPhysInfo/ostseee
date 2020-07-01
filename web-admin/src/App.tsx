@@ -17,9 +17,7 @@ import {
   EuiPageContentHeaderSection,
   EuiPageHeader,
   EuiPageHeaderSection,  
-  //@ts-ignore
   EuiNavDrawerGroup,
-    //@ts-ignore
   EuiNavDrawer,
   EuiSpacer,
   EuiText,
@@ -33,7 +31,6 @@ import './App.css';
 import store from './lib/store';
 import { Route, Switch, useHistory } from 'react-router';
 
-//@ts-ignore
 import CoursesOverview from './components/CoursesOverview';
 import FacultiesOverview from './components/FacultiesOverview';
 import FormsOverview from './components/FormsOverview';
@@ -46,13 +43,16 @@ import TutorsOverview from './components/TutorsOverview';
 import ProfEdit from './components/ProfEdit';
 import ProfNew from './components/ProfNew';
 import ProfDetail from './components/ProfDetail';
+import CourseEdit from './components/CourseEdit';
 import CourseDetail from './components/CourseDetail';
 import CourseNew from './components/CourseNew';
+import ModuleEdit from './components/ModuleEdit';
+import ModuleNew from './components/ModuleNew';
+import ModuleDetail from './components/ModuleDetail';
 import TermEdit from './components/TermEdit';
 import TermNew from './components/TermNew';
 import TermDetail from './components/TermDetail';
 
-import CourseEdit from './components/CourseEdit';
 
 import FacultyEdit from './components/FacultyEdit';
 import FacultyNew from './components/FacultyNew';
@@ -175,6 +175,13 @@ function App({store}) {
           <FacultiesOverview/>
         </Route>
         <Route path="/modules/new">
+          <ModuleNew/>
+        </Route>
+        <Route path="/modules/:moduleId/edit">
+          <ModuleEdit/>
+        </Route>
+        <Route path="/modules/:moduleId">
+          <ModuleDetail/>
         </Route>
         <Route path="/modules">
           <ModulesOverview/>

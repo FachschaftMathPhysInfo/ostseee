@@ -1,5 +1,6 @@
 //import * as t from 'ostseee-web-common/dist/modules/es2017/index';
 import * as t from 'ostseee-web-common';
+
 export const facultiesGet =()=>{
     return t.facultiesGet({
         transform:(val: any)=>{

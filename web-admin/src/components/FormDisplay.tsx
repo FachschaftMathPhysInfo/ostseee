@@ -5,6 +5,7 @@ import EuiCustomLink from '../EuiCustomLink';
 import {  Form } from 'ostseee-web-common';
 import { formGet } from '../query-configs/forms';
 import { getForm } from '../selectors/forms';
+
 const FormDisplay = ({id})=>{
     const [data, second] = useRequest(formGet(id));
     const form :Form= useSelector(getForm(id))

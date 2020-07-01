@@ -16,6 +16,7 @@ import InvitationList from "../lib/invitationlist";
 import ModuleSelect from "./ModuleSelect";
 import TermSelect from "./TermSelect";
 import { getCourse } from "../selectors/courses";
+import CourseProfsEditor from "./CourseProfsEditor";
 const CourseDetail = props => {
     let { courseId } = useParams();
     const [{ isPending }] = useRequest(courseGet(courseId));
@@ -57,6 +58,9 @@ const CourseDetail = props => {
                 <EuiTextAlign textAlign="left">
                     <b># Students:</b><code>{course.numberOfStudents}</code><br></br>
                     <b>Form:</b>
+                    <EuiFormRow label="Profs">
+                    <CourseProfsEditor courseId={courseId}></CourseProfsEditor>
+                    </EuiFormRow>
                     <EuiFormRow label="Zeitraum">
                     <EuiDatePickerRange
                         startDateControl={

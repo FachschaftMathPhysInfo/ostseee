@@ -52,7 +52,7 @@ const SliderQuestion = props => {
     <>
       <h3><b>{prof?.lastname}</b></h3>
       {prof != null ? <EuiSpacer size="s"></EuiSpacer> : <></>}
-      <EuiFlexGroup >{options.map(opt => (<EuiFlexItem grow={true} ><div style={{ display: "flex",alignItems:"center",marginRight:"auto", marginLeft:"auto" }}>
+      <EuiFlexGroup >{options.map(opt => (<EuiFlexItem grow={true} key={opt.id} ><div style={{ display: "flex",alignItems:"center",marginRight:"auto", marginLeft:"auto" }}>
         <EuiRadio id={opt.id} checked={answerid.values[0] == opt.value} onChange={setSelected(question.id, props.concerns, opt.value)}></EuiRadio></div><EuiText textAlign="center">{opt.label}</EuiText></EuiFlexItem>))}</EuiFlexGroup>
       <EuiSpacer size="m"></EuiSpacer>{
         question.hasNotApplicableOption ?

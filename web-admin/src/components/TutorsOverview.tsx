@@ -15,7 +15,6 @@ import * as tutorSelectors from '../selectors/tutors';
 import { Tutor } from 'ostseee-web-common';
 
 const TutorsOverview = props => {
-  useRequest(tutorQueryConfigs.tutorsGet());
   const Tutors = useSelector (tutorSelectors.getTutors);
 
   const columns = [

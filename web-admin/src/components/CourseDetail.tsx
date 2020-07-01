@@ -1,5 +1,5 @@
 
-import { useParams } from "react-router"
+import { useParams, useHistory } from "react-router"
 import React, { useState } from "react";
 import { useRequest, useMutation } from "redux-query-react";
 import { courseGet } from "../query-configs/courses";
@@ -17,6 +17,7 @@ import ModuleSelect from "./ModuleSelect";
 import TermSelect from "./TermSelect";
 import { getCourse } from "../selectors/courses";
 import CourseProfsEditor from "./CourseProfsEditor";
+import TutorsEditor from "./TutorsEditor";
 const CourseDetail = props => {
     let { courseId } = useParams();
     const [{ isPending }] = useRequest(courseGet(courseId));
@@ -30,7 +31,8 @@ const CourseDetail = props => {
     //@ts-ignore
     var invs: InvitationList= {}
     const [baseUrl, setbaseUrl] = useState("https://eval.mathphys.info/questionaire/")
-   
+    
+    const history= useHistory()
     if (isPending) {
         return (<>Loading</>)
     }
@@ -48,10 +50,10 @@ const CourseDetail = props => {
                 <EuiPageContentHeaderSection>
                     <EuiTitle>
                         <h1><ModuleDisplay id={course.moduleId}></ModuleDisplay> im <code><TermDisplay termId={course.termId}></TermDisplay></code></h1>
-                    </EuiTitle>
-                    <EuiTitle >
-                        <h2>bei <CourseProfsDisplay id={course.id}></CourseProfsDisplay></h2>
-                    </EuiTitle>
+                    </EuiTitle>         
+                </EuiPageContentHeaderSection>
+                <EuiPageContentHeaderSection>
+                <EuiButton iconType="pencil" onClick={() => history.push(`/courses/${course.id}/edit`)}>Bearbeiten</EuiButton>
                 </EuiPageContentHeaderSection>
             </EuiPageContentHeader>
             <EuiPageContentBody>
@@ -93,7 +95,9 @@ const CourseDetail = props => {
                     </EuiFormRow>
                     <EuiButton onClick={(e)=>console.log(getInvitations(beginDate,endDate))}>Lade Invitations</EuiButton>
                     <EuiCode language="json">{JSON.stringify(invs)}</EuiCode>
-                </EuiTextAlign></EuiPageContentBody>
+                </EuiTextAlign>
+                <TutorsEditor courseId={courseId}></TutorsEditor>
+                </EuiPageContentBody>
         </EuiPageContent>
     )
 }

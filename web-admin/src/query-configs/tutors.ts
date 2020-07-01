@@ -1,15 +1,18 @@
-//import * as t from 'ostseee-web-common/dist/modules/es2017/index';
-import * as t from 'ostseee-web-common';
-export const tutorsGet =()=>{
+import { coursesCourseIdTutorsGet } from "ostseee-web-common";
+
+export const tutorsByCourseGet =(courseId)=>{
   //@ts-ignore
-    return t.tutorsGet({
+    return coursesCourseIdTutorsGet({courseId},{
         transform:(val: any)=>{
-            return {Tutors:val};
+            return {TutorsByCourseId:val};
         },
         update: {
-        Tutors: (prev, next) => {
-          // Discard previous `response` value (we don't need it anymore).
-          return next;
+          TutorsByCourseId: (prev, next) => {
+            if (prev == undefined) {
+              prev = {};
+            }
+            prev[courseId]= next
+          return prev;
         },
       },});
 }

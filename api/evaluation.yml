@@ -423,7 +423,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CourseProf'
     delete:
-      summary: Deletes a module by ID
+      summary: Deletes a courseProf
       responses:
         '204':
           description: OK

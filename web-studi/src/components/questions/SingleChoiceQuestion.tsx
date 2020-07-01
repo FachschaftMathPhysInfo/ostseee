@@ -14,6 +14,7 @@ import {useSelector, useDispatch} from 'react-redux'
 import { getAnswer } from '../../selectors/answers';
 import { changeAnswer } from '../../lib/store';
 import translate from '../../lib/translate';
+import { EuiRadio } from '@elastic/eui';
 const SingleChoiceQuestion = props => {
   const question:Question = props.question
   const languageCode = useSelector(getLanguage)
@@ -26,6 +27,7 @@ const SingleChoiceQuestion = props => {
   const [isOtherVisible, setIsOtherVisible] = useState(false);
   const answerid = useSelector(getAnswer(question.id,props.concerns))
   const answer = `${question.options.filter(o=>`${o.value}`==answerid.values[0])[0]?.id}:${props.concerns}`
+  console.log(answer)
   const dispatch = useDispatch()
   const setSelected=(qid,concerns)=>(option:string)=>{
     console.log(qid,concerns,option)
@@ -55,13 +57,17 @@ const SingleChoiceQuestion = props => {
       
     />
 
-    {question.hasOtherOption && isOtherVisible ? <>
+    {question.hasOtherOption && <>
     <EuiSpacer size="m"></EuiSpacer>
-      <EuiFieldText 
-      id={htmlIdGenerator()()}
+    <EuiRadio onChange={e=>onChange(translate({"de":"sonstiges","en":"other"},languageCode))} checked={(answer==`undefined:${props.concerns}`&&answerid.values!="")||false}
+    label={(<EuiFieldText 
+      id={`${question.id}:${props.concerns}other`}
       placeholder={translate({"de": "Bitte Sonstiges spezifizieren","en": "Please specify other option"},languageCode)}
       onChange={e=>onChange(e.target.value)}
-    /></> :<></>}
+      value={answer==`undefined:${props.concerns}`?(answerid.values[0]||""):""}
+    />)}
+    >
+      </EuiRadio></>}
 
     <EuiSpacer size="m"></EuiSpacer>{
       question.hasNotApplicableOption?

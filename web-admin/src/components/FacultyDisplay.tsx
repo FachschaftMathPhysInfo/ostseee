@@ -6,14 +6,17 @@ import { Faculty } from 'ostseee-web-common';
 import { facultyGet } from '../query-configs/faculties';
 import { getFaculty } from '../selectors/faculties';
 
-const FacultyDisplay = ({id})=>{
-    const [data, second] = useRequest(facultyGet(id));
-    const faculty : Faculty= useSelector(getFaculty(id))
-    if(data.isPending||faculty==undefined){
+const FacultyDisplay = ({facultyId})=>{
+    const [data, second] = useRequest(facultyGet(facultyId));
+    const faculty : Faculty= useSelector(getFaculty(facultyId))
+    if(data.isPending){
         return (<>Loading</>)
     }
+    if(faculty==undefined){
+        return (<>Faculty error</>)
+    }
     return (
-    <EuiCustomLink to={`/faculties/${id}`}>{faculty.name}</EuiCustomLink>
+    <EuiCustomLink to={`/faculties/${facultyId}`}>{faculty.name}</EuiCustomLink>
     )
 }
 export default FacultyDisplay

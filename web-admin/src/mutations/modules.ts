@@ -5,7 +5,7 @@ import { prettyInterval } from '@elastic/eui/src/components/date_picker/super_da
 export const editModule =(moduleId:string, name:string, description:string, facultyId:string)=>{
     return t.modulesModuleIdPatch({
         moduleId:moduleId,
-        module:{name, description, facultyId}
+        module:{id:moduleId,name, description, facultyId}
     },{
         transform:(val: any)=>{
             return {Modules:[val],ModulesById:val};

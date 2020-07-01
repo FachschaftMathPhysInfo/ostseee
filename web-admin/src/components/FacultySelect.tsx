@@ -10,7 +10,7 @@ const FacultySelect = props =>{
     const onChange =props.onChange||((e)=>{console.log(e);})
     const  [{ isPending, status }, refresh] = useRequest(facultiesGet())
     const facultys = useSelector(getFaculties)
-    const [id, setid] = useState(props.facultyId)
+    const [id, setid] = useState(props.facultyId||'')
     const options = facultys.map(opt=>{return {
         value:opt.id,
         inputDisplay:opt.name

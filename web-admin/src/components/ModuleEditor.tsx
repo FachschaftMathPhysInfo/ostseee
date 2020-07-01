@@ -11,6 +11,7 @@ import { EuiForm,
 } from "@elastic/eui";
 import { Module } from "ostseee-web-common";
 import FacultySelect from "./FacultySelect"
+import {editModule,newModule} from '../mutations/modules'
 
 const ModuleEditor = props => {
 

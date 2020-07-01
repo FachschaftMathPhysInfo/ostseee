@@ -8,6 +8,11 @@ import {
   EuiInMemoryTable,
   EuiButtonIcon,
   SortDirection,
+  EuiPageContent,
+  EuiPageContentHeader,
+  EuiPageContentHeaderSection,
+  EuiPageContentBody,
+  EuiTitle,
 } from "@elastic/eui";
 
 import * as moduleQueryConfigs from '../query-configs/modules';
@@ -53,18 +58,28 @@ const ModulesOverview = props => {
   };
 
   return (
-    <>
-      <EuiButton fill iconType="plusInCircle"  
+    <EuiPageContent >
+            <EuiPageContentHeader>
+                <EuiPageContentHeaderSection>
+                <EuiTitle>
+                  <h1>Module</h1>
+                  </EuiTitle></EuiPageContentHeaderSection>
+                <EuiPageContentHeaderSection>
+                <EuiButton fill iconType="plusInCircle"  
               onClick={() => history.push("/modules/new")}>
         Neues Modul anlegen
-      </EuiButton>   
-      <EuiInMemoryTable
+      </EuiButton> 
+                   </EuiPageContentHeaderSection>
+            </EuiPageContentHeader>
+            <EuiPageContentBody>
+            <EuiInMemoryTable
         items={Modules}  // adjust for server request
         columns={columns}
         sorting = {sorting}
         rowProps={getRowProps}
-        />
-    </>
+        /> </EuiPageContentBody>
+        </EuiPageContent>
+
   );
 };
 

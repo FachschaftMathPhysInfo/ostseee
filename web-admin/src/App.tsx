@@ -131,7 +131,6 @@ function App({store}) {
   const navbar = (<EuiCollapsibleNav isOpen={navIsOpen}  
     onClose={() => setNavIsOpen(false)} 
     isDocked={navIsOpen}
-    hideButtonIfDocked={false}
     
     button={
       <EuiHeaderSectionItemButton
@@ -148,8 +147,8 @@ function App({store}) {
   const leftbar=[navbar,(<EuiHeaderLogo iconType={mathphysinfoLogo}></EuiHeaderLogo>)]
 
   return (
-    <div className="App">
-      <EuiPage>
+    <div className="body-tag">
+      <EuiPage className="body-tag">
       <EuiHeader position="fixed" sections={[
               {
                 items: leftbar,
@@ -157,7 +156,8 @@ function App({store}) {
               },]}>
         
       </EuiHeader>
-<EuiPageBody component="div">
+<EuiPageBody component="div" className="body-tag">
+  <EuiSpacer size="xl"></EuiSpacer>
       <Switch>
         <Route path="/about">
           About

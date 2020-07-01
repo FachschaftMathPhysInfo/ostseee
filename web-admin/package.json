@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@elastic/datemath": "^5.0.3",
-    "@elastic/eui": "^22.3.1",
+    "@elastic/eui": "^26.1.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -14,6 +14,7 @@
     "@types/react-dom": "^16.9.0",
     "@types/react-router": "^5.1.7",
     "moment": "2.24.0",
+    "node-sass": "^4.14.1",
     "ostseee-web-common": "../web-common",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

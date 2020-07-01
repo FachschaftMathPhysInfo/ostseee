@@ -1,0 +1,6 @@
+// This is the default theme.
+@import './themes/ruperto/ruperto.scss';
+
+body{
+    @include euiHeaderAffordForFixed;
+}

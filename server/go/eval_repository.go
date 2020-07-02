@@ -31,9 +31,13 @@ func (ev *EvalRepository) Save(fac Faculty) Faculty {
 	return fac
 }
 
+//FindFaculty finds a specific faculty
 func (ev *EvalRepository) FindFaculty(id uuid.UUID) (Faculty, error) {
 	var faculty Faculty
 	filter := &Faculty{}
+	if id == uuid.Nil {
+		return faculty, fmt.Errorf("nil is not allowed")
+	}
 	filter.Id = id
 	ev.DB.Where(filter).First(&faculty)
 	return faculty, nil
@@ -64,6 +68,9 @@ func (ev *EvalRepository) FindAllForms() []Form {
 func (ev *EvalRepository) FindForm(id uuid.UUID) (Form, error) {
 	var form Form
 	filter := &Form{}
+	if id == uuid.Nil {
+		return form, fmt.Errorf("nil is not allowed")
+	}
 	filter.Id = id
 
 	ev.DB.Preload("AbstractForm").Preload("AbstractForm.Pages", func(db *gorm.DB) *gorm.DB {
@@ -84,9 +91,14 @@ func (ev *EvalRepository) FindAllTerms() []Term {
 	ev.DB.Find(&terms)
 	return terms
 }
+
+//FindTerm Finds a specific Term
 func (ev *EvalRepository) FindTerm(id uuid.UUID) (Term, error) {
 	var term Term
 	filter := &Term{}
+	if id == uuid.Nil {
+		return term, fmt.Errorf("nil is not allowed")
+	}
 	filter.Id = id
 	ev.DB.Where(filter).First(&term)
 	return term, nil
@@ -113,17 +125,25 @@ func (ev *EvalRepository) FindAllCourses() []Course {
 	return courses
 }
 
+//FindCourse finds a course by id
 func (ev *EvalRepository) FindCourse(id uuid.UUID) (Course, error) {
 	var course Course
 	filter := &Course{}
+	if id == uuid.Nil {
+		return course, fmt.Errorf("nil is not allowed")
+	}
 	filter.Id = id
 	ev.DB.Where(filter).First(&course)
 	return course, nil
 }
 
+//FindCourseByThirdPartyKey finds a course By ThirdPartyKey
 func (ev *EvalRepository) FindCourseByThirdPartyKey(thirdPartyKey string) (Course, error) {
 	var course Course
 	filter := &Course{}
+	if thirdPartyKey == "" {
+		return course, fmt.Errorf("nil is not allowed")
+	}
 	filter.ThirdPartyKey = thirdPartyKey
 	ev.DB.Where(filter).First(&course)
 	return course, nil
@@ -144,15 +164,22 @@ func (ev *EvalRepository) FindAllModules() []Module {
 	return modules
 }
 
+//FindModule finds a module by id
 func (ev *EvalRepository) FindModule(id uuid.UUID) (Module, error) {
 	var module Module
 	filter := &Module{}
+	if id == uuid.Nil {
+		return module, fmt.Errorf("nil is not allowed")
+	}
 	filter.Id = id
 	ev.DB.Where(filter).First(&module)
 	return module, nil
 }
 func (ev *EvalRepository) DeleteModule(id uuid.UUID) error {
 	m := Module{}
+	if id == uuid.Nil {
+		return fmt.Errorf("nil is not allowed")
+	}
 	m.Id = id
 	ev.DB.Delete(&m)
 	return nil
@@ -175,14 +202,21 @@ func (ev *EvalRepository) FindAllProfs() []Prof {
 
 func (ev *EvalRepository) DeleteProf(id uuid.UUID) error {
 	p := Prof{}
+	if id == uuid.Nil {
+		return fmt.Errorf("nil is not allowed")
+	}
 	p.Id = id
 	ev.DB.Delete(&p)
 	return nil
 }
 
+//FindProf finds a prof by id
 func (ev *EvalRepository) FindProf(id uuid.UUID) (Prof, error) {
 	var prof Prof
 	filter := &Prof{}
+	if id == uuid.Nil {
+		return prof, fmt.Errorf("nil is not allowed")
+	}
 	filter.Id = id
 	ev.DB.Where(filter).First(&prof)
 	return prof, nil
@@ -207,6 +241,9 @@ func (ev *EvalRepository) FindAllCourseProfs(courseId uuid.UUID, profId uuid.UUI
 
 func (ev *EvalRepository) DeleteCourseProf(id uuid.UUID) error {
 	p := CourseProf{}
+	if id == uuid.Nil {
+		return fmt.Errorf("nil is not allowed")
+	}
 	p.Id = id
 	ev.DB.Delete(&p)
 	return nil
@@ -214,6 +251,9 @@ func (ev *EvalRepository) DeleteCourseProf(id uuid.UUID) error {
 func (ev *EvalRepository) DeleteCourse(id uuid.UUID) error {
 	p := Course{}
 	p.Id = id
+	if id == uuid.Nil {
+		return fmt.Errorf("nil is not allowed")
+	}
 	ev.DB.Delete(&p)
 	return nil
 }
@@ -221,22 +261,34 @@ func (ev *EvalRepository) DeleteCourse(id uuid.UUID) error {
 func (ev *EvalRepository) FindCourseProf(id uuid.UUID) (CourseProf, error) {
 	var courseprof CourseProf
 	filter := &CourseProf{}
+	if id == uuid.Nil {
+		return courseprof, fmt.Errorf("nil is not allowed")
+	}
 	filter.Id = id
 	ev.DB.Where(filter).First(&courseprof)
 	return courseprof, nil
 }
 
 // FindAllTutors returns all tutors
-func (ev *EvalRepository) FindAllCourseTutors(courseId uuid.UUID) []Tutor {
+func (ev *EvalRepository) FindAllCourseTutors(courseId uuid.UUID) ([]Tutor, error) {
 	var tutors []Tutor
 	filter := &Tutor{}
+	if courseId == uuid.Nil {
+		return tutors, fmt.Errorf("nil is not allowed")
+	}
 	filter.CourseId = courseId
 	ev.DB.Where(filter).Find(&tutors)
-	return tutors
+	return tutors, nil
 }
 
 func (ev *EvalRepository) DeleteTutor(courseId, tutorId uuid.UUID) error {
 	p := Tutor{}
+	if tutorId == uuid.Nil {
+		return fmt.Errorf("nil is not allowed")
+	}
+	if courseId == uuid.Nil {
+		return fmt.Errorf("nil is not allowed")
+	}
 	p.Id = tutorId
 	p.CourseId = courseId
 	ev.DB.Delete(&p)
@@ -246,6 +298,12 @@ func (ev *EvalRepository) DeleteTutor(courseId, tutorId uuid.UUID) error {
 func (ev *EvalRepository) FindTutor(courseId, tutorId uuid.UUID) (Tutor, error) {
 	var tutor Tutor
 	filter := &Tutor{}
+	if tutorId == uuid.Nil {
+		return tutor, fmt.Errorf("nil is not allowed")
+	}
+	if courseId == uuid.Nil {
+		return tutor, fmt.Errorf("nil is not allowed")
+	}
 	filter.Id = tutorId
 	filter.CourseId = courseId
 	ev.DB.Where(filter).First(&tutor)
@@ -259,6 +317,9 @@ func (ev *EvalRepository) SaveTutor(tutor Tutor) Tutor {
 }
 
 func (ev *EvalRepository) DeleteAllInvitationsOfCourse(courseId uuid.UUID) error {
+	if courseId == uuid.Nil {
+		return fmt.Errorf("nil is not allowed")
+	}
 	ev.DB.Where("course_id = ?", courseId).Delete(Invitation{})
 	return nil
 }
@@ -290,6 +351,9 @@ func (ev *EvalRepository) FindInvitation(id uuid.UUID) (Invitation, error) {
 func (ev *EvalRepository) FindAllCourseProfsForCourse(courseId uuid.UUID) ([]Prof, error) {
 	var courseprofs []CourseProf
 	var filter CourseProf
+	if courseId == uuid.Nil {
+		return nil, fmt.Errorf("nil is not allowed")
+	}
 	filter.CourseId = courseId
 	ev.DB.Where(&filter).Find(&courseprofs)
 	profs := make([]Prof, len(courseprofs))

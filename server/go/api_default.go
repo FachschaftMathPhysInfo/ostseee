@@ -236,7 +236,13 @@ func (ev *EvalAPI) CoursesCourseIdTutorsGet(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
-	c.JSON(http.StatusOK, ev.EvalService.FindAllCourseTutors(courseId))
+	tutors, err := ev.EvalService.FindAllCourseTutors(courseId)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, tutors)
 }
 
 // CoursesCourseIdTutorsPost -

@@ -132,7 +132,7 @@ func (ev *EvalService) SaveTutor(tutor Tutor) (Tutor, error) {
 	return ev.EvalRepository.SaveTutor(tutor), nil
 }
 
-func (ev *EvalService) FindAllTutors(courseId uuid.UUID) []Tutor {
+func (ev *EvalService) FindAllTutors(courseId uuid.UUID) ([]Tutor, error) {
 	return ev.EvalRepository.FindAllCourseTutors(courseId)
 }
 
@@ -144,7 +144,7 @@ func (ev *EvalService) FindCourseTutor(courseId, tutorId uuid.UUID) (Tutor, erro
 	return ev.EvalRepository.FindTutor(courseId, tutorId)
 }
 
-func (ev *EvalService) FindAllCourseTutors(courseId uuid.UUID) []Tutor {
+func (ev *EvalService) FindAllCourseTutors(courseId uuid.UUID) ([]Tutor, error) {
 	return ev.EvalRepository.FindAllCourseTutors(courseId)
 }
 
@@ -224,7 +224,11 @@ func (ev *EvalService) RenderInvitationToEmptyForm(invitationID uuid.UUID) (Empt
 	emptyForm := EmptyForm{}
 	emptyForm.Id = invitationID
 	emptyForm.Profs, _ = ev.EvalRepository.FindAllCourseProfsForCourse(inv.CourseId) //BUG(henrik): we need the id of courseProf
-	emptyForm.Tutors = privaticeTutors(ev.FindAllCourseTutors(inv.CourseId))
+	tutors, err := ev.FindAllCourseTutors(inv.CourseId)
+	if err != nil {
+		return EmptyForm{}, err
+	}
+	emptyForm.Tutors = privaticeTutors(tutors)
 	emptyForm.Course, _ = ev.FindCourse(inv.CourseId)
 	module, _ := ev.FindModule(emptyForm.Course.ModuleId)
 	emptyForm.ModuleName = module.Name
@@ -288,7 +292,7 @@ func (ev *EvalService) ValidateAndSaveQuestionaire(invitationId uuid.UUID, quest
 	}
 	//load course Information
 	course, err := ev.EvalRepository.FindCourse(inv.CourseId)
-	tutors := ev.EvalRepository.FindAllCourseTutors(inv.CourseId)
+	tutors, err := ev.EvalRepository.FindAllCourseTutors(inv.CourseId)
 	courseProfs, err := ev.EvalRepository.FindAllCourseProfsForCourse(inv.CourseId)
 	validUUIDs := make([]uuid.UUID, len(tutors)+len(courseProfs)+1)
 	validUUIDs[0] = course.Id
@@ -502,7 +506,10 @@ func (ev *EvalService) GenerateCourseReport(courseId uuid.UUID) (CourseReport, e
 		return CourseReport{}, err
 	}
 	//generate Tutors report
-	tutors := ev.EvalRepository.FindAllCourseTutors(courseId)
+	tutors, err := ev.EvalRepository.FindAllCourseTutors(courseId)
+	if err != nil {
+		return CourseReport{}, err
+	}
 	tutorsReport := make([]TutorReport, len(tutors))
 	for i, tut := range tutors {
 		tutorsReport[i], _ = ev.GenerateTutorReport(courseId, tut.Id)

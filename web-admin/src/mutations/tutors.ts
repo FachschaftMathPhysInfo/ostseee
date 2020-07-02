@@ -43,7 +43,7 @@ export const newTutor= ( courseId, tutor:Tutor) => {
 export const editTutor= ( courseId,tutorId, tutor:Tutor) => {
     return coursesCourseIdTutorsTutorIdPatch({ courseId,tutorId,tutor }, {
       transform: (val: any) => {
-        return { TutorsByCourseId: val };
+        return { TutorsByCourseId: val,TutorsById:val };
       },
       update: {
           TutorsByCourseId: (prev, next) => {
@@ -56,6 +56,13 @@ export const editTutor= ( courseId,tutorId, tutor:Tutor) => {
   
           return prev;
         },
+        TutorsById:(prev:any,next)=>{
+            if(prev==undefined){
+              prev={}
+            }
+            prev[next.id]= next
+            return prev
+          }
       },
     })
   }

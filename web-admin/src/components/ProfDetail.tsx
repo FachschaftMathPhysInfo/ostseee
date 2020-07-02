@@ -5,46 +5,38 @@ import { useRequest } from "redux-query-react";
 import * as profQueryConfigs from '../query-configs/profs';
 import * as profSelectors from '../selectors/profs';
 import './Prof.css';
-import { EuiButton } from "@elastic/eui";
+import { EuiButton, EuiPageContent, EuiPageContentHeader, EuiPageContentHeaderSection, EuiPageContentBody, EuiDescriptionList } from "@elastic/eui";
+import { Prof } from "ostseee-web-common";
 
 
 const ProfDetail = props => {
     
     let {profId} = useParams();
-    const [data, second] = useRequest(profQueryConfigs.profGet(profId));
-    const Prof = useSelector(profSelectors.getProf(profId))
+    const [{isPending}, second] = useRequest(profQueryConfigs.profGet(profId));
+    const Prof:Prof = useSelector(profSelectors.getProf(profId))
     const history = useHistory()
+    if (isPending) return (<>Loading</>)
+    if (Prof == undefined) return (<>Prof not found</>)
+    const AsList = [{ title: "Titel", description: Prof.title },
+         { title: "Vorname", description: Prof.firstname },
+         { title: "Nachname", description: Prof.lastname },
+         { title: "Email", description: (<a href={"mailto:"+Prof.email}>{Prof.email}</a>) },
+         { title: "Zensiert", description: Prof.censored ? 'Ja': 'Nein' },
+         {title:"Datum der Zensierentscheidung", description: Prof.censoredDate.toLocaleDateString()}
+     ]
     if(Prof){
         return (
-            <>
-                <table style={{textAlign:'left', margin:50}}>
-                    <tr>
-                        <td><b>Titel: </b></td>
-                        <td>{Prof.title}</td>
-                    </tr>
-                    <tr>
-                        <td><b>Vorname: </b></td>
-                        <td>{Prof.firstname}</td>
-                    </tr>
-                    <tr>
-                        <td><b>Nachname: </b></td>
-                        <td>{Prof.lastname}</td>
-                    </tr>
-                    <tr>
-                        <td><b>Email: </b></td>
-                        <td><a href={"mailto:"+Prof.email}>{Prof.email}</a></td>
-                    </tr>
-                    <tr>
-                        <td><b>Zensiert: </b></td>
-                        <td>{Prof.censored ? 'Ja': 'Nein'}</td>
-                    </tr>
-                    <tr>
-                        <td><b>Datum der Veröffentlichungsbestätigung: </b></td>
-                        <td>{Prof.censoredDate.toLocaleDateString()}</td>
-                    </tr>
-                </table>
+            <EuiPageContent >
+            <EuiPageContentHeader>
+                <EuiPageContentHeaderSection>Prof</EuiPageContentHeaderSection>
+                <EuiPageContentHeaderSection> 
                 <EuiButton iconType="pencil" onClick={()=>history.push(`/profs/${Prof.id}/edit`)}>Bearbeiten</EuiButton>
-            </>
+           </EuiPageContentHeaderSection>
+            </EuiPageContentHeader>
+            <EuiPageContentBody>
+            <EuiDescriptionList textStyle="reverse" listItems={AsList} />
+            </EuiPageContentBody>
+        </EuiPageContent>
         )
     }
     else{

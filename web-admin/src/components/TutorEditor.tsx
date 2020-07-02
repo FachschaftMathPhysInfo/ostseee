@@ -48,7 +48,7 @@ const TutorEditor = props => {
         <EuiFormRow label="ThirdPartyKey">
             <EuiFieldText placeholder="ThirdPartyKey" value={thirdPartyKey} onChange={(e)=>setThirdPartyKey(e.target.value)}></EuiFieldText>
         </EuiFormRow>
-        <EuiButton fill onClick={()=> {submit( {thirdPartyKey, name, email, censored, censoredDate:censoredDate.toDate()});}} disabled={isPending}>{props.tutor==undefined?"Hinzufügen":"Aktualisieren"}</EuiButton>
+        <EuiButton fill onClick={()=> {submit( {id:tutor?.id,thirdPartyKey, name, email, censored, censoredDate:censoredDate.toDate()});}} disabled={isPending}>{props.tutor==undefined?"Hinzufügen":"Aktualisieren"}</EuiButton>
         </EuiForm>
     </>
 )

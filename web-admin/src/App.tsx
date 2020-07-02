@@ -60,6 +60,8 @@ import FacultyDetail from './components/FacultyDetail';
 import FormDetail from './components/FormDetail';
 import FormEdit from './components/FormEdit';
 import FormNew from './components/FormNew';
+import TutorDetail from './components/TutorDetail';
+import TutorEdit from './components/TutorEdit';
 
 
 function App({store}) {
@@ -157,7 +159,6 @@ function App({store}) {
         
       </EuiHeader>
 <EuiPageBody component="div" className="body-tag">
-  <EuiSpacer size="xl"></EuiSpacer>
       <Switch>
         <Route path="/about">
           About
@@ -188,6 +189,12 @@ function App({store}) {
         </Route>
         <Route path="/courses/new">
           <CourseNew/>
+        </Route>
+        <Route path="/courses/:courseId/tutors/:tutorId/edit">
+          <TutorEdit></TutorEdit>
+        </Route>
+        <Route path="/courses/:courseId/tutors/:tutorId">
+          <TutorDetail></TutorDetail>
         </Route>
         <Route path="/courses/:courseId/edit">
           <CourseEdit></CourseEdit>

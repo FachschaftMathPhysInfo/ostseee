@@ -57,13 +57,12 @@ const CourseDetail = props => {
                 </EuiPageContentHeaderSection>
             </EuiPageContentHeader>
             <EuiPageContentBody>
-                <EuiTextAlign textAlign="left">
                     <b># Students:</b><code>{course.numberOfStudents}</code><br></br>
-                    <b>Form:</b>
+                    <b>Form:<FormDisplay formId={course.formId}></FormDisplay></b>
                     <EuiFormRow label="Profs">
                     <CourseProfsEditor courseId={courseId}></CourseProfsEditor>
                     </EuiFormRow>
-                    <EuiFormRow label="Zeitraum">
+                    {/*<EuiFormRow label="Zeitraum">
                     <EuiDatePickerRange
                         startDateControl={
                             <EuiDatePicker
@@ -95,8 +94,10 @@ const CourseDetail = props => {
                     </EuiFormRow>
                     <EuiButton onClick={(e)=>console.log(getInvitations(beginDate,endDate))}>Lade Invitations</EuiButton>
                     <EuiCode language="json">{JSON.stringify(invs)}</EuiCode>
-                </EuiTextAlign>
+                    */}
+                    <EuiFormRow label="Tutors">
                 <TutorsEditor courseId={courseId}></TutorsEditor>
+                </EuiFormRow>
                 </EuiPageContentBody>
         </EuiPageContent>
     )

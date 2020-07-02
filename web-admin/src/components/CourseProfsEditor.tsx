@@ -48,6 +48,16 @@ const CourseProfsEditor = ({ courseId }) => {
         return <>Loading</>
     }
     console.log(profs)
+    if(courseProfs.length==0){
+        return (<><>No Profs</>
+            <EuiSuggest
+            status={"loading"}
+            //@ts-ignore
+            onInputChange={(e) => {setTypeahead(e.value)}}
+            onItemClick={onItemClick}
+            suggestions={profs}
+        /></>)
+    }
     return (<><ul>
         {courseProfs?.map((cp => <li key={cp.id}><ProfDisplay id={cp.profId}></ProfDisplay>
             <EuiButtonIcon onClick={(e) => {

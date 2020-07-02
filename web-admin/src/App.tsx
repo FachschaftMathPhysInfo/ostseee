@@ -26,6 +26,7 @@ import {
   EuiCollapsibleNav,
   EuiCollapsibleNavGroup,
   EuiListGroupItem,
+  EuiButtonIcon,
 } from "@elastic/eui";
 import './App.css';
 import store from './lib/store';
@@ -62,6 +63,7 @@ import FormEdit from './components/FormEdit';
 import FormNew from './components/FormNew';
 import TutorDetail from './components/TutorDetail';
 import TutorEdit from './components/TutorEdit';
+import { logOut } from './lib/session';
 
 
 function App({store}) {
@@ -155,7 +157,10 @@ function App({store}) {
               {
                 items: leftbar,
                 borders: 'none',
-              },]}>
+              },
+              {
+                items: [(<EuiButtonIcon iconType="lock" onClick={()=>{logOut(); history.push("/")}}></EuiButtonIcon>)]
+              }]}>
         
       </EuiHeader>
 <EuiPageBody component="div" className="body-tag">

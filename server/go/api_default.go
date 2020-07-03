@@ -466,7 +466,18 @@ func (ev *EvalAPI) FormsFormIdGet(c *gin.Context) {
 
 // FormsFormIdPatch - Change a form by ID
 func (ev *EvalAPI) FormsFormIdPatch(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	id := c.Params.ByName("formId")
+	uid, err := uuid.FromString(id)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	var form Form
+	c.Bind(&form)
+	form.Id = uid
+	//BUG(henrik): check for errors!
+	f := ev.EvalService.EvalRepository.SaveForm(form)
+	c.JSON(http.StatusOK, f)
 }
 
 // FormsGet -

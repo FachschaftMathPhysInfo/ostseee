@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -45,7 +46,8 @@ var termsListCmd = &cobra.Command{
 	Short: "Print the terms of ostseee",
 	Run: func(cmd *cobra.Command, args []string) {
 		client := NewAPIClient()
-		terms, _, err := client.DefaultApi.TermsGet(cmd.Context())
+		ctx := context.WithValue(cmd.Context(), openapi.ContextBasicAuth, openapi.BasicAuth{UserName: viper.GetString("basic_user"), Password: viper.GetString("basic_pw")})
+		terms, _, err := client.DefaultApi.TermsGet(ctx)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -83,10 +85,16 @@ func init() {
 	rootCmd.PersistentFlags().String("scheme", "https", "Transport scheme")
 	rootCmd.PersistentFlags().String("host", "eval.mathphys.info", "Host of ostseee")
 	rootCmd.PersistentFlags().String("basepath", "v1", "BasePath")
+	rootCmd.PersistentFlags().String("basic_user", "admin", "Used to login")
+	rootCmd.PersistentFlags().String("basic_pw", "password", "Used to login (password)")
+	MailCmd.PersistentFlags().String("smtp", "localhost:1025", "SMTP server used for mailing")
 	ReportCmd.PersistentFlags().StringVar(&Locale, "locale", "de", "Locale to render")
 	viper.BindPFlag("scheme", rootCmd.PersistentFlags().Lookup("scheme"))
 	viper.BindPFlag("host", rootCmd.PersistentFlags().Lookup("host"))
 	viper.BindPFlag("basepath", rootCmd.PersistentFlags().Lookup("basepath"))
+
+	viper.BindPFlag("basic_user", rootCmd.PersistentFlags().Lookup("basic_user"))
+	viper.BindPFlag("basic_pw", rootCmd.PersistentFlags().Lookup("basic_pw"))
 
 	rootCmd.AddCommand(versionCmd)
 	termsCmd.AddCommand(termsListCmd)
@@ -94,6 +102,13 @@ func init() {
 	ReportCmd.AddCommand(ReportTutorCmd)
 	ReportCmd.AddCommand(ReportCourseCmd)
 	rootCmd.AddCommand(ReportCmd)
+	MailCmd.AddCommand(MailTermCmd)
+	FormsCmd.AddCommand(FormsValidateCmd)
+	FormsCmd.AddCommand(FormsListCmd)
+	FormsCmd.AddCommand(FormsUpdateCmd)
+	FormsCmd.AddCommand(FormsGetCmd)
+	rootCmd.AddCommand(FormsCmd)
+	rootCmd.AddCommand(MailCmd)
 }
 
 func er(msg interface{}) {

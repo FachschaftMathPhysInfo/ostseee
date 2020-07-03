@@ -13,10 +13,12 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	lti "github.com/henrixapp/go-lti"
 	uuid "github.com/satori/go.uuid"
+	"github.com/shirou/gopsutil/mem"
 )
 
 type EvalAPI struct {
@@ -824,4 +826,14 @@ func (ev *EvalAPI) LTILaunch(c *gin.Context) {
 		//returnUrl, _ := ltiRequest.CreateReturnURL()
 		c.String(http.StatusBadRequest, "Couldn't validate your request.")
 	}
+}
+
+func (ev *EvalAPI) StatusGet(c *gin.Context) {
+	var status Status
+	status.Generated = time.Now()
+	v, _ := mem.VirtualMemory()
+	status.Sysstats.Ram = float32(v.Total / 1024 / 1024)
+	status.Sysstats.Ram10 = float32(v.Used / 1024 / 1024)
+	status.Counts = ev.EvalService.GetCounts()
+	c.JSON(http.StatusOK, status)
 }

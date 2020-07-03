@@ -72,6 +72,12 @@ func NewRouter(Db *gorm.DB) *gin.Engine {
 			"/v1/",
 			Index,
 		},
+		{
+			"StatusGet",
+			http.MethodGet,
+			"/v1/status",
+			evalAPI.StatusGet,
+		},
 
 		{
 			"CourseprofsCourseProfIdDelete",

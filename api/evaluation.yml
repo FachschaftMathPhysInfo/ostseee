@@ -6,6 +6,15 @@ info:
 servers:
   - url: https://eval.mathphys.info/v1
 paths:
+  /status:
+      get:
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Status'
   /faculties:
     get:
       responses:
@@ -1133,3 +1142,39 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CourseProfReport'
+    Status:
+      type: object
+      properties:
+        generated:
+          type: string
+          format: date-time
+        counts:
+          type: object
+          properties:
+            terms:
+              type: number
+            tutors:
+              type: number
+            options:
+              type: number
+            profs:
+              type: number
+            courseprofs:
+              type: number
+            courses:
+              type: number
+            questionaires:
+              type: number
+            singleanswers:
+              type: number
+        sysstats:
+          type: object
+          properties:
+            ram:
+              type: number
+            ram10:
+              type: number
+            cpu:
+              type: number
+            cpu10:
+              type: number

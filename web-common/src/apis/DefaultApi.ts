@@ -49,6 +49,9 @@ import {
     Questionaire,
     QuestionaireFromJSON,
     QuestionaireToJSON,
+    Status,
+    StatusFromJSON,
+    StatusToJSON,
     Term,
     TermFromJSON,
     TermToJSON,
@@ -234,7 +237,7 @@ export interface TermsTermIdReportGetRequest {
 
 
 /**
- * Deletes a module by ID
+ * Deletes a courseProf
  */
 function courseprofsCourseProfIdDeleteRaw<T>(requestParameters: CourseprofsCourseProfIdDeleteRequest, requestConfig: runtime.TypedQueryConfig<T, void> = {}): QueryConfig<T> {
     if (requestParameters.courseProfId === null || requestParameters.courseProfId === undefined) {
@@ -272,7 +275,7 @@ function courseprofsCourseProfIdDeleteRaw<T>(requestParameters: CourseprofsCours
 }
 
 /**
-* Deletes a module by ID
+* Deletes a courseProf
 */
 export function courseprofsCourseProfIdDelete<T>(requestParameters: CourseprofsCourseProfIdDeleteRequest, requestConfig?: runtime.TypedQueryConfig<T, void>): QueryConfig<T> {
     return courseprofsCourseProfIdDeleteRaw(requestParameters, requestConfig);
@@ -2073,6 +2076,46 @@ function questionaireInvitationIdPostRaw<T>(requestParameters: QuestionaireInvit
 */
 export function questionaireInvitationIdPost<T>(requestParameters: QuestionaireInvitationIdPostRequest, requestConfig?: runtime.TypedQueryConfig<T, void>): QueryConfig<T> {
     return questionaireInvitationIdPostRaw(requestParameters, requestConfig);
+}
+
+/**
+ */
+function statusGetRaw<T>( requestConfig: runtime.TypedQueryConfig<T, Status> = {}): QueryConfig<T> {
+    let queryParameters = null;
+
+
+    const headerParameters = {};
+
+
+    const { meta = {} } = requestConfig;
+
+    const config: QueryConfig<T> = {
+        url: `/status`,
+        meta,
+        update: requestConfig.update,
+        queryKey: requestConfig.queryKey,
+        optimisticUpdate: requestConfig.optimisticUpdate,
+        force: requestConfig.force,
+        rollback: requestConfig.rollback,
+        options: {
+            method: 'GET',
+            headers: headerParameters,
+        },
+        body: queryParameters,
+    };
+
+    const { transform: requestTransform } = requestConfig;
+    if (requestTransform) {
+        config.transform = (body: ResponseBody, text: ResponseBody) => requestTransform(StatusFromJSON(body), text);
+    }
+
+    return config;
+}
+
+/**
+*/
+export function statusGet<T>( requestConfig?: runtime.TypedQueryConfig<T, Status>): QueryConfig<T> {
+    return statusGetRaw( requestConfig);
 }
 
 /**

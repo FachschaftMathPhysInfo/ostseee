@@ -28,7 +28,7 @@ var (
 type DefaultApiService service
 
 /*
-CourseprofsCourseProfIdDelete Deletes a module by ID
+CourseprofsCourseProfIdDelete Deletes a courseProf
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param courseProfId ID of the courseprof to get
 */

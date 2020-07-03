@@ -9,4 +9,6 @@ require (
 	github.com/henrixapp/go-lti v0.0.2
 	github.com/jinzhu/gorm v1.9.12
 	github.com/satori/go.uuid v1.2.0
+	github.com/shirou/gopsutil v2.20.6+incompatible
+	google.golang.org/appengine v1.4.0
 )

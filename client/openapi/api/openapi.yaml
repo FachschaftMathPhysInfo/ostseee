@@ -494,7 +494,7 @@ paths:
       responses:
         "204":
           description: OK
-      summary: Deletes a module by ID
+      summary: Deletes a courseProf
     get:
       parameters:
       - description: ID of the courseprof to get
@@ -2211,7 +2211,6 @@ components:
           $ref: '#/components/schemas/AbstractForm'
       required:
       - abstractForm
-      - id
       - name
       - termId
       type: object
@@ -3510,3 +3509,41 @@ components:
             $ref: '#/components/schemas/CourseProfReport'
           type: array
       type: object
+    Status:
+      properties:
+        generated:
+          format: date-time
+          type: string
+        counts:
+          $ref: '#/components/schemas/Status_counts'
+        sysstats:
+          $ref: '#/components/schemas/Status_sysstats'
+      type: object
+    Status_counts:
+      properties:
+        terms:
+          type: number
+        tutors:
+          type: number
+        options:
+          type: number
+        profs:
+          type: number
+        courseprofs:
+          type: number
+        courses:
+          type: number
+        questionaires:
+          type: number
+        singleanswers:
+          type: number
+    Status_sysstats:
+      properties:
+        ram:
+          type: number
+        ram10:
+          type: number
+        cpu:
+          type: number
+        cpu10:
+          type: number

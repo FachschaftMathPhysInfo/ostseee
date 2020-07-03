@@ -32,7 +32,7 @@ All URIs are relative to *https://eval.mathphys.info/v1*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*DefaultApi* | [**CourseprofsCourseProfIdDelete**](docs/DefaultApi.md#courseprofscourseprofiddelete) | **Delete** /courseprofs/{courseProfId} | Deletes a module by ID
+*DefaultApi* | [**CourseprofsCourseProfIdDelete**](docs/DefaultApi.md#courseprofscourseprofiddelete) | **Delete** /courseprofs/{courseProfId} | Deletes a courseProf
 *DefaultApi* | [**CourseprofsCourseProfIdGet**](docs/DefaultApi.md#courseprofscourseprofidget) | **Get** /courseprofs/{courseProfId} | Get a courseprof by ID
 *DefaultApi* | [**CourseprofsCourseProfIdPatch**](docs/DefaultApi.md#courseprofscourseprofidpatch) | **Patch** /courseprofs/{courseProfId} | Change a courseprof by ID
 *DefaultApi* | [**CourseprofsCourseProfIdReportGet**](docs/DefaultApi.md#courseprofscourseprofidreportget) | **Get** /courseprofs/{courseProfId}/report | Get a courseProf report
@@ -100,6 +100,9 @@ Class | Method | HTTP request | Description
  - [ResultPair](docs/ResultPair.md)
  - [ResultSection](docs/ResultSection.md)
  - [Section](docs/Section.md)
+ - [Status](docs/Status.md)
+ - [StatusCounts](docs/StatusCounts.md)
+ - [StatusSysstats](docs/StatusSysstats.md)
  - [Term](docs/Term.md)
  - [TermReport](docs/TermReport.md)
  - [Tutor](docs/Tutor.md)

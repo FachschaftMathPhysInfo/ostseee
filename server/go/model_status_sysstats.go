@@ -8,10 +8,10 @@
  */
 
 package openapi
-// Form struct for Form
-type Form struct {
-	Id string `json:"id,omitempty"`
-	Name string `json:"name"`
-	TermId string `json:"termId"`
-	AbstractForm AbstractForm `json:"abstractForm"`
+// StatusSysstats struct for StatusSysstats
+type StatusSysstats struct {
+	Ram float32 `json:"ram,omitempty"`
+	Ram10 float32 `json:"ram10,omitempty"`
+	Cpu float32 `json:"cpu,omitempty"`
+	Cpu10 float32 `json:"cpu10,omitempty"`
 }

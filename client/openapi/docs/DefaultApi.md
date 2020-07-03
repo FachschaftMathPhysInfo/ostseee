@@ -4,7 +4,7 @@ All URIs are relative to *https://eval.mathphys.info/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**CourseprofsCourseProfIdDelete**](DefaultApi.md#CourseprofsCourseProfIdDelete) | **Delete** /courseprofs/{courseProfId} | Deletes a module by ID
+[**CourseprofsCourseProfIdDelete**](DefaultApi.md#CourseprofsCourseProfIdDelete) | **Delete** /courseprofs/{courseProfId} | Deletes a courseProf
 [**CourseprofsCourseProfIdGet**](DefaultApi.md#CourseprofsCourseProfIdGet) | **Get** /courseprofs/{courseProfId} | Get a courseprof by ID
 [**CourseprofsCourseProfIdPatch**](DefaultApi.md#CourseprofsCourseProfIdPatch) | **Patch** /courseprofs/{courseProfId} | Change a courseprof by ID
 [**CourseprofsCourseProfIdReportGet**](DefaultApi.md#CourseprofsCourseProfIdReportGet) | **Get** /courseprofs/{courseProfId}/report | Get a courseProf report
@@ -55,7 +55,7 @@ Method | HTTP request | Description
 
 > CourseprofsCourseProfIdDelete(ctx, courseProfId)
 
-Deletes a module by ID
+Deletes a courseProf
 
 ### Required Parameters
 

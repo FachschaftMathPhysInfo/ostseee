@@ -588,3 +588,15 @@ func (ev *EvalService) GetInvitationForLTI(infos LTIInfos) (string, error) {
 	}
 	return inv, nil
 }
+
+func (ev *EvalService) GetCounts() StatusCounts {
+	res := StatusCounts{}
+	res.Courseprofs = ev.EvalRepository.GetCount("course_profs")
+	res.Courses = ev.EvalRepository.GetCount("courses")
+	res.Options = ev.EvalRepository.GetCount("options")
+	res.Questionaires = ev.EvalRepository.GetCount("questionaires")
+	res.Singleanswers = ev.EvalRepository.GetCount("single_answers")
+	res.Terms = ev.EvalRepository.GetCount("terms")
+	res.Tutors = ev.EvalRepository.GetCount("tutors")
+	return res
+}

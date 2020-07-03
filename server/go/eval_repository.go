@@ -462,3 +462,9 @@ func (ev *EvalRepository) GetInvitationForLTIAssignment(courseId uuid.UUID, user
 	ev.DB.Save(&filter)
 	return inv.Id.String(), nil
 }
+
+func (ev *EvalRepository) GetCount(tablename string) int32 {
+	var count int
+	ev.DB.Table(tablename).Count(&count)
+	return int32(count)
+}

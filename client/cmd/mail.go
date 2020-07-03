@@ -56,8 +56,11 @@ var MailTermCmd = &cobra.Command{
 					fmt.Println("error:", err)
 					return
 				}
+
+				module, _, _ := client.DefaultApi.ModulesModuleIdGet(ctx, c.ModuleId)
 				if len(courseProfs) == 0 {
 					log.Println("Warning: No Profs", c.Id)
+					log.Println(module.Name)
 				}
 				mails := make([]string, len(courseProfs))
 				names := make([]string, len(courseProfs))
@@ -73,12 +76,11 @@ var MailTermCmd = &cobra.Command{
 					tutorsName[i] = tut.Name
 				}
 				tutorsNameJoined := strings.Join(tutorsName, ", ")
-				module, _, _ := client.DefaultApi.ModulesModuleIdGet(ctx, c.ModuleId)
 				form, _, _ := client.DefaultApi.FormsFormIdGet(ctx, c.FormId)
 				isMoodle := strings.Contains(c.ThirdPartyKey, "lti")
 				greeting := "Sehr geehrte Dozierende,"
 				intros := []string{"In der Woche vom 13. Juli soll die Online-Evaluation durchgeführt werden. Wir senden Ihnen daher nun die Informationen zu Ihrer Veranstaltung zu.",
-					"Bitte überprüfen Sie die Daten und senden Sie uns ggf. Korrekturen zu! Besonders wichtig ist, dass die Anzahl der Studierenden ausreichend groß gewählt ist."}
+					"Bitte überprüfen Sie die Daten und senden Sie uns ggf. Korrekturen zu! Besonders wichtig ist, dass die Anzahl der Studierenden ausreichend groß gewählt ist und alle Tutoren (falls vorhanden) aufgelistet sind. Sollten Sie sie selbst eine Übungsgruppe halten, so müssen Sie unter Tutoren aufgelistet sein."}
 				signature := "Viele Grüße"
 				plattform := "Übungsgruppenverwaltung der Physik"
 				installInstructions := []string{"Da die Teilnehmer Ihrer Veranstaltung über die Übungsgruppenverwaltung Zugriff auf die Umfrage erhalten, müssen Sie nichts konfigurieren. Bitte weisen Sie die Teilnehmer Ihrer Veranstaltung auf die Evaluation hin.", "Bei weiteren Fragen stehen wir Ihnen gerne zur Verfügung."}
@@ -88,14 +90,14 @@ var MailTermCmd = &cobra.Command{
 						"1. Aktivieren Sie den Bearbeitungsmodus auf Ihrer Kursseite und klicken Sie auf 'Aktivität oder Material hinzufügen'",
 						"2. Wählen Sie 'Externes Tool' unter Aktivitäten aus.",
 						"3. Benennen Sie die Aktivität 'Evaluation', wählen Sie unter 'vorkonfiguriertes Tool' den Eintrag 'Evaluation (Physik)' und speichern Sie die Aktivität.",
-						"Bitte weisen Sie die Teilnehmer Ihrer Veranstaltung auf die Evaluation hin. Der Zugriff ist nur während der Evaluationswoche möglich. Als Dozent können Sie keine Umfrage durchführen.", "Bei weiteren Fragen stehen wir Ihnen gerne zur Verfügung."}
+						"Bitte weisen Sie die Teilnehmer Ihrer Veranstaltung auf die Evaluation hin. Der Zugriff ist nur während der Evaluationswoche möglich über das Moodle möglich, die Studierenden müssen also in Ihrem Kurs eingetragen sein. Als Dozent können Sie keine Umfrage durchführen.", "Bei weiteren Fragen stehen wir Ihnen gerne zur Verfügung."}
 				}
 				if c.Language == "en" {
 					intros = []string{
 						"During the week of the 13th of July an online evaluation will take place at the faculty of physics and astronomy. In order to guarantee a smooth performance, we are sending you informations about your course.",
-						"Please check for errors and report them to us. In particular, please check the number of students."}
+						"Please check for errors and report them to us. In particular, please check the number of students and whether all tutors are listed. If you are offering a tutorium, you have to be listed, too. "}
 					installInstructions = []string{
-						"Because participants of your course are going to access their questionnaire via the 'Übungsgruppenverwaltung', you do not have to configure anything. Please notify your participants that there will be an evaluation.",
+						"Because participants of your course are going to access their questionnaire via the 'Übungsgruppenverwaltung', you do not have to configure anything. Please notify your participants that there will be an evaluation and that they have to be signed up to take the survey.",
 						"If you have any further questions, please contact us."}
 					if isMoodle {
 						plattform = "Moodle"
@@ -105,7 +107,7 @@ var MailTermCmd = &cobra.Command{
 							"2. Select 'external tool' on the left hand side and click 'Add'.",
 							"3. Name your activity 'Evaluation', select 'Evaluation (Physik)' in the drop-down menu 'preconfigured Tool' and save the activity. ",
 
-							" Please notify your participants that there will be an evaluation. The questionnaire is only aviable during the week. As a lecturer you are not allowed to participate.", "If you have additional questions, do not hesitate to contact us."}
+							" Please notify your participants that there will be an evaluation and that they have to be signed up to take the survey. The questionnaire is only aviable during the week. As a lecturer you are not allowed to participate.", "If you have additional questions, do not hesitate to contact us."}
 					}
 					signature = "Kind regards"
 					greeting = "Dear lecturer(s),"
@@ -152,7 +154,7 @@ var MailTermCmd = &cobra.Command{
 				}
 				errorMail := e.Send(viper.GetString("smtp"), a)
 				if errorMail != nil {
-					fmt.Println("Mail konnte nicht gesandt werden:", errorMail.Error())
+					fmt.Println("Mail", module.Name, " konnte nicht gesandt werden:", errorMail.Error())
 				}
 			}
 		}

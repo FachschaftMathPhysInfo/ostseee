@@ -96,6 +96,8 @@ func init() {
 	viper.BindPFlag("basic_user", rootCmd.PersistentFlags().Lookup("basic_user"))
 	viper.BindPFlag("basic_pw", rootCmd.PersistentFlags().Lookup("basic_pw"))
 
+	viper.BindPFlag("smtp", MailCmd.PersistentFlags().Lookup("smtp"))
+
 	rootCmd.AddCommand(versionCmd)
 	termsCmd.AddCommand(termsListCmd)
 	rootCmd.AddCommand(termsCmd)
@@ -108,6 +110,9 @@ func init() {
 	FormsCmd.AddCommand(FormsUpdateCmd)
 	FormsCmd.AddCommand(FormsGetCmd)
 	rootCmd.AddCommand(FormsCmd)
+	CoursesCmd.AddCommand(CoursesListCmd)
+	CoursesCmd.AddCommand(CoursesTutorUploadCmd)
+	rootCmd.AddCommand(CoursesCmd)
 	rootCmd.AddCommand(MailCmd)
 }
 

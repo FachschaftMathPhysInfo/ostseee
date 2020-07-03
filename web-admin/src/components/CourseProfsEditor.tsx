@@ -34,7 +34,7 @@ const CourseProfsEditor = ({ courseId }) => {
     }
     const [{ isPending: is3 }, reloadProfs] = useRequest(profsGet())
     const profs: Array<EuiSuggestItemProps> = useSelector(getProfs)?.filter((p:Prof)=>{
-        return (courseProfs.findIndex((o:CourseProf)=>o.profId==p.id)==-1)&&`${p.lastname}, ${p.firstname}`.includes(typeahead)
+        return (courseProfs.findIndex((o:CourseProf)=>o?.profId==p.id)==-1)&&`${p.lastname}, ${p.firstname}`.includes(typeahead)
     }).map((prof: Prof) => {
         return {
             label: `${prof.lastname}, ${prof.firstname}`,

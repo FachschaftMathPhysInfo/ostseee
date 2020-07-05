@@ -94,10 +94,10 @@ var MailTermCmd = &cobra.Command{
 				}
 				if c.Language == "en" {
 					intros = []string{
-						"During the week of the 13th of July an online evaluation will take place at the faculty of physics and astronomy. In order to guarantee a smooth performance, we are sending you informations about your course.",
-						"Please check for errors and report them to us. In particular, please check the number of students and whether all tutors are listed. If you are offering a tutorium, you have to be listed, too. "}
+						"During the week of the 13th of July an online evaluation will take place at the department of physics and astronomy. In order to guarantee a smooth performance, we are sending you information about your course.",
+						"Please check it for errors and report them to us. In particular, please check the number of students and whether all tutors are listed. If you are offering a tutorium yourself, you have to be listed among the tutors, too. "}
 					installInstructions = []string{
-						"Because participants of your course are going to access their questionnaire via the 'Übungsgruppenverwaltung', you do not have to configure anything. Please notify your participants that there will be an evaluation and that they have to be signed up to take the survey.",
+						"Because participants of your course are going to access their questionnaire via the 'Übungsgruppenverwaltung', you do not have to configure anything. Please notify your participants that there will be an evaluation and that they have to be signed up to take the survey. The questionnaire is only available during the week. As a lecturer you cannot participate.",
 						"If you have any further questions, please contact us."}
 					if isMoodle {
 						plattform = "Moodle"
@@ -107,7 +107,7 @@ var MailTermCmd = &cobra.Command{
 							"2. Select 'external tool' on the left hand side and click 'Add'.",
 							"3. Name your activity 'Evaluation', select 'Evaluation (Physik)' in the drop-down menu 'preconfigured Tool' and save the activity. ",
 
-							" Please notify your participants that there will be an evaluation and that they have to be signed up to take the survey. The questionnaire is only aviable during the week. As a lecturer you are not allowed to participate.", "If you have additional questions, do not hesitate to contact us."}
+							" Please notify your participants that there will be an evaluation and that they have to be signed up to take the survey. The questionnaire is only available during the week. As a lecturer you cannot participate.", "If you have additional questions, do not hesitate to contact us."}
 					}
 					signature = "Kind regards"
 					greeting = "Dear lecturer(s),"

@@ -44,7 +44,7 @@ const TutorsEditor = ({ courseId }) => {
         )
     }
     return (<><ul>
-        {tutors?.map((t => <li key={t.id}><EuiCustomLink to={`/courses/${courseId}/tutors/${t.id}`}>{t.name}</EuiCustomLink>
+        {tutors?.map((t => <li key={t.id}><EuiCustomLink to={`/courses/${courseId}/tutors/${t.id}`}>{t.name} ({t.censored?"zensiert":"unzensiert"})</EuiCustomLink>
             <EuiButtonIcon onClick={(e) => {
                 //@ts-ignore
                 if (window.confirm("Remove?")) {

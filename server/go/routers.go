@@ -134,7 +134,12 @@ func NewRouter(Db *gorm.DB) *gin.Engine {
 			"/v1/courses/:courseId",
 			evalAPI.CoursesCourseIdGet,
 		},
-
+		{
+			"CoursesCourseIdInvitationsSendPost",
+			http.MethodPost,
+			"/v1/courses/:courseId/invitations/send",
+			evalAPI.CoursesCourseIdInvitationsSendPost,
+		},
 		{
 			"CoursesCourseIdInvitationsGet",
 			http.MethodGet,

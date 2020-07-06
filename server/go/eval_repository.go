@@ -456,7 +456,7 @@ func (ev *EvalRepository) GetInvitationForLTIAssignment(courseId uuid.UUID, user
 	var inv Invitation
 	ev.DB.Joins("LEFT JOIN lti_assignments t2 ON invitations.ID = t2.invitation_id WHERE t2.invitation_id IS NULL AND invitations.course_id = ? ", courseId).First(&inv)
 	if inv.Id == uuid.Nil {
-		return "", fmt.Errorf("not enough unused invitations")
+		return "", fmt.Errorf("not enough unused invitations. the evaluation has not begun")
 	}
 	filter.InvitationId = inv.Id
 	ev.DB.Save(&filter)

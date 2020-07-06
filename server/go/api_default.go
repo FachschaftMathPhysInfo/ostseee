@@ -188,6 +188,31 @@ func (ev *EvalAPI) CoursesCourseIdInvitationsGet(c *gin.Context) {
 	c.JSON(http.StatusOK, invitations)
 }
 
+// CoursesCourseIdInvitationsSendPost -
+func (ev *EvalAPI) CoursesCourseIdInvitationsSendPost(c *gin.Context) {
+	type Settings struct {
+		Begin        string `form:"begin" json:"begin"`
+		End          string `form:"end" json:"end"`
+		BaseUrl      string `form:"baseUrl" json:"baseUrl"`
+		PlattformUrl string `form:"plattformUrl" json:"plattformUrl"`
+	}
+	var settings Settings
+	c.Bind(&settings)
+	log.Println(settings)
+	id, err := uuid.FromString(c.Param("courseId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	status, err := ev.EvalService.SendInvitations(id, settings.Begin, settings.End, settings.BaseUrl, settings.PlattformUrl)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, status)
+}
+
 // CoursesCourseIdPatch - Change a course by ID
 func (ev *EvalAPI) CoursesCourseIdPatch(c *gin.Context) {
 	var course Course

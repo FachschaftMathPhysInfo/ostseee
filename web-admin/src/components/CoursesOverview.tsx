@@ -60,6 +60,7 @@ const CoursesOverview = props => {
     {
       field: 'numberOfStudents', 
       name: '# Students',
+      sortable: true,
       truncateText: true
     },
     {
@@ -75,6 +76,7 @@ const CoursesOverview = props => {
     {
       field: 'thirdPartyKey', 
       name: '3rd-Party Key',
+      sortable: true,
       truncateText: true
     },
     {

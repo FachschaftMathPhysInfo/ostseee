@@ -1,9 +1,12 @@
 package openapi
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"log"
 	"math"
+	"net/http"
 	"sort"
 	"strconv"
 	"time"
@@ -584,7 +587,7 @@ func (ev *EvalService) GetInvitationForLTI(infos LTIInfos) (string, error) {
 	inv, err := ev.EvalRepository.GetInvitationForLTIAssignment(course.Id, infos.UserId)
 	if err != nil {
 		log.Println(err)
-		return "", fmt.Errorf("Some error occured!")
+		return "", err
 	}
 	return inv, nil
 }
@@ -599,4 +602,52 @@ func (ev *EvalService) GetCounts() StatusCounts {
 	res.Terms = ev.EvalRepository.GetCount("terms")
 	res.Tutors = ev.EvalRepository.GetCount("tutors")
 	return res
+}
+
+type SendStatus struct {
+	ErrNo        int `json:"errno"`
+	Vid          int `json:"vid"`
+	Participants int `json:"participants"`
+	Assigned     int `json:"assigned"`
+	Overwritten  int `json:"overwritten"`
+	NotChanged   int `json:"notchanged"`
+}
+type Data struct {
+	BaseUrl       string   `json:"baseUrl"`
+	Invitations   []string `json:"invitations"`
+	ThirdPartyKey string   `json:"thirdPartyKey"`
+	Begin         string   `json:"begin"`
+	End           string   `json:"end"`
+}
+
+// SendInvitations finds or generates invitations and send them to the plattform
+func (ev *EvalService) SendInvitations(id uuid.UUID, begin, end string, baseUrl, url string) (SendStatus, error) {
+	course, err := ev.EvalRepository.FindCourse(id)
+	if err != nil {
+		return SendStatus{}, err
+	}
+	invs, err := ev.FindOrGenerateCourseInvitations(id, begin, end)
+	if err != nil {
+		return SendStatus{}, err
+	}
+	invitations := make([]string, len(invs))
+	for idx, i := range invs {
+		invitations[idx] = i.Id.String()
+	}
+	var data Data
+	data.BaseUrl = baseUrl
+	data.Begin = begin
+	data.End = end
+	data.ThirdPartyKey = course.ThirdPartyKey
+	data.Invitations = invitations
+	jsonData, _ := json.Marshal(&data)
+	resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonData))
+	if err != nil {
+		return SendStatus{}, err
+	}
+	defer resp.Body.Close()
+	dec := json.NewDecoder(resp.Body)
+	var status SendStatus
+	err = dec.Decode(&status)
+	return status, err
 }

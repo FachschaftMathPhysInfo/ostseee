@@ -209,7 +209,7 @@ func (ev *EvalAPI) CoursesCourseIdInvitationsSendPost(c *gin.Context) {
 	status, err := ev.EvalService.SendInvitations(id, settings.Begin, settings.End, settings.BaseUrl, settings.PlattformUrl, settings.Force)
 	if err != nil {
 		log.Println(err)
-		c.Status(http.StatusBadRequest)
+		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
 	c.JSON(http.StatusOK, status)

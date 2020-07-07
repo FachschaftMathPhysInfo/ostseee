@@ -605,12 +605,12 @@ func (ev *EvalService) GetCounts() StatusCounts {
 }
 
 type SendStatus struct {
-	ErrNo        int `json:"errno"`
-	Vid          int `json:"vid"`
-	Participants int `json:"participants"`
-	Assigned     int `json:"assigned"`
-	Overwritten  int `json:"overwritten"`
-	NotChanged   int `json:"notchanged"`
+	ErrNo        int    `json:"errno"`
+	Vid          string `json:"vid"`
+	Participants int    `json:"participants"`
+	Assigned     int    `json:"assigned"`
+	Overwritten  int    `json:"overwritten"`
+	NotChanged   int    `json:"notchanged"`
 }
 type Data struct {
 	BaseUrl       string   `json:"baseUrl"`
@@ -618,10 +618,11 @@ type Data struct {
 	ThirdPartyKey string   `json:"thirdPartyKey"`
 	Begin         string   `json:"begin"`
 	End           string   `json:"end"`
+	Force         int32    `form:"force" json:"force"`
 }
 
 // SendInvitations finds or generates invitations and send them to the plattform
-func (ev *EvalService) SendInvitations(id uuid.UUID, begin, end string, baseUrl, url string) (SendStatus, error) {
+func (ev *EvalService) SendInvitations(id uuid.UUID, begin, end string, baseUrl, url string, force int32) (SendStatus, error) {
 	course, err := ev.EvalRepository.FindCourse(id)
 	if err != nil {
 		return SendStatus{}, err
@@ -640,6 +641,7 @@ func (ev *EvalService) SendInvitations(id uuid.UUID, begin, end string, baseUrl,
 	data.End = end
 	data.ThirdPartyKey = course.ThirdPartyKey
 	data.Invitations = invitations
+	data.Force = force
 	jsonData, _ := json.Marshal(&data)
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonData))
 	if err != nil {

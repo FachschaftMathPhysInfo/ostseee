@@ -18,6 +18,7 @@ import TermSelect from "./TermSelect";
 import { getCourse } from "../selectors/courses";
 import CourseProfsEditor from "./CourseProfsEditor";
 import TutorsEditor from "./TutorsEditor";
+import ThirdPartySend from "./ThirdPartySend";
 const CourseDetail = props => {
     let { courseId } = useParams();
     const [{ isPending }] = useRequest(courseGet(courseId));
@@ -62,42 +63,12 @@ const CourseDetail = props => {
                     <EuiFormRow label="Profs">
                     <CourseProfsEditor courseId={courseId}></CourseProfsEditor>
                     </EuiFormRow>
-                    {/*<EuiFormRow label="Zeitraum">
-                    <EuiDatePickerRange
-                        startDateControl={
-                            <EuiDatePicker
-                                selected={beginDate}
-                                onChange={handleChangeBegin}
-                                startDate={beginDate}
-                                endDate={endDate}
-                                isInvalid={beginDate > endDate}
-                                aria-label="Start date"
-                                showTimeSelect
-                            />
-                        }
-                        endDateControl={
-                            <EuiDatePicker
-                                selected={endDate}
-                                onChange={handleChangeEnd}
-                                startDate={beginDate}
-                                endDate={endDate}
-                                isInvalid={beginDate >endDate}
-                                aria-label="End date"
-                                showTimeSelect
-                            />
-                        }
-                    />
-                    </EuiFormRow>
-                    <EuiFormRow label="BaseURL">
-
-                    <EuiFieldText type="url" value={baseUrl} onChange={(e)=>setbaseUrl(e.target.value)}></EuiFieldText>
-                    </EuiFormRow>
-                    <EuiButton onClick={(e)=>console.log(getInvitations(beginDate,endDate))}>Lade Invitations</EuiButton>
-                    <EuiCode language="json">{JSON.stringify(invs)}</EuiCode>
-                    */}
                     <EuiFormRow label="Tutors">
                 <TutorsEditor courseId={courseId}></TutorsEditor>
                 </EuiFormRow>
+                <EuiButton onClick={(e)=>console.log(getInvitations(beginDate,endDate))}>Lade Invitations</EuiButton>
+                    {invs.invitations.length>0&&<EuiCode language="json">{JSON.stringify(invs)}</EuiCode>}
+                    <ThirdPartySend courseId={courseId}></ThirdPartySend>
                 </EuiPageContentBody>
         </EuiPageContent>
     )

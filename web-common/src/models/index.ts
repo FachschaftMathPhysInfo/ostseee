@@ -23,5 +23,7 @@ export * from './StatusCounts';
 export * from './StatusSysstats';
 export * from './Term';
 export * from './TermReport';
+export * from './ThirdPartySendSettings';
+export * from './ThirdPartySendStatus';
 export * from './Tutor';
 export * from './TutorReport';

@@ -195,6 +195,7 @@ func (ev *EvalAPI) CoursesCourseIdInvitationsSendPost(c *gin.Context) {
 		End          string `form:"end" json:"end"`
 		BaseUrl      string `form:"baseUrl" json:"baseUrl"`
 		PlattformUrl string `form:"plattformUrl" json:"plattformUrl"`
+		Force        int32  `form:"force" json:"force"`
 	}
 	var settings Settings
 	c.Bind(&settings)
@@ -205,8 +206,9 @@ func (ev *EvalAPI) CoursesCourseIdInvitationsSendPost(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
-	status, err := ev.EvalService.SendInvitations(id, settings.Begin, settings.End, settings.BaseUrl, settings.PlattformUrl)
+	status, err := ev.EvalService.SendInvitations(id, settings.Begin, settings.End, settings.BaseUrl, settings.PlattformUrl, settings.Force)
 	if err != nil {
+		log.Println(err)
 		c.Status(http.StatusBadRequest)
 		return
 	}

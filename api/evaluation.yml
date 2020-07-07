@@ -553,6 +553,29 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TutorReport'
+  /courses/{courseId}/invitations/send:
+    parameters:
+      - in: path
+        name: courseId
+        schema:
+          type: string
+        required: true
+        description:  ID of the course
+    post:
+      requestBody:
+        description: Upload results into system.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ThirdPartySendSettings'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThirdPartySendStatus'
   /courses/{courseId}/invitations:
     parameters:
       - in: path
@@ -1178,3 +1201,34 @@ components:
               type: number
             cpu10:
               type: number
+    ThirdPartySendSettings:
+      type: object
+      properties:
+        begin:
+          type: string
+        end:
+          type: string
+        plattformUrl:
+          type: string
+          description: The URl of the Plattform to be contacted
+        baseUrl:
+          type: string
+          description: The URl of the the eval system, should end with /
+        force:
+          type: integer
+          description: non zero values are meant to force
+    ThirdPartySendStatus:
+      type: object
+      properties:
+        errno:
+          type: integer
+        vid:
+          type: integer
+        participants:
+          type: integer
+        assigned:
+          type: integer
+        overwritten:
+          type: integer
+        notchanged:
+          type: integer

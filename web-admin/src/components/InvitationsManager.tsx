@@ -6,6 +6,7 @@ import { getInvitationsByCourseId } from "../selectors/invitations"
 import { useSelector} from "react-redux"
 import { useRequest, useMutation } from "redux-query-react"
 import { InvSend } from "../mutations/invitations"
+import { invitationGet } from "../query-configs/invitations"
 
 const InvitationsManager = ({courseId,thirdPartyKey}) =>{
     const [begin, setbegin] = useState(moment())

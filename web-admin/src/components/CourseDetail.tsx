@@ -25,14 +25,6 @@ const CourseDetail = props => {
     const course: Course = useSelector(getCourse(courseId))
     //@ts-ignore
     const [{ isPending: isPending2, status }, getInvitations] = useMutation((begin, end) => { return invitationGet(courseId, begin, end) });
-    const [beginDate,handleChangeBegin] = useState(moment());
-
-    const [endDate,handleChangeEnd] = useState(moment().add(11,'d'));
-    const invitations = useSelector(state=>(state.entities.InvitationById||{})[courseId])||[]
-    //@ts-ignore
-    var invs: InvitationList= {}
-    const [baseUrl, setbaseUrl] = useState("https://eval.mathphys.info/questionaire/")
-    
     const history= useHistory()
     if (isPending) {
         return (<>Loading</>)
@@ -40,11 +32,6 @@ const CourseDetail = props => {
     if (course == undefined) {
         return <>course</>
     }
-    invs.baseUrl = baseUrl
-    invs.invitations = invitations.map(i=>i.id)
-    invs.begin= beginDate.toISOString()
-    invs.end = endDate.toISOString()
-    invs.thirdPartyKey= course.thirdPartyKey
     return (
         <EuiPageContent >
             <EuiPageContentHeader>
@@ -69,7 +56,6 @@ const CourseDetail = props => {
                 </EuiFormRow>
                 <EuiSpacer size="l"></EuiSpacer>
                 </EuiForm>
-                    {invs.invitations.length>0&&<EuiCode language="json">{JSON.stringify(invs)}</EuiCode>}
                     <InvitationsManager courseId={courseId} thirdPartyKey={course.thirdPartyKey}></InvitationsManager>
                 </EuiPageContentBody>
         </EuiPageContent>

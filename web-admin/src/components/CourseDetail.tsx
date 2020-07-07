@@ -5,7 +5,7 @@ import { useRequest, useMutation } from "redux-query-react";
 import { courseGet } from "../query-configs/courses";
 import { useSelector } from 'react-redux'
 import { Course } from "ostseee-web-common";
-import { EuiPageContent, EuiPageContentHeader, EuiPageContentHeaderSection, EuiTitle, EuiPageContentBody, EuiText, EuiTextAlign, EuiDatePickerRange, EuiDatePicker, EuiButton, EuiCode, EuiFieldText, EuiFormRow } from "@elastic/eui";
+import { EuiPageContent, EuiPageContentHeader, EuiPageContentHeaderSection, EuiTitle, EuiPageContentBody, EuiText, EuiTextAlign, EuiDatePickerRange, EuiDatePicker, EuiButton, EuiCode, EuiFieldText, EuiFormRow, EuiForm, EuiSpacer } from "@elastic/eui";
 import ModuleDisplay from "./ModuleDisplay";
 import TermDisplay from "./TermDisplay";
 import CourseProfsDisplay from "./CourseProfsDisplay";
@@ -18,7 +18,7 @@ import TermSelect from "./TermSelect";
 import { getCourse } from "../selectors/courses";
 import CourseProfsEditor from "./CourseProfsEditor";
 import TutorsEditor from "./TutorsEditor";
-import ThirdPartySend from "./ThirdPartySend";
+import InvitationsManager from "./InvitationsManager";
 const CourseDetail = props => {
     let { courseId } = useParams();
     const [{ isPending }] = useRequest(courseGet(courseId));
@@ -58,6 +58,7 @@ const CourseDetail = props => {
                 </EuiPageContentHeaderSection>
             </EuiPageContentHeader>
             <EuiPageContentBody>
+                <EuiForm>
                     <b># Students:</b><code>{course.numberOfStudents}</code><br></br>
                     <b>Form:<FormDisplay formId={course.formId}></FormDisplay></b>
                     <EuiFormRow label="Profs">
@@ -66,9 +67,10 @@ const CourseDetail = props => {
                     <EuiFormRow label="Tutors">
                 <TutorsEditor courseId={courseId}></TutorsEditor>
                 </EuiFormRow>
-                <EuiButton onClick={(e)=>console.log(getInvitations(beginDate,endDate))}>Lade Invitations</EuiButton>
+                <EuiSpacer size="l"></EuiSpacer>
+                </EuiForm>
                     {invs.invitations.length>0&&<EuiCode language="json">{JSON.stringify(invs)}</EuiCode>}
-                    <ThirdPartySend courseId={courseId}></ThirdPartySend>
+                    <InvitationsManager courseId={courseId} thirdPartyKey={course.thirdPartyKey}></InvitationsManager>
                 </EuiPageContentBody>
         </EuiPageContent>
     )

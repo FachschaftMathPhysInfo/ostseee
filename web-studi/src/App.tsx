@@ -47,6 +47,7 @@ import {useSelector} from 'react-redux'
 import { getAnswersCount, getLastSectionAnswered } from './selectors/answers';
 import { EmptyForm } from 'ostseee-web-common';
 import translate from './lib/translate';
+import LicensePage from './components/LicensePage';
 function App() {
 
   
@@ -142,6 +143,9 @@ function App() {
       <Switch>
         <Route path="/questionaire/:questionaireId">
           <Questionaire lang={"de"}></Questionaire>
+         </Route>
+         <Route path="/licenses/:bibliothek">
+          <LicensePage ></LicensePage>
          </Route>
       </Switch>
       {/* <FacultiesOverView

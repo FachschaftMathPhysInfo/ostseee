@@ -14,6 +14,7 @@ import { EuiPortal } from "@elastic/eui";
 import { EuiCallOut } from "@elastic/eui";
 import translate from "../lib/translate";
 import translation from "../data/translation.json";
+import EuiCustomLink from "./EuiCustomLink";
 const Questionaire = props => {
   const languageCode = useSelector(getLanguage)
   const { questionaireId } = useParams();
@@ -102,7 +103,7 @@ Im Neuenheimer Feld 205<br />
 Mathematikon, Raum 01.301<br />
 69120 Heidelberg<br />
               <br />
-              <EuiButton href="/attribution.txt">Rechliche Hinweise zu den verwendeten Bibliotheken</EuiButton>
+              <EuiCustomLink to="/licenses/all">Rechliche Hinweise zu den verwendeten Bibliotheken</EuiCustomLink>
             </p>
           </EuiText>
         </EuiFlyoutBody>

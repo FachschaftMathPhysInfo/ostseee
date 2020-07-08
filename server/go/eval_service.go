@@ -323,31 +323,33 @@ func (ev *EvalService) ValidateAndSaveQuestionaire(invitationId uuid.UUID, quest
 		if !quest.HasNotApplicableOption && answer.NotApplicable {
 			return fmt.Errorf("not applicable not allowed")
 		}
-		if !quest.IsMulti && !quest.IsComment && len(answer.Values) > 1 {
-			return fmt.Errorf("len(answer.Values)>1 on single choice")
-		}
-		if !quest.IsComment && !quest.HasOtherOption {
-			if !answer.NotApplicable && (quest.Visualizer != "tutor_overview") { //BUG(henrik): add isTutorselect!
-				//check if all values are in options
-				for _, val := range answer.Values {
-					if !contains(quest.Options, val) {
-						return fmt.Errorf("Wrong value supplied to %s: %s", quest.Title["de"], val)
+		if !answer.NotApplicable {
+			if !quest.IsMulti && !quest.IsComment && len(answer.Values) > 1 {
+				return fmt.Errorf("len(answer.Values)>1 on single choice")
+			}
+			if !quest.IsComment && !quest.HasOtherOption {
+				if !answer.NotApplicable && (quest.Visualizer != "tutor_overview") { //BUG(henrik): add isTutorselect!
+					//check if all values are in options
+					for _, val := range answer.Values {
+						if !contains(quest.Options, val) {
+							return fmt.Errorf("Wrong value supplied to %s: %s", quest.Title["de"], val)
+						}
 					}
 				}
 			}
-		}
-		//Check if concerns is valid, does not check
-		if !isIn(answer.Concerns, validUUIDs) {
-			return fmt.Errorf("Answer %s is not concerning to  specific object (Question:%i)", answer.Concerns, quest.Title)
-		}
-		if len(courseProfs) <= 1 || quest.Regards != "lecturer" {
-			delete(questions, answer.QuestionId)
-		} else {
-			// increase count
-			multiPersonMap[answer.QuestionId]++
-			// delete if reached
-			if len(courseProfs) == multiPersonMap[answer.QuestionId] {
+			//Check if concerns is valid, does not check
+			if !isIn(answer.Concerns, validUUIDs) {
+				return fmt.Errorf("Answer %s is not concerning to  specific object (Question:%i)", answer.Concerns, quest.Title)
+			}
+			if len(courseProfs) <= 1 || quest.Regards != "lecturer" {
 				delete(questions, answer.QuestionId)
+			} else {
+				// increase count
+				multiPersonMap[answer.QuestionId]++
+				// delete if reached
+				if len(courseProfs) == multiPersonMap[answer.QuestionId] {
+					delete(questions, answer.QuestionId)
+				}
 			}
 		}
 	}

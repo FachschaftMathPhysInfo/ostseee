@@ -569,7 +569,7 @@ func (ev *EvalService) GenerateCourseProfReport(courseprofId uuid.UUID) (CourseP
 	generatedSections := make([]ResultSection, len(sections))
 	for i, sec := range sections {
 		generatedSections[i].Label = sec.Title
-		generatedSections[i].Results, err = ev.generateResults(sec.Questions, course.Id)
+		generatedSections[i].Results, err = ev.generateResults(sec.Questions, courseprofId)
 		if err != nil {
 			return CourseProfReport{}, err
 		}

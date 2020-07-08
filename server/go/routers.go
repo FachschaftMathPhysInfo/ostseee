@@ -378,8 +378,10 @@ func NewRouter(Db *gorm.DB) *gin.Engine {
 		},
 	}
 
-	router := gin.Default()
+	router := gin.New()
+	router.Use(gin.Recovery())
 	addRoutes(router, unsecuredRoutes)
+	router.Use(gin.Logger()) //Logger for secured lines
 	if _, jwtEnabled := os.LookupEnv("JWT_ENABLED"); jwtEnabled {
 		authMiddleware := initJWT()
 		router.POST("/v1/login", authMiddleware.LoginHandler)

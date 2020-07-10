@@ -19,4 +19,5 @@ type StatusCounts struct {
 	Courses       int32 `json:"courses,omitempty"`
 	Questionaires int32 `json:"questionaires,omitempty"`
 	Singleanswers int32 `json:"singleanswers,omitempty"`
+	Invitations   int32 `json:"invitations,omitempty"`
 }

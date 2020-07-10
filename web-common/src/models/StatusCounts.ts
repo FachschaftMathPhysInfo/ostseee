@@ -23,6 +23,12 @@ export interface StatusCounts  {
      * @type {number}
      * @memberof StatusCounts
      */
+    invitations?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof StatusCounts
+     */
     terms?: number;
     /**
      * 
@@ -70,6 +76,7 @@ export interface StatusCounts  {
 
 export function StatusCountsFromJSON(json: any): StatusCounts {
     return {
+        'invitations': !exists(json, 'invitations') ? undefined : json['invitations'],
         'terms': !exists(json, 'terms') ? undefined : json['terms'],
         'tutors': !exists(json, 'tutors') ? undefined : json['tutors'],
         'options': !exists(json, 'options') ? undefined : json['options'],
@@ -86,6 +93,7 @@ export function StatusCountsToJSON(value?: StatusCounts): any {
         return undefined;
     }
     return {
+        'invitations': value.invitations,
         'terms': value.terms,
         'tutors': value.tutors,
         'options': value.options,

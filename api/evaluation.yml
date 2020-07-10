@@ -1174,6 +1174,8 @@ components:
         counts:
           type: object
           properties:
+            invitations:
+              type: integer
             terms:
               type: number
             tutors:

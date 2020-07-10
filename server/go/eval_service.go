@@ -603,6 +603,7 @@ func (ev *EvalService) GetCounts() StatusCounts {
 	res.Singleanswers = ev.EvalRepository.GetCount("single_answers")
 	res.Terms = ev.EvalRepository.GetCount("terms")
 	res.Tutors = ev.EvalRepository.GetCount("tutors")
+	res.Invitations = ev.EvalRepository.GetCount("invitations")
 	return res
 }
 

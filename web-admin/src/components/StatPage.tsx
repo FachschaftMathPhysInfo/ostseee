@@ -37,6 +37,9 @@ const StatPage = props =>{
           <EuiStat title={status.counts?.questionaires||0} description="Questionaires" />
           </EuiFlexItem>
           <EuiFlexItem>
+          <EuiStat title={status.counts?.invitations||0} description="Invitations" />
+          </EuiFlexItem>
+          <EuiFlexItem>
           <EuiStat title={status.counts?.singleanswers||0} description="Data points" />
         </EuiFlexItem>
       </EuiFlexGroup>

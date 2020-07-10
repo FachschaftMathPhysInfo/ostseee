@@ -1,7 +1,7 @@
 {
     "eval.introduction":{
-        "en":"This evaluation is carried out by the Studienkommission in cooperation with the Fachschaft MathPhysInfo. It is used to improve teaching and preserve courses with a high quality of teaching. Please read the questions carefully and answer them afterwards."
-        ,"de":"Diese Evaluation wird von der Studienkommission in Zusammenarbeit mit der Fachschaft MathPhysInfo durchgeführt. Sie soll helfen, die Lehre zu verbessern bzw.  Lehrveranstaltungen guter Qualität zu erhalten. Bitte lese die Fragen sorgfältig durch und beantworte sie anschließend."
+        "en":"This evaluation is carried out by the Studienkommission in cooperation with the Fachschaft MathPhysInfo. It is used to improve teaching and preserve courses with a high quality of teaching. Please read the questions carefully and answer them afterwards. In case of questions or problems please contact evaluation@mathphys.stura.uni-heidelberg.de"
+        ,"de":"Diese Evaluation wird von der Studienkommission in Zusammenarbeit mit der Fachschaft MathPhysInfo durchgeführt. Sie soll helfen, die Lehre zu verbessern bzw.  Lehrveranstaltungen guter Qualität zu erhalten. Bitte lies die Fragen sorgfältig durch und beantworte sie anschließend. Bei Fragen und Problemen wende dich an evaluation@mathphys.stura.uni-heidelberg.de"
     },
     "eval.concerns":{
         "de":"Diese Umfrage betrifft folgende Veranstaltung:",
@@ -37,7 +37,7 @@
     },
     "eval.error.loading.intro":{
         "de":"Die eingegebene Seite ist nicht verfügbar. Dies kann einen der folgenden Gründe haben:",
-        "en":"The requested page is not aviable. Here is a list of possible reasons:"
+        "en":"The requested page is not available. Here is a list of possible reasons:"
     },
     "eval.error.invalid.token":{
         "de":"Der Umfragetoken ist ungültig oder wurde schon benutzt.",
@@ -68,7 +68,7 @@
         "en":"You can submit this survey already, but you have not answered the following questions yet"
     },
     "eval.not.all.questions.answered.title":{
-        "de":"Umfrage nicht vollständig bearbeitet.",
+        "de":"Umfrage nicht vollständig ausgefüllt.",
         "en":"Questionnaire not fully answered"
     },
     "eval.submit":{

@@ -110,9 +110,10 @@ const Form = (props) => {
         </EuiCallOut>
         <EuiSpacer size="xl"></EuiSpacer></>
         }
+        <div style={{textAlign:"center"}} >
       <EuiButton fill iconType="exit" onClick={e => submitForm()} disabled={isPending}>
         {translate(translation["eval.submit"],languageCode)}
-  </EuiButton></>:<></>}
+  </EuiButton></div></>:<></>}
     </div>
   );
 };

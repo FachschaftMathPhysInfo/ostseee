@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/fachschaftmathphys/ostseee/client/openapi"
@@ -27,6 +28,44 @@ var CoursesListCmd = &cobra.Command{
 		for _, f := range courses {
 			m, _, _ := client.DefaultApi.ModulesModuleIdGet(ctx, f.ModuleId)
 			fmt.Printf("[%s] %s\n", f.Id, m.Name)
+		}
+	},
+}
+
+var CoursesGenerateInvitationsCmd = &cobra.Command{
+	Use:   "invitations",
+	Short: "lists all courses",
+	Args:  cobra.NoArgs,
+	Run: func(cmd *cobra.Command, args []string) {
+		ctx := context.WithValue(cmd.Context(), openapi.ContextBasicAuth, openapi.BasicAuth{UserName: viper.GetString("basic_user"), Password: viper.GetString("basic_pw")})
+		client := NewAPIClient()
+		courses, _, err := client.DefaultApi.CoursesGet(ctx)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		log.Println(viper.GetString("platform_url"))
+		log.Println(viper.GetTime("begin"))
+		log.Println(viper.GetTime("end"))
+		for _, f := range courses {
+			m, _, _ := client.DefaultApi.ModulesModuleIdGet(ctx, f.ModuleId)
+			if strings.Contains(f.ThirdPartyKey, "lti") {
+				_, _, err := client.DefaultApi.CoursesCourseIdInvitationsGet(ctx, f.Id, viper.GetTime("begin"), viper.GetTime("end"))
+				if err != nil {
+					log.Println(m.Name, err)
+				}
+			} else {
+				force := int32(0)
+				if viper.GetBool("force") {
+					force = 1
+				}
+				mess, _, err := client.DefaultApi.CoursesCourseIdInvitationsSendPost(ctx, f.Id, openapi.ThirdPartySendSettings{Begin: viper.GetString("begin"), End: viper.GetString("end"), PlattformUrl: viper.GetString("platform_url"),
+					BaseUrl: viper.GetString("base_url"),
+					Force:   force})
+
+				if err != nil || mess.Errno != 0 {
+					log.Println(m.Name, err, mess.Errno)
+				}
+			}
 		}
 	},
 }

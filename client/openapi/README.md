@@ -41,6 +41,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**CoursesCourseIdDelete**](docs/DefaultApi.md#coursescourseiddelete) | **Delete** /courses/{courseId} | Deletes a module by ID
 *DefaultApi* | [**CoursesCourseIdGet**](docs/DefaultApi.md#coursescourseidget) | **Get** /courses/{courseId} | Get a course by ID
 *DefaultApi* | [**CoursesCourseIdInvitationsGet**](docs/DefaultApi.md#coursescourseidinvitationsget) | **Get** /courses/{courseId}/invitations | 
+*DefaultApi* | [**CoursesCourseIdInvitationsSendPost**](docs/DefaultApi.md#coursescourseidinvitationssendpost) | **Post** /courses/{courseId}/invitations/send | 
 *DefaultApi* | [**CoursesCourseIdPatch**](docs/DefaultApi.md#coursescourseidpatch) | **Patch** /courses/{courseId} | Change a course by ID
 *DefaultApi* | [**CoursesCourseIdReportGet**](docs/DefaultApi.md#coursescourseidreportget) | **Get** /courses/{courseId}/report | Get a course report
 *DefaultApi* | [**CoursesCourseIdTutorsGet**](docs/DefaultApi.md#coursescourseidtutorsget) | **Get** /courses/{courseId}/tutors | 
@@ -71,6 +72,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**ProfsProfIdPatch**](docs/DefaultApi.md#profsprofidpatch) | **Patch** /profs/{profId} | Change a prof by ID
 *DefaultApi* | [**QuestionaireInvitationIdGet**](docs/DefaultApi.md#questionaireinvitationidget) | **Get** /questionaire/{invitationId} | 
 *DefaultApi* | [**QuestionaireInvitationIdPost**](docs/DefaultApi.md#questionaireinvitationidpost) | **Post** /questionaire/{invitationId} | 
+*DefaultApi* | [**StatusGet**](docs/DefaultApi.md#statusget) | **Get** /status | 
 *DefaultApi* | [**TermsGet**](docs/DefaultApi.md#termsget) | **Get** /terms | 
 *DefaultApi* | [**TermsPost**](docs/DefaultApi.md#termspost) | **Post** /terms | 
 *DefaultApi* | [**TermsTermIdGet**](docs/DefaultApi.md#termstermidget) | **Get** /terms/{termId} | Get a term by ID
@@ -105,6 +107,8 @@ Class | Method | HTTP request | Description
  - [StatusSysstats](docs/StatusSysstats.md)
  - [Term](docs/Term.md)
  - [TermReport](docs/TermReport.md)
+ - [ThirdPartySendSettings](docs/ThirdPartySendSettings.md)
+ - [ThirdPartySendStatus](docs/ThirdPartySendStatus.md)
  - [Tutor](docs/Tutor.md)
  - [TutorReport](docs/TutorReport.md)
 

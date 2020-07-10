@@ -87,6 +87,12 @@ func init() {
 	rootCmd.PersistentFlags().String("basepath", "v1", "BasePath")
 	rootCmd.PersistentFlags().String("basic_user", "admin", "Used to login")
 	rootCmd.PersistentFlags().String("basic_pw", "password", "Used to login (password)")
+
+	CoursesGenerateInvitationsCmd.PersistentFlags().String("begin", "2020-07-12T22:00:00.000Z", "begin of the evaluation")
+	CoursesGenerateInvitationsCmd.PersistentFlags().String("end", "2020-07-19T21:59:59.000Z", "end of the evaluation")
+	CoursesGenerateInvitationsCmd.PersistentFlags().String("platform_url", "", "platform url to send invitations to")
+	CoursesGenerateInvitationsCmd.PersistentFlags().String("base_url", "https://eval.mathphys.info/questionaire/", "base URL of the system")
+	CoursesGenerateInvitationsCmd.PersistentFlags().Bool("force", false, "whether to overwrite data.")
 	MailCmd.PersistentFlags().String("smtp", "localhost:1025", "SMTP server used for mailing")
 	ReportCmd.PersistentFlags().StringVar(&Locale, "locale", "de", "Locale to render")
 	viper.BindPFlag("scheme", rootCmd.PersistentFlags().Lookup("scheme"))
@@ -98,11 +104,17 @@ func init() {
 
 	viper.BindPFlag("smtp", MailCmd.PersistentFlags().Lookup("smtp"))
 
+	viper.BindPFlag("begin", CoursesGenerateInvitationsCmd.PersistentFlags().Lookup("begin"))
+	viper.BindPFlag("end", CoursesGenerateInvitationsCmd.PersistentFlags().Lookup("end"))
+	viper.BindPFlag("platform_url", CoursesGenerateInvitationsCmd.PersistentFlags().Lookup("platform_url"))
+	viper.BindPFlag("base_url", CoursesGenerateInvitationsCmd.PersistentFlags().Lookup("base_url"))
+	viper.BindPFlag("force", CoursesGenerateInvitationsCmd.PersistentFlags().Lookup("force"))
 	rootCmd.AddCommand(versionCmd)
 	termsCmd.AddCommand(termsListCmd)
 	rootCmd.AddCommand(termsCmd)
 	ReportCmd.AddCommand(ReportTutorCmd)
 	ReportCmd.AddCommand(ReportCourseCmd)
+	ReportCmd.AddCommand(ReportCourseProfCmd)
 	rootCmd.AddCommand(ReportCmd)
 	MailCmd.AddCommand(MailTermCmd)
 	FormsCmd.AddCommand(FormsValidateCmd)
@@ -112,6 +124,7 @@ func init() {
 	rootCmd.AddCommand(FormsCmd)
 	CoursesCmd.AddCommand(CoursesListCmd)
 	CoursesCmd.AddCommand(CoursesTutorUploadCmd)
+	CoursesCmd.AddCommand(CoursesGenerateInvitationsCmd)
 	rootCmd.AddCommand(CoursesCmd)
 	rootCmd.AddCommand(MailCmd)
 }

@@ -7,6 +7,15 @@ info:
 servers:
 - url: https://eval.mathphys.info/v1
 paths:
+  /status:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: OK
   /faculties:
     get:
       responses:
@@ -710,6 +719,31 @@ paths:
                 $ref: '#/components/schemas/TutorReport'
           description: OK
       summary: Get a tutor report
+  /courses/{courseId}/invitations/send:
+    post:
+      parameters:
+      - description: ID of the course
+        explode: false
+        in: path
+        name: courseId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ThirdPartySendSettings'
+        description: Upload results into system.
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThirdPartySendStatus'
+          description: OK
   /courses/{courseId}/invitations:
     get:
       parameters:
@@ -3510,6 +3544,23 @@ components:
           type: array
       type: object
     Status:
+      example:
+        sysstats:
+          cpu10: 1.2315135367772556
+          ram10: 4.145608029883936
+          cpu: 7.386281948385884
+          ram: 2.027123023002322
+        generated: 2000-01-23T04:56:07.000+00:00
+        counts:
+          singleanswers: 3.616076749251911
+          courses: 7.061401241503109
+          tutors: 1.4658129805029452
+          courseprofs: 2.3021358869347655
+          invitations: 0
+          terms: 6.027456183070403
+          profs: 5.637376656633329
+          options: 5.962133916683182
+          questionaires: 9.301444243932576
       properties:
         generated:
           format: date-time
@@ -3519,8 +3570,64 @@ components:
         sysstats:
           $ref: '#/components/schemas/Status_sysstats'
       type: object
-    Status_counts:
+    ThirdPartySendSettings:
+      example:
+        baseUrl: baseUrl
+        plattformUrl: plattformUrl
+        end: end
+        force: 0
+        begin: begin
       properties:
+        begin:
+          type: string
+        end:
+          type: string
+        plattformUrl:
+          description: The URl of the Plattform to be contacted
+          type: string
+        baseUrl:
+          description: The URl of the the eval system, should end with /
+          type: string
+        force:
+          description: non zero values are meant to force
+          type: integer
+      type: object
+    ThirdPartySendStatus:
+      example:
+        vid: 6
+        errno: 0
+        overwritten: 5
+        assigned: 5
+        participants: 1
+        notchanged: 2
+      properties:
+        errno:
+          type: integer
+        vid:
+          type: integer
+        participants:
+          type: integer
+        assigned:
+          type: integer
+        overwritten:
+          type: integer
+        notchanged:
+          type: integer
+      type: object
+    Status_counts:
+      example:
+        singleanswers: 3.616076749251911
+        courses: 7.061401241503109
+        tutors: 1.4658129805029452
+        courseprofs: 2.3021358869347655
+        invitations: 0
+        terms: 6.027456183070403
+        profs: 5.637376656633329
+        options: 5.962133916683182
+        questionaires: 9.301444243932576
+      properties:
+        invitations:
+          type: integer
         terms:
           type: number
         tutors:
@@ -3538,6 +3645,11 @@ components:
         singleanswers:
           type: number
     Status_sysstats:
+      example:
+        cpu10: 1.2315135367772556
+        ram10: 4.145608029883936
+        cpu: 7.386281948385884
+        ram: 2.027123023002322
       properties:
         ram:
           type: number

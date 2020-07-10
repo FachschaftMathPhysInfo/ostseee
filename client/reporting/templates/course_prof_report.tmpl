@@ -1,4 +1,4 @@
-≤≤ define "course_report"≥≥
+≤≤ define "course_prof_report"≥≥
 \documentclass[pagesize,halfparskip-,headsepline,cleardoubleempty,table]{scrbook}
 \def\tightlist{} % for pandoc
   \title{Lehrevaluation ≤≤ lesc .Module.Name ≥≥}
@@ -15,11 +15,12 @@
 ≤≤ template "preface" ≥≥
 \kurskopf{≤≤ lesc .Module.Name ≥≥}{ ≤≤ getNames .CourseProfs ≥≥ }{0}{≤≤.Course.Id ≥≥}{≤≤i18n "by"≥≥}
 \selectlanguage{≤≤ i18n "tex_lang" ≥≥}
-≤≤ template "course" .CourseReport ≥≥
- ≤≤ if gt (len .CourseReport.TutorReports) 0≥≥
+≤≤ template "course_prof" .CourseProfReport ≥≥
+≤≤ template "course" .CourseProfReport.CourseReport ≥≥
+ ≤≤ if gt (len .CourseProfReport.CourseReport.TutorReports) 0≥≥
  \subsection*{Fragen zu den Tutorien}
  ≤≤ template "tutor_overview" .Tutors≥≥
- ≤≤ range .CourseReport.TutorReports ≥≥
+ ≤≤ range .CourseProfReport.CourseReport.TutorReports ≥≥
     ≤≤ template "tutor" . ≥≥
  ≤≤ end ≥≥
  ≤≤end≥≥

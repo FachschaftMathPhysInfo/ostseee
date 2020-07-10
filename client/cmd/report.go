@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -11,6 +12,7 @@ import (
 	"github.com/antihax/optional"
 	"github.com/fachschaftmathphys/ostseee/client/openapi"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var Locale = "de"
@@ -24,7 +26,7 @@ func getNames(arr []openapi.Prof) string {
 }
 func lesc(s string) string {
 	//BUG(henrik): Write replacements
-	return strings.ReplaceAll(strings.ReplaceAll(s, "\\", ""), "%", "\\%")
+	return strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(s, "\\", ""), "%", "\\%"), "&", "\\&"), "#", "\\#")
 }
 
 func getTutor(courseId, tutorId string) openapi.Tutor {
@@ -79,7 +81,7 @@ func toPercentage(arr []openapi.ResultPair) string {
 	percentages := make([]string, len(arr))
 	for i, v := range arr {
 		s, _ := strconv.Atoi(v.Value)
-		percentages[i] = fmt.Sprint(100 * float64(s) / float64(sum))
+		percentages[i] = fmt.Sprintf("%.1f", 100*float64(s)/float64(sum))
 	}
 	return strings.Join(percentages, ",")
 }
@@ -104,6 +106,7 @@ var ReportTutorCmd = &cobra.Command{
 	Use:   "tutor",
 	Short: "generates a report for a given tutor ",
 	Run: func(cmd *cobra.Command, args []string) {
+		ctx := context.WithValue(cmd.Context(), openapi.ContextBasicAuth, openapi.BasicAuth{UserName: viper.GetString("basic_user"), Password: viper.GetString("basic_pw")})
 		fmt.Println(args)
 		tutorId := args[1]
 		courseId := args[0]
@@ -128,15 +131,15 @@ var ReportTutorCmd = &cobra.Command{
 		apiClient := NewAPIClient()
 		trd := TutorReportRendering{}
 		file, _ := os.Create(outputFile)
-		trd.Course, _, _ = apiClient.DefaultApi.CoursesCourseIdGet(cmd.Context(), courseId)
-		trd.Tutor, _, _ = apiClient.DefaultApi.CoursesCourseIdTutorsTutorIdGet(cmd.Context(), courseId, tutorId)
-		trd.Term, _, _ = apiClient.DefaultApi.TermsTermIdGet(cmd.Context(), trd.Course.TermId)
-		trd.Module, _, _ = apiClient.DefaultApi.ModulesModuleIdGet(cmd.Context(), trd.Course.ModuleId)
-		trd.TutorReport, _, _ = apiClient.DefaultApi.CoursesCourseIdTutorsTutorIdReportGet(cmd.Context(), courseId, tutorId)
-		cPs, _, _ := apiClient.DefaultApi.CourseprofsGet(cmd.Context(), &openapi.CourseprofsGetOpts{CourseId: optional.NewString(courseId)})
+		trd.Course, _, _ = apiClient.DefaultApi.CoursesCourseIdGet(ctx, courseId)
+		trd.Tutor, _, _ = apiClient.DefaultApi.CoursesCourseIdTutorsTutorIdGet(ctx, courseId, tutorId)
+		trd.Term, _, _ = apiClient.DefaultApi.TermsTermIdGet(ctx, trd.Course.TermId)
+		trd.Module, _, _ = apiClient.DefaultApi.ModulesModuleIdGet(ctx, trd.Course.ModuleId)
+		trd.TutorReport, _, _ = apiClient.DefaultApi.CoursesCourseIdTutorsTutorIdReportGet(ctx, courseId, tutorId)
+		cPs, _, _ := apiClient.DefaultApi.CourseprofsGet(ctx, &openapi.CourseprofsGetOpts{CourseId: optional.NewString(courseId)})
 		trd.CourseProfs = make([]openapi.Prof, len(cPs))
 		for i, cp := range cPs {
-			trd.CourseProfs[i], _, _ = apiClient.DefaultApi.ProfsProfIdGet(cmd.Context(), cp.ProfId)
+			trd.CourseProfs[i], _, _ = apiClient.DefaultApi.ProfsProfIdGet(ctx, cp.ProfId)
 			trd.CourseProfs[i].Id = cp.Id
 		}
 		t.ExecuteTemplate(file, "tutor_report", &trd)
@@ -145,9 +148,10 @@ var ReportTutorCmd = &cobra.Command{
 }
 var ReportCourseCmd = &cobra.Command{
 	Use:   "course",
-	Short: "generates a report for a given tutor ",
+	Short: "generates a report for a given course (not including profs) ",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(args)
+		ctx := context.WithValue(cmd.Context(), openapi.ContextBasicAuth, openapi.BasicAuth{UserName: viper.GetString("basic_user"), Password: viper.GetString("basic_pw")})
 		courseId := args[0]
 		outputFile := courseId + ".pdf"
 		if len(args) > 1 {
@@ -170,21 +174,102 @@ var ReportCourseCmd = &cobra.Command{
 		apiClient := NewAPIClient()
 		trd := CourseReportRendering{}
 		file, _ := os.Create(outputFile)
-		trd.Course, _, _ = apiClient.DefaultApi.CoursesCourseIdGet(cmd.Context(), courseId)
-		trd.Term, _, _ = apiClient.DefaultApi.TermsTermIdGet(cmd.Context(), trd.Course.TermId)
-		trd.Module, _, _ = apiClient.DefaultApi.ModulesModuleIdGet(cmd.Context(), trd.Course.ModuleId)
-		trd.CourseReport, _, _ = apiClient.DefaultApi.CoursesCourseIdReportGet(cmd.Context(), courseId)
-		trd.Tutors, _, _ = apiClient.DefaultApi.CoursesCourseIdTutorsGet(cmd.Context(), courseId)
-		cPs, _, _ := apiClient.DefaultApi.CourseprofsGet(cmd.Context(), &openapi.CourseprofsGetOpts{CourseId: optional.NewString(courseId)})
+		trd.Course, _, err = apiClient.DefaultApi.CoursesCourseIdGet(ctx, courseId)
+		if err != nil {
+			log.Println(err)
+		}
+		trd.Term, _, err = apiClient.DefaultApi.TermsTermIdGet(ctx, trd.Course.TermId)
+		if err != nil {
+			log.Println(err)
+		}
+		trd.Module, _, err = apiClient.DefaultApi.ModulesModuleIdGet(ctx, trd.Course.ModuleId)
+		if err != nil {
+			log.Println(err)
+		}
+		trd.CourseReport, _, err = apiClient.DefaultApi.CoursesCourseIdReportGet(ctx, courseId)
+		if err != nil {
+			log.Println(err)
+		}
+		trd.Tutors, _, err = apiClient.DefaultApi.CoursesCourseIdTutorsGet(ctx, courseId)
+		if err != nil {
+			log.Println(err)
+		}
+		cPs, _, _ := apiClient.DefaultApi.CourseprofsGet(ctx, &openapi.CourseprofsGetOpts{CourseId: optional.NewString(courseId)})
 		trd.CourseProfs = make([]openapi.Prof, len(cPs))
 		for i, cp := range cPs {
-			trd.CourseProfs[i], _, _ = apiClient.DefaultApi.ProfsProfIdGet(cmd.Context(), cp.ProfId)
+			trd.CourseProfs[i], _, _ = apiClient.DefaultApi.ProfsProfIdGet(ctx, cp.ProfId)
 			trd.CourseProfs[i].Id = cp.Id
 		}
 		t.ExecuteTemplate(file, "course_report", &trd)
 	},
 	Args: cobra.MinimumNArgs(1),
 }
+
+var ReportCourseProfCmd = &cobra.Command{
+	Use:   "course_prof",
+	Short: "generates a report for a given prof ",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println(args)
+		ctx := context.WithValue(cmd.Context(), openapi.ContextBasicAuth, openapi.BasicAuth{UserName: viper.GetString("basic_user"), Password: viper.GetString("basic_pw")})
+		courseprofId := args[0]
+		outputFile := courseprofId + ".pdf"
+		if len(args) > 1 {
+			outputFile = args[1]
+		}
+
+		t, err := template.New("course_prof_report").Delims("≤≤", "≥≥").Funcs(funcMap).ParseFiles("./reporting/templates/tutor_report.tmpl", "./reporting/templates/preamble.tmpl",
+			"./reporting/templates/preface.tmpl", "./reporting/templates/tutor.tmpl", "./reporting/templates/common.tmpl", "./reporting/templates/course.tmpl",
+			"./reporting/templates/course_prof.tmpl", "./reporting/templates/course_report.tmpl", "./reporting/templates/course_prof_report.tmpl")
+		if err != nil {
+			fmt.Println(err)
+		}
+		type CourseProfReportRendering struct {
+			CourseProfReport openapi.CourseProfReport
+			Term             openapi.Term
+			Module           openapi.Module
+			Faculty          openapi.Faculty
+			Course           openapi.Course
+			CourseProfs      []openapi.Prof
+			Tutors           []openapi.Tutor
+		}
+		apiClient := NewAPIClient()
+		trd := CourseProfReportRendering{}
+		file, _ := os.Create(outputFile)
+		courseProf, _, err := apiClient.DefaultApi.CourseprofsCourseProfIdGet(ctx, courseprofId)
+		if err != nil {
+			fmt.Println(err)
+		}
+		trd.Course, _, err = apiClient.DefaultApi.CoursesCourseIdGet(ctx, courseProf.CourseId)
+		if err != nil {
+			log.Println(err)
+		}
+		trd.Term, _, err = apiClient.DefaultApi.TermsTermIdGet(ctx, trd.Course.TermId)
+		if err != nil {
+			log.Println(err)
+		}
+		trd.Module, _, err = apiClient.DefaultApi.ModulesModuleIdGet(ctx, trd.Course.ModuleId)
+		if err != nil {
+			log.Println(err)
+		}
+		trd.CourseProfReport, _, err = apiClient.DefaultApi.CourseprofsCourseProfIdReportGet(ctx, courseprofId)
+		if err != nil {
+			log.Println(err)
+		}
+		trd.Tutors, _, err = apiClient.DefaultApi.CoursesCourseIdTutorsGet(ctx, courseProf.CourseId)
+		if err != nil {
+			log.Println(err)
+		}
+		cPs, _, _ := apiClient.DefaultApi.CourseprofsGet(ctx, &openapi.CourseprofsGetOpts{CourseId: optional.NewString(courseProf.CourseId)})
+		trd.CourseProfs = make([]openapi.Prof, len(cPs))
+		for i, cp := range cPs {
+			trd.CourseProfs[i], _, _ = apiClient.DefaultApi.ProfsProfIdGet(ctx, cp.ProfId)
+			trd.CourseProfs[i].Id = cp.Id
+		}
+		t.ExecuteTemplate(file, "course_prof_report", &trd)
+	},
+	Args: cobra.MinimumNArgs(1),
+}
+
 var ReportCmd = &cobra.Command{
 	Use:   "report",
 	Short: "Generate reports.",

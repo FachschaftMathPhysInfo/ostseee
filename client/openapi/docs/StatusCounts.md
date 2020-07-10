@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**Invitations** | **int32** |  | [optional] 
 **Terms** | **float32** |  | [optional] 
 **Tutors** | **float32** |  | [optional] 
 **Options** | **float32** |  | [optional] 

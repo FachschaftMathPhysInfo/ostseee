@@ -16,8 +16,14 @@ import { getLanguage } from '../selectors/language';
 import translate from '../lib/translate';
 import translation from '../data/translation.json';
 import { lang } from 'moment';
+import { useEffect } from 'react';
+import store, { changeLanguage } from '../lib/store';
 const Form = (props) => {
   let emptyForm: EmptyForm = props.emptyForm
+  useEffect(() => {
+    //@ts-ignore
+    store.dispatch(changeLanguage(emptyForm.course.language))
+  }, []);
   const languageCode = useSelector(getLanguage)
   let answersInStore = useSelector(getAnswers)
   const tutorId = useSelector(getTutorId)
@@ -75,7 +81,7 @@ const Form = (props) => {
         }
         return { questionaireId: emptyForm.id,questionId:q.id, ...answersInStore[`${q.id}:${concernsId}`] }
       }))
-    }).filter(q=>q!==undefined)
+    }).filter(q=>q!==undefined&&(q.values[0]!=""||q.notApplicable))
     console.log(answers)
     const questionaire:Questionaire = {answers}
     submitQuest(questionaire,emptyForm.id)

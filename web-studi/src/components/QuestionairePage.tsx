@@ -247,10 +247,11 @@ Mathematikon, Raum 01.301<br />
             /></EuiCard>
 
           <EuiSpacer size="xl" />
+          <div style={{textAlign:"center"}} >
           <a href="#abschnitt"><EuiButton fill iconType="arrowDown">
             {translate(translation["eval.begin"], languageCode)}
 
-          </EuiButton></a>
+          </EuiButton></a></div>
           <EuiSpacer size="xl" />
           <EuiFlexGroup gutterSize="s" alignItems="center">
             <EuiFlexItem grow={false}>

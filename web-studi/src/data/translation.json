@@ -63,6 +63,10 @@
         "de":"Umfrage erfolgreich abgesendet!",
         "en":"Questionnaire successfully submitted!"
     },
+    "eval.finished":{
+        "de":"Vielen Dank für das Ausfüllen des Evaluationsbogens. Du kannst das Fenster nun schließen.",
+        "en":"Thank you for filling in this evaluation form. You may close this window now."
+    },
     "eval.not.all.questions.answered.intro":{
         "de":"Du kannst die Umfrage schon absenden, du hast aber folgende Fragen nicht beantwortet:",
         "en":"You can submit this survey already, but you have not answered the following questions yet"

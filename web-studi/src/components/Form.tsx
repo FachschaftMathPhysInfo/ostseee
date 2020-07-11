@@ -94,7 +94,9 @@ const Form = (props) => {
             <EuiSpacer size="xl"></EuiSpacer>
             <EuiSpacer size="xl"></EuiSpacer>
             <SectionComponent section={sec}  />
-        </div>))):<><h1>{translate(translation["eval.send.success"],languageCode)}</h1></>
+        </div>))):<><EuiCallOut title={translate(translation["eval.send.success"],languageCode)} color="success" iconType="check">
+          <p>{translate(translation["eval.finished"],languageCode)}</p>
+        </EuiCallOut></>
       }
       
       {!(isFinished&&status ==204)?
@@ -108,9 +110,10 @@ const Form = (props) => {
         </EuiCallOut>
         <EuiSpacer size="xl"></EuiSpacer></>
         }
+        <div style={{textAlign:"center"}} >
       <EuiButton fill iconType="exit" onClick={e => submitForm()} disabled={isPending}>
         {translate(translation["eval.submit"],languageCode)}
-  </EuiButton></>:<></>}
+  </EuiButton></div></>:<></>}
     </div>
   );
 };

@@ -227,7 +227,7 @@ Mathematikon, Raum 01.301<br />
           </EuiText>
           <EuiText style={{ textAlign: "left" }}>{translate(translation["eval.concerns"], languageCode)} </EuiText>
           <EuiSpacer size="l" />
-          <EuiText><b>{emptyForm.moduleName}</b> {translate(translation["eval.by"], languageCode)} <b>{emptyForm.profs.map(p => p.lastname).join(", ")}</b></EuiText>
+          <EuiText style={{textAlign:"center"}}><b>{emptyForm.moduleName}</b> {translate(translation["eval.by"], languageCode)} <b>{emptyForm.profs.map(p => p.lastname).join(", ")}</b></EuiText>
           <br></br>
           <EuiCard
             layout="vertical"
@@ -247,10 +247,11 @@ Mathematikon, Raum 01.301<br />
             /></EuiCard>
 
           <EuiSpacer size="xl" />
+          <div style={{textAlign:"center"}} >
           <a href="#abschnitt"><EuiButton fill iconType="arrowDown">
             {translate(translation["eval.begin"], languageCode)}
 
-          </EuiButton></a>
+          </EuiButton></a></div>
           <EuiSpacer size="xl" />
           <EuiFlexGroup gutterSize="s" alignItems="center">
             <EuiFlexItem grow={false}>

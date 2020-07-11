@@ -15,6 +15,14 @@ type Result struct {
 	Label map[string]string `json:"label,omitempty"`
 	// indicate, how result is displayed.
 	Visualizer string `json:"visualizer,omitempty"`
+	// If applicable return the average of this field
+	Avg float32 `json:"avg,omitempty"`
+	// If applicable return the standard deviation of this answer
+	Stddev float32 `json:"stddev,omitempty"`
+	// If applicable return the average of this question globally.
+	AvgQuestion float32 `json:"avgQuestion,omitempty"`
+	// If applicable return the standard deviation  of this question globally.
+	StddevQuestion float32 `json:"stddevQuestion,omitempty"`
 	// gives the number of not applicable.
 	NotApplicableCount float32 `json:"notApplicableCount,omitempty"`
 	Values []ResultPair `json:"values,omitempty"`

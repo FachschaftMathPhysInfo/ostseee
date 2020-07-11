@@ -443,6 +443,12 @@ func (ev *EvalService) generateResult(question Question, objectId uuid.UUID) (Re
 		return resultpairs[i].Position < resultpairs[j].Position
 	})
 	result.Values = resultpairs
+	if result.Visualizer == "histogram" {
+		result.Avg = ev.EvalRepository.AvgPerConcern(objectId, question.Id)
+		result.AvgQuestion = ev.EvalRepository.AvgPerQuestion(question.Id)
+		result.Stddev = ev.EvalRepository.StddevPerConcern(objectId, question.Id)
+		result.StddevQuestion = ev.EvalRepository.StddevPerQuestion(question.Id)
+	}
 	return result, nil
 }
 func (ev *EvalService) generateResults(questions []Question, objectId uuid.UUID) ([]Result, error) {

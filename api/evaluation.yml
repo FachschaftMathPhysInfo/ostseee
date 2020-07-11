@@ -1075,6 +1075,18 @@ components:
         visualizer:
           type: string
           description: indicate, how result is displayed.
+        avg:
+          type: number
+          description: If applicable return the average of this field
+        stddev:
+          type: number
+          description: If applicable return the standard deviation of this answer
+        avgQuestion:
+          type: number
+          description: If applicable return the average of this question globally.
+        stddevQuestion:
+          type: number
+          description: If applicable return the standard deviation  of this question globally.
         notApplicableCount:
           type: number
           description: gives the number of not applicable.

@@ -468,3 +468,45 @@ func (ev *EvalRepository) GetCount(tablename string) int32 {
 	ev.DB.Table(tablename).Count(&count)
 	return int32(count)
 }
+
+func (ev *EvalRepository) AvgPerConcern(objectId, questionId uuid.UUID) float32 {
+	type Result struct {
+		Freq float32
+	}
+	var res []Result
+	ev.DB.Table("single_answers").Where("not_applicable <> True AND question_id = ? AND concerns = ?", questionId, objectId).Select("avg(CAST(coalesce(NULLIF(value, ''), '0') AS integer)) as freq").Scan(&res)
+	return res[0].Freq
+}
+
+func (ev *EvalRepository) AvgPerQuestion(questionId uuid.UUID) float32 {
+	type Result struct {
+		Freq float32
+	}
+	var res []Result
+	ev.DB.Table("single_answers").Where("not_applicable <> True AND question_id = ? ", questionId).Select("avg(CAST(coalesce(NULLIF(value, ''), '0') AS integer)) as freq").Scan(&res)
+	return res[0].Freq
+}
+
+func (ev *EvalRepository) StddevPerConcern(objectId, questionId uuid.UUID) float32 {
+	type Result struct {
+		Freq float32
+	}
+	var res []Result
+	ev.DB.Table("single_answers").Where("not_applicable <> True AND question_id = ? AND concerns = ?", questionId, objectId).Select("stddev_samp(CAST(coalesce(NULLIF(value, ''), '0') AS integer)) as freq").Scan(&res)
+	if len(res) > 0 {
+		return res[0].Freq
+	}
+	return 0
+}
+
+func (ev *EvalRepository) StddevPerQuestion(questionId uuid.UUID) float32 {
+	type Result struct {
+		Freq float32
+	}
+	var res []Result
+	ev.DB.Table("single_answers").Where("not_applicable <> True AND question_id = ? ", questionId).Select("stddev_samp(CAST(coalesce(NULLIF(value, ''), '0') AS integer)) as freq").Scan(&res)
+	if len(res) > 0 {
+		return res[0].Freq
+	}
+	return 0
+}

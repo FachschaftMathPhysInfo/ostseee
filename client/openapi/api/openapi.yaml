@@ -2256,7 +2256,7 @@ components:
       example:
         label:
           key: label
-        position: 6
+        position: 2
         value: value
       properties:
         label:
@@ -2272,20 +2272,24 @@ components:
       type: object
     Result:
       example:
+        avg: 0.8008281904610115
+        stddevQuestion: 5.962133916683182
         values:
         - label:
             key: label
-          position: 6
+          position: 2
           value: value
         - label:
             key: label
-          position: 6
+          position: 2
           value: value
-        notApplicableCount: 0.8008281904610115
+        notApplicableCount: 5.637376656633329
         id: id
         label:
           key: label
         visualizer: visualizer
+        stddev: 6.027456183070403
+        avgQuestion: 1.4658129805029452
       properties:
         id:
           type: string
@@ -2298,6 +2302,19 @@ components:
         visualizer:
           description: indicate, how result is displayed.
           type: string
+        avg:
+          description: If applicable return the average of this field
+          type: number
+        stddev:
+          description: If applicable return the standard deviation of this answer
+          type: number
+        avgQuestion:
+          description: If applicable return the average of this question globally.
+          type: number
+        stddevQuestion:
+          description: If applicable return the standard deviation  of this question
+            globally.
+          type: number
         notApplicableCount:
           description: gives the number of not applicable.
           type: number
@@ -2312,34 +2329,42 @@ components:
         label:
           key: label
         results:
-        - values:
+        - avg: 0.8008281904610115
+          stddevQuestion: 5.962133916683182
+          values:
           - label:
               key: label
-            position: 6
+            position: 2
             value: value
           - label:
               key: label
-            position: 6
+            position: 2
             value: value
-          notApplicableCount: 0.8008281904610115
+          notApplicableCount: 5.637376656633329
           id: id
           label:
             key: label
           visualizer: visualizer
-        - values:
+          stddev: 6.027456183070403
+          avgQuestion: 1.4658129805029452
+        - avg: 0.8008281904610115
+          stddevQuestion: 5.962133916683182
+          values:
           - label:
               key: label
-            position: 6
+            position: 2
             value: value
           - label:
               key: label
-            position: 6
+            position: 2
             value: value
-          notApplicableCount: 0.8008281904610115
+          notApplicableCount: 5.637376656633329
           id: id
           label:
             key: label
           visualizer: visualizer
+          stddev: 6.027456183070403
+          avgQuestion: 1.4658129805029452
       properties:
         id:
           type: string
@@ -2365,66 +2390,82 @@ components:
           label:
             key: label
           results:
-          - values:
+          - avg: 0.8008281904610115
+            stddevQuestion: 5.962133916683182
+            values:
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
-            notApplicableCount: 0.8008281904610115
+            notApplicableCount: 5.637376656633329
             id: id
             label:
               key: label
             visualizer: visualizer
-          - values:
+            stddev: 6.027456183070403
+            avgQuestion: 1.4658129805029452
+          - avg: 0.8008281904610115
+            stddevQuestion: 5.962133916683182
+            values:
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
-            notApplicableCount: 0.8008281904610115
+            notApplicableCount: 5.637376656633329
             id: id
             label:
               key: label
             visualizer: visualizer
+            stddev: 6.027456183070403
+            avgQuestion: 1.4658129805029452
         - id: id
           label:
             key: label
           results:
-          - values:
+          - avg: 0.8008281904610115
+            stddevQuestion: 5.962133916683182
+            values:
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
-            notApplicableCount: 0.8008281904610115
+            notApplicableCount: 5.637376656633329
             id: id
             label:
               key: label
             visualizer: visualizer
-          - values:
+            stddev: 6.027456183070403
+            avgQuestion: 1.4658129805029452
+          - avg: 0.8008281904610115
+            stddevQuestion: 5.962133916683182
+            values:
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
-            notApplicableCount: 0.8008281904610115
+            notApplicableCount: 5.637376656633329
             id: id
             label:
               key: label
             visualizer: visualizer
+            stddev: 6.027456183070403
+            avgQuestion: 1.4658129805029452
       properties:
         id:
           type: string
@@ -2455,66 +2496,82 @@ components:
             label:
               key: label
             results:
-            - values:
+            - avg: 0.8008281904610115
+              stddevQuestion: 5.962133916683182
+              values:
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
-              notApplicableCount: 0.8008281904610115
+              notApplicableCount: 5.637376656633329
               id: id
               label:
                 key: label
               visualizer: visualizer
-            - values:
+              stddev: 6.027456183070403
+              avgQuestion: 1.4658129805029452
+            - avg: 0.8008281904610115
+              stddevQuestion: 5.962133916683182
+              values:
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
-              notApplicableCount: 0.8008281904610115
+              notApplicableCount: 5.637376656633329
               id: id
               label:
                 key: label
               visualizer: visualizer
+              stddev: 6.027456183070403
+              avgQuestion: 1.4658129805029452
           - id: id
             label:
               key: label
             results:
-            - values:
+            - avg: 0.8008281904610115
+              stddevQuestion: 5.962133916683182
+              values:
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
-              notApplicableCount: 0.8008281904610115
+              notApplicableCount: 5.637376656633329
               id: id
               label:
                 key: label
               visualizer: visualizer
-            - values:
+              stddev: 6.027456183070403
+              avgQuestion: 1.4658129805029452
+            - avg: 0.8008281904610115
+              stddevQuestion: 5.962133916683182
+              values:
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
-              notApplicableCount: 0.8008281904610115
+              notApplicableCount: 5.637376656633329
               id: id
               label:
                 key: label
               visualizer: visualizer
+              stddev: 6.027456183070403
+              avgQuestion: 1.4658129805029452
         - tutorId: tutorId
           generated: 2000-01-23T04:56:07.000+00:00
           id: id
@@ -2524,131 +2581,163 @@ components:
             label:
               key: label
             results:
-            - values:
+            - avg: 0.8008281904610115
+              stddevQuestion: 5.962133916683182
+              values:
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
-              notApplicableCount: 0.8008281904610115
+              notApplicableCount: 5.637376656633329
               id: id
               label:
                 key: label
               visualizer: visualizer
-            - values:
+              stddev: 6.027456183070403
+              avgQuestion: 1.4658129805029452
+            - avg: 0.8008281904610115
+              stddevQuestion: 5.962133916683182
+              values:
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
-              notApplicableCount: 0.8008281904610115
+              notApplicableCount: 5.637376656633329
               id: id
               label:
                 key: label
               visualizer: visualizer
+              stddev: 6.027456183070403
+              avgQuestion: 1.4658129805029452
           - id: id
             label:
               key: label
             results:
-            - values:
+            - avg: 0.8008281904610115
+              stddevQuestion: 5.962133916683182
+              values:
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
-              notApplicableCount: 0.8008281904610115
+              notApplicableCount: 5.637376656633329
               id: id
               label:
                 key: label
               visualizer: visualizer
-            - values:
+              stddev: 6.027456183070403
+              avgQuestion: 1.4658129805029452
+            - avg: 0.8008281904610115
+              stddevQuestion: 5.962133916683182
+              values:
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
-              notApplicableCount: 0.8008281904610115
+              notApplicableCount: 5.637376656633329
               id: id
               label:
                 key: label
               visualizer: visualizer
+              stddev: 6.027456183070403
+              avgQuestion: 1.4658129805029452
         sections:
         - id: id
           label:
             key: label
           results:
-          - values:
+          - avg: 0.8008281904610115
+            stddevQuestion: 5.962133916683182
+            values:
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
-            notApplicableCount: 0.8008281904610115
+            notApplicableCount: 5.637376656633329
             id: id
             label:
               key: label
             visualizer: visualizer
-          - values:
+            stddev: 6.027456183070403
+            avgQuestion: 1.4658129805029452
+          - avg: 0.8008281904610115
+            stddevQuestion: 5.962133916683182
+            values:
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
-            notApplicableCount: 0.8008281904610115
+            notApplicableCount: 5.637376656633329
             id: id
             label:
               key: label
             visualizer: visualizer
+            stddev: 6.027456183070403
+            avgQuestion: 1.4658129805029452
         - id: id
           label:
             key: label
           results:
-          - values:
+          - avg: 0.8008281904610115
+            stddevQuestion: 5.962133916683182
+            values:
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
-            notApplicableCount: 0.8008281904610115
+            notApplicableCount: 5.637376656633329
             id: id
             label:
               key: label
             visualizer: visualizer
-          - values:
+            stddev: 6.027456183070403
+            avgQuestion: 1.4658129805029452
+          - avg: 0.8008281904610115
+            stddevQuestion: 5.962133916683182
+            values:
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
-            notApplicableCount: 0.8008281904610115
+            notApplicableCount: 5.637376656633329
             id: id
             label:
               key: label
             visualizer: visualizer
+            stddev: 6.027456183070403
+            avgQuestion: 1.4658129805029452
       properties:
         id:
           type: string
@@ -2685,66 +2774,82 @@ components:
               label:
                 key: label
               results:
-              - values:
+              - avg: 0.8008281904610115
+                stddevQuestion: 5.962133916683182
+                values:
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
-                notApplicableCount: 0.8008281904610115
+                notApplicableCount: 5.637376656633329
                 id: id
                 label:
                   key: label
                 visualizer: visualizer
-              - values:
+                stddev: 6.027456183070403
+                avgQuestion: 1.4658129805029452
+              - avg: 0.8008281904610115
+                stddevQuestion: 5.962133916683182
+                values:
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
-                notApplicableCount: 0.8008281904610115
+                notApplicableCount: 5.637376656633329
                 id: id
                 label:
                   key: label
                 visualizer: visualizer
+                stddev: 6.027456183070403
+                avgQuestion: 1.4658129805029452
             - id: id
               label:
                 key: label
               results:
-              - values:
+              - avg: 0.8008281904610115
+                stddevQuestion: 5.962133916683182
+                values:
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
-                notApplicableCount: 0.8008281904610115
+                notApplicableCount: 5.637376656633329
                 id: id
                 label:
                   key: label
                 visualizer: visualizer
-              - values:
+                stddev: 6.027456183070403
+                avgQuestion: 1.4658129805029452
+              - avg: 0.8008281904610115
+                stddevQuestion: 5.962133916683182
+                values:
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
-                notApplicableCount: 0.8008281904610115
+                notApplicableCount: 5.637376656633329
                 id: id
                 label:
                   key: label
                 visualizer: visualizer
+                stddev: 6.027456183070403
+                avgQuestion: 1.4658129805029452
           - tutorId: tutorId
             generated: 2000-01-23T04:56:07.000+00:00
             id: id
@@ -2754,131 +2859,163 @@ components:
               label:
                 key: label
               results:
-              - values:
+              - avg: 0.8008281904610115
+                stddevQuestion: 5.962133916683182
+                values:
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
-                notApplicableCount: 0.8008281904610115
+                notApplicableCount: 5.637376656633329
                 id: id
                 label:
                   key: label
                 visualizer: visualizer
-              - values:
+                stddev: 6.027456183070403
+                avgQuestion: 1.4658129805029452
+              - avg: 0.8008281904610115
+                stddevQuestion: 5.962133916683182
+                values:
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
-                notApplicableCount: 0.8008281904610115
+                notApplicableCount: 5.637376656633329
                 id: id
                 label:
                   key: label
                 visualizer: visualizer
+                stddev: 6.027456183070403
+                avgQuestion: 1.4658129805029452
             - id: id
               label:
                 key: label
               results:
-              - values:
+              - avg: 0.8008281904610115
+                stddevQuestion: 5.962133916683182
+                values:
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
-                notApplicableCount: 0.8008281904610115
+                notApplicableCount: 5.637376656633329
                 id: id
                 label:
                   key: label
                 visualizer: visualizer
-              - values:
+                stddev: 6.027456183070403
+                avgQuestion: 1.4658129805029452
+              - avg: 0.8008281904610115
+                stddevQuestion: 5.962133916683182
+                values:
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
-                notApplicableCount: 0.8008281904610115
+                notApplicableCount: 5.637376656633329
                 id: id
                 label:
                   key: label
                 visualizer: visualizer
+                stddev: 6.027456183070403
+                avgQuestion: 1.4658129805029452
           sections:
           - id: id
             label:
               key: label
             results:
-            - values:
+            - avg: 0.8008281904610115
+              stddevQuestion: 5.962133916683182
+              values:
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
-              notApplicableCount: 0.8008281904610115
+              notApplicableCount: 5.637376656633329
               id: id
               label:
                 key: label
               visualizer: visualizer
-            - values:
+              stddev: 6.027456183070403
+              avgQuestion: 1.4658129805029452
+            - avg: 0.8008281904610115
+              stddevQuestion: 5.962133916683182
+              values:
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
-              notApplicableCount: 0.8008281904610115
+              notApplicableCount: 5.637376656633329
               id: id
               label:
                 key: label
               visualizer: visualizer
+              stddev: 6.027456183070403
+              avgQuestion: 1.4658129805029452
           - id: id
             label:
               key: label
             results:
-            - values:
+            - avg: 0.8008281904610115
+              stddevQuestion: 5.962133916683182
+              values:
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
-              notApplicableCount: 0.8008281904610115
+              notApplicableCount: 5.637376656633329
               id: id
               label:
                 key: label
               visualizer: visualizer
-            - values:
+              stddev: 6.027456183070403
+              avgQuestion: 1.4658129805029452
+            - avg: 0.8008281904610115
+              stddevQuestion: 5.962133916683182
+              values:
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
-              notApplicableCount: 0.8008281904610115
+              notApplicableCount: 5.637376656633329
               id: id
               label:
                 key: label
               visualizer: visualizer
+              stddev: 6.027456183070403
+              avgQuestion: 1.4658129805029452
         courseId: courseId
         courseProfId: courseProfId
         sections:
@@ -2886,66 +3023,82 @@ components:
           label:
             key: label
           results:
-          - values:
+          - avg: 0.8008281904610115
+            stddevQuestion: 5.962133916683182
+            values:
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
-            notApplicableCount: 0.8008281904610115
+            notApplicableCount: 5.637376656633329
             id: id
             label:
               key: label
             visualizer: visualizer
-          - values:
+            stddev: 6.027456183070403
+            avgQuestion: 1.4658129805029452
+          - avg: 0.8008281904610115
+            stddevQuestion: 5.962133916683182
+            values:
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
-            notApplicableCount: 0.8008281904610115
+            notApplicableCount: 5.637376656633329
             id: id
             label:
               key: label
             visualizer: visualizer
+            stddev: 6.027456183070403
+            avgQuestion: 1.4658129805029452
         - id: id
           label:
             key: label
           results:
-          - values:
+          - avg: 0.8008281904610115
+            stddevQuestion: 5.962133916683182
+            values:
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
-            notApplicableCount: 0.8008281904610115
+            notApplicableCount: 5.637376656633329
             id: id
             label:
               key: label
             visualizer: visualizer
-          - values:
+            stddev: 6.027456183070403
+            avgQuestion: 1.4658129805029452
+          - avg: 0.8008281904610115
+            stddevQuestion: 5.962133916683182
+            values:
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
             - label:
                 key: label
-              position: 6
+              position: 2
               value: value
-            notApplicableCount: 0.8008281904610115
+            notApplicableCount: 5.637376656633329
             id: id
             label:
               key: label
             visualizer: visualizer
+            stddev: 6.027456183070403
+            avgQuestion: 1.4658129805029452
       properties:
         id:
           type: string
@@ -2988,66 +3141,82 @@ components:
                 label:
                   key: label
                 results:
-                - values:
+                - avg: 0.8008281904610115
+                  stddevQuestion: 5.962133916683182
+                  values:
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
-                  notApplicableCount: 0.8008281904610115
+                  notApplicableCount: 5.637376656633329
                   id: id
                   label:
                     key: label
                   visualizer: visualizer
-                - values:
+                  stddev: 6.027456183070403
+                  avgQuestion: 1.4658129805029452
+                - avg: 0.8008281904610115
+                  stddevQuestion: 5.962133916683182
+                  values:
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
-                  notApplicableCount: 0.8008281904610115
+                  notApplicableCount: 5.637376656633329
                   id: id
                   label:
                     key: label
                   visualizer: visualizer
+                  stddev: 6.027456183070403
+                  avgQuestion: 1.4658129805029452
               - id: id
                 label:
                   key: label
                 results:
-                - values:
+                - avg: 0.8008281904610115
+                  stddevQuestion: 5.962133916683182
+                  values:
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
-                  notApplicableCount: 0.8008281904610115
+                  notApplicableCount: 5.637376656633329
                   id: id
                   label:
                     key: label
                   visualizer: visualizer
-                - values:
+                  stddev: 6.027456183070403
+                  avgQuestion: 1.4658129805029452
+                - avg: 0.8008281904610115
+                  stddevQuestion: 5.962133916683182
+                  values:
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
-                  notApplicableCount: 0.8008281904610115
+                  notApplicableCount: 5.637376656633329
                   id: id
                   label:
                     key: label
                   visualizer: visualizer
+                  stddev: 6.027456183070403
+                  avgQuestion: 1.4658129805029452
             - tutorId: tutorId
               generated: 2000-01-23T04:56:07.000+00:00
               id: id
@@ -3057,131 +3226,163 @@ components:
                 label:
                   key: label
                 results:
-                - values:
+                - avg: 0.8008281904610115
+                  stddevQuestion: 5.962133916683182
+                  values:
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
-                  notApplicableCount: 0.8008281904610115
+                  notApplicableCount: 5.637376656633329
                   id: id
                   label:
                     key: label
                   visualizer: visualizer
-                - values:
+                  stddev: 6.027456183070403
+                  avgQuestion: 1.4658129805029452
+                - avg: 0.8008281904610115
+                  stddevQuestion: 5.962133916683182
+                  values:
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
-                  notApplicableCount: 0.8008281904610115
+                  notApplicableCount: 5.637376656633329
                   id: id
                   label:
                     key: label
                   visualizer: visualizer
+                  stddev: 6.027456183070403
+                  avgQuestion: 1.4658129805029452
               - id: id
                 label:
                   key: label
                 results:
-                - values:
+                - avg: 0.8008281904610115
+                  stddevQuestion: 5.962133916683182
+                  values:
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
-                  notApplicableCount: 0.8008281904610115
+                  notApplicableCount: 5.637376656633329
                   id: id
                   label:
                     key: label
                   visualizer: visualizer
-                - values:
+                  stddev: 6.027456183070403
+                  avgQuestion: 1.4658129805029452
+                - avg: 0.8008281904610115
+                  stddevQuestion: 5.962133916683182
+                  values:
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
-                  notApplicableCount: 0.8008281904610115
+                  notApplicableCount: 5.637376656633329
                   id: id
                   label:
                     key: label
                   visualizer: visualizer
+                  stddev: 6.027456183070403
+                  avgQuestion: 1.4658129805029452
             sections:
             - id: id
               label:
                 key: label
               results:
-              - values:
+              - avg: 0.8008281904610115
+                stddevQuestion: 5.962133916683182
+                values:
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
-                notApplicableCount: 0.8008281904610115
+                notApplicableCount: 5.637376656633329
                 id: id
                 label:
                   key: label
                 visualizer: visualizer
-              - values:
+                stddev: 6.027456183070403
+                avgQuestion: 1.4658129805029452
+              - avg: 0.8008281904610115
+                stddevQuestion: 5.962133916683182
+                values:
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
-                notApplicableCount: 0.8008281904610115
+                notApplicableCount: 5.637376656633329
                 id: id
                 label:
                   key: label
                 visualizer: visualizer
+                stddev: 6.027456183070403
+                avgQuestion: 1.4658129805029452
             - id: id
               label:
                 key: label
               results:
-              - values:
+              - avg: 0.8008281904610115
+                stddevQuestion: 5.962133916683182
+                values:
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
-                notApplicableCount: 0.8008281904610115
+                notApplicableCount: 5.637376656633329
                 id: id
                 label:
                   key: label
                 visualizer: visualizer
-              - values:
+                stddev: 6.027456183070403
+                avgQuestion: 1.4658129805029452
+              - avg: 0.8008281904610115
+                stddevQuestion: 5.962133916683182
+                values:
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
-                notApplicableCount: 0.8008281904610115
+                notApplicableCount: 5.637376656633329
                 id: id
                 label:
                   key: label
                 visualizer: visualizer
+                stddev: 6.027456183070403
+                avgQuestion: 1.4658129805029452
           courseId: courseId
           courseProfId: courseProfId
           sections:
@@ -3189,66 +3390,82 @@ components:
             label:
               key: label
             results:
-            - values:
+            - avg: 0.8008281904610115
+              stddevQuestion: 5.962133916683182
+              values:
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
-              notApplicableCount: 0.8008281904610115
+              notApplicableCount: 5.637376656633329
               id: id
               label:
                 key: label
               visualizer: visualizer
-            - values:
+              stddev: 6.027456183070403
+              avgQuestion: 1.4658129805029452
+            - avg: 0.8008281904610115
+              stddevQuestion: 5.962133916683182
+              values:
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
-              notApplicableCount: 0.8008281904610115
+              notApplicableCount: 5.637376656633329
               id: id
               label:
                 key: label
               visualizer: visualizer
+              stddev: 6.027456183070403
+              avgQuestion: 1.4658129805029452
           - id: id
             label:
               key: label
             results:
-            - values:
+            - avg: 0.8008281904610115
+              stddevQuestion: 5.962133916683182
+              values:
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
-              notApplicableCount: 0.8008281904610115
+              notApplicableCount: 5.637376656633329
               id: id
               label:
                 key: label
               visualizer: visualizer
-            - values:
+              stddev: 6.027456183070403
+              avgQuestion: 1.4658129805029452
+            - avg: 0.8008281904610115
+              stddevQuestion: 5.962133916683182
+              values:
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
-              notApplicableCount: 0.8008281904610115
+              notApplicableCount: 5.637376656633329
               id: id
               label:
                 key: label
               visualizer: visualizer
+              stddev: 6.027456183070403
+              avgQuestion: 1.4658129805029452
         - generated: 2000-01-23T04:56:07.000+00:00
           id: id
           courseReport:
@@ -3265,66 +3482,82 @@ components:
                 label:
                   key: label
                 results:
-                - values:
+                - avg: 0.8008281904610115
+                  stddevQuestion: 5.962133916683182
+                  values:
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
-                  notApplicableCount: 0.8008281904610115
+                  notApplicableCount: 5.637376656633329
                   id: id
                   label:
                     key: label
                   visualizer: visualizer
-                - values:
+                  stddev: 6.027456183070403
+                  avgQuestion: 1.4658129805029452
+                - avg: 0.8008281904610115
+                  stddevQuestion: 5.962133916683182
+                  values:
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
-                  notApplicableCount: 0.8008281904610115
+                  notApplicableCount: 5.637376656633329
                   id: id
                   label:
                     key: label
                   visualizer: visualizer
+                  stddev: 6.027456183070403
+                  avgQuestion: 1.4658129805029452
               - id: id
                 label:
                   key: label
                 results:
-                - values:
+                - avg: 0.8008281904610115
+                  stddevQuestion: 5.962133916683182
+                  values:
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
-                  notApplicableCount: 0.8008281904610115
+                  notApplicableCount: 5.637376656633329
                   id: id
                   label:
                     key: label
                   visualizer: visualizer
-                - values:
+                  stddev: 6.027456183070403
+                  avgQuestion: 1.4658129805029452
+                - avg: 0.8008281904610115
+                  stddevQuestion: 5.962133916683182
+                  values:
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
-                  notApplicableCount: 0.8008281904610115
+                  notApplicableCount: 5.637376656633329
                   id: id
                   label:
                     key: label
                   visualizer: visualizer
+                  stddev: 6.027456183070403
+                  avgQuestion: 1.4658129805029452
             - tutorId: tutorId
               generated: 2000-01-23T04:56:07.000+00:00
               id: id
@@ -3334,131 +3567,163 @@ components:
                 label:
                   key: label
                 results:
-                - values:
+                - avg: 0.8008281904610115
+                  stddevQuestion: 5.962133916683182
+                  values:
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
-                  notApplicableCount: 0.8008281904610115
+                  notApplicableCount: 5.637376656633329
                   id: id
                   label:
                     key: label
                   visualizer: visualizer
-                - values:
+                  stddev: 6.027456183070403
+                  avgQuestion: 1.4658129805029452
+                - avg: 0.8008281904610115
+                  stddevQuestion: 5.962133916683182
+                  values:
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
-                  notApplicableCount: 0.8008281904610115
+                  notApplicableCount: 5.637376656633329
                   id: id
                   label:
                     key: label
                   visualizer: visualizer
+                  stddev: 6.027456183070403
+                  avgQuestion: 1.4658129805029452
               - id: id
                 label:
                   key: label
                 results:
-                - values:
+                - avg: 0.8008281904610115
+                  stddevQuestion: 5.962133916683182
+                  values:
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
-                  notApplicableCount: 0.8008281904610115
+                  notApplicableCount: 5.637376656633329
                   id: id
                   label:
                     key: label
                   visualizer: visualizer
-                - values:
+                  stddev: 6.027456183070403
+                  avgQuestion: 1.4658129805029452
+                - avg: 0.8008281904610115
+                  stddevQuestion: 5.962133916683182
+                  values:
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
                   - label:
                       key: label
-                    position: 6
+                    position: 2
                     value: value
-                  notApplicableCount: 0.8008281904610115
+                  notApplicableCount: 5.637376656633329
                   id: id
                   label:
                     key: label
                   visualizer: visualizer
+                  stddev: 6.027456183070403
+                  avgQuestion: 1.4658129805029452
             sections:
             - id: id
               label:
                 key: label
               results:
-              - values:
+              - avg: 0.8008281904610115
+                stddevQuestion: 5.962133916683182
+                values:
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
-                notApplicableCount: 0.8008281904610115
+                notApplicableCount: 5.637376656633329
                 id: id
                 label:
                   key: label
                 visualizer: visualizer
-              - values:
+                stddev: 6.027456183070403
+                avgQuestion: 1.4658129805029452
+              - avg: 0.8008281904610115
+                stddevQuestion: 5.962133916683182
+                values:
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
-                notApplicableCount: 0.8008281904610115
+                notApplicableCount: 5.637376656633329
                 id: id
                 label:
                   key: label
                 visualizer: visualizer
+                stddev: 6.027456183070403
+                avgQuestion: 1.4658129805029452
             - id: id
               label:
                 key: label
               results:
-              - values:
+              - avg: 0.8008281904610115
+                stddevQuestion: 5.962133916683182
+                values:
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
-                notApplicableCount: 0.8008281904610115
+                notApplicableCount: 5.637376656633329
                 id: id
                 label:
                   key: label
                 visualizer: visualizer
-              - values:
+                stddev: 6.027456183070403
+                avgQuestion: 1.4658129805029452
+              - avg: 0.8008281904610115
+                stddevQuestion: 5.962133916683182
+                values:
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
                 - label:
                     key: label
-                  position: 6
+                  position: 2
                   value: value
-                notApplicableCount: 0.8008281904610115
+                notApplicableCount: 5.637376656633329
                 id: id
                 label:
                   key: label
                 visualizer: visualizer
+                stddev: 6.027456183070403
+                avgQuestion: 1.4658129805029452
           courseId: courseId
           courseProfId: courseProfId
           sections:
@@ -3466,66 +3731,82 @@ components:
             label:
               key: label
             results:
-            - values:
+            - avg: 0.8008281904610115
+              stddevQuestion: 5.962133916683182
+              values:
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
-              notApplicableCount: 0.8008281904610115
+              notApplicableCount: 5.637376656633329
               id: id
               label:
                 key: label
               visualizer: visualizer
-            - values:
+              stddev: 6.027456183070403
+              avgQuestion: 1.4658129805029452
+            - avg: 0.8008281904610115
+              stddevQuestion: 5.962133916683182
+              values:
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
-              notApplicableCount: 0.8008281904610115
+              notApplicableCount: 5.637376656633329
               id: id
               label:
                 key: label
               visualizer: visualizer
+              stddev: 6.027456183070403
+              avgQuestion: 1.4658129805029452
           - id: id
             label:
               key: label
             results:
-            - values:
+            - avg: 0.8008281904610115
+              stddevQuestion: 5.962133916683182
+              values:
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
-              notApplicableCount: 0.8008281904610115
+              notApplicableCount: 5.637376656633329
               id: id
               label:
                 key: label
               visualizer: visualizer
-            - values:
+              stddev: 6.027456183070403
+              avgQuestion: 1.4658129805029452
+            - avg: 0.8008281904610115
+              stddevQuestion: 5.962133916683182
+              values:
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
               - label:
                   key: label
-                position: 6
+                position: 2
                 value: value
-              notApplicableCount: 0.8008281904610115
+              notApplicableCount: 5.637376656633329
               id: id
               label:
                 key: label
               visualizer: visualizer
+              stddev: 6.027456183070403
+              avgQuestion: 1.4658129805029452
       properties:
         id:
           type: string

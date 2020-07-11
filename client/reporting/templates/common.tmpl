@@ -32,8 +32,8 @@
 }
 \singleHistogramPoleLeft{≤≤  lesc (i18n_map (index .Values 0).Label)  ≥≥}
 \singleHistogramHist{≤≤ toPercentage .Values≥≥}
-≤≤if eq . Visualizer "histogram" ≥≥
-\singleHistogramErr{≤≤.Avg ≥≥}{≤≤.Stddev≥≥}[≤≤.AvgQuestion≥≥][≤≤.StddevQuestion≥≥] 
+≤≤if eq .Visualizer "histogram" ≥≥
+\singleHistogramErr{≤≤(add .Avg 1) ≥≥}{≤≤.Stddev≥≥}[≤≤(add .AvgQuestion 1)≥≥][≤≤.StddevQuestion≥≥] 
 ≤≤ end ≥≥
 \singleHistogramPoleRight{≤≤ lesc (i18n_map (last .Values ).Label) ≥≥}
 \end{tikzpicture}

@@ -33,6 +33,9 @@ func getTutor(courseId, tutorId string) openapi.Tutor {
 	res, _, _ := NewAPIClient().DefaultApi.CoursesCourseIdTutorsTutorIdGet(context.TODO(), courseId, tutorId)
 	return res
 }
+func add(a, b float32) float32 {
+	return a + b
+}
 
 var translations = map[string](map[string]string){
 	"by":                map[string]string{"de": "bei", "en": "by"},
@@ -101,6 +104,7 @@ var funcMap = template.FuncMap{
 	"toPercentage": toPercentage,
 	"last":         last,
 	"getTutor":     getTutor,
+	"add":          add,
 }
 var ReportTutorCmd = &cobra.Command{
 	Use:   "tutor",

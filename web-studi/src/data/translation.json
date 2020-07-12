@@ -15,6 +15,10 @@
         "de":"Evaluation beginnen",
         "en": "Take the survey"
     },
+    "eval.date":{
+        "de":"13.7.-19.7.2020",
+        "en": "7/13-7/19/2020"
+    },
     "eval.privacy":{
         "de":"Datenschutz",
         "en":"Privacy"
@@ -86,5 +90,42 @@
     "eval.no.tutor":{
         "de": "Kein Tutor ausgewählt.",
         "en": "No tutor selected"
+    },
+    "landingpage.anonymity.body":{
+        "de":"Es ist uns wichtig, dass deine Angaben nur anonymisiert an die Dozierenden weitergegeben werden. Wir speichern beim Besuch der Evaluationswebsite keine IP-Adressen oder Zeitstempel, damit dein ausgefüllter Bogen dir im Nachhinein nicht zugeordnet werden kann. Die Berichte, die wir an die Dozierenden, die Tutoren und die Studienkommission schicken, enthalten daher nur eine statistische Auswertung der Ergebnisse. Aus ihnen kann man also nicht erkennen, wie ein einzelner Studierender die Fragen beantwortet hat. Aus dem gleichen Grund werten wir außerdem keine Veranstaltungen aus, die von weniger als fünf Teilnehmern evaluiert wurden."
+    ,"en":"It is important to us that your evaluation statements will only be passed on to your lecturer anonymously. During your visit of this website, we do not save IP-addresses or timestamps so that nobody can match the evaluation form you submitted to your personal identity afterwards. The reports we send to the lecturers, tutors and the Studienkommission only contain a statistical analysis of the results. They do not contain information that can be connected to how a single students answered the questions. For the same reasons, we do not analyse any courses that have been evaluated by less than five participants."
+    },
+    "landingpage.anonymity.header":{
+        "de":"Anonymität",
+        "en":"Anonymity"
+    },
+    "landingpage.security.header":{
+        "de":"Sicherheit",
+        "en":"Security"
+    },
+    "landingpage.security.body":{
+        "de":"Die Übertragung der Daten erfolgt verschlüsselt. Nur das Evaluationsteam der Fachschaft MathPhysInfo hat Zugriff auf den Evaluationsserver und damit auf deine Umfrageantworten. In der Evaluationsordnung der Universität Heidelberg wird festgelegt, dass wir die Rohdaten der Evaluation an HeiQUALITY weitergeben müssen; das ist das zentrale Qualitätsmanagementbüro der Universität. Dort werden deine Daten ebenfalls dazu genutzt, die Lehrqualität des Studiengangs zu kontrollieren. Außerdem geben wir aggregierte Berichte an die Studienkommission, deinen Dozenten und deinen Tutor weiter.",
+        "en":"The data transmission is encrypted. Only the evaluation team of the Fachschaft MathPhysInfo has access to the evaluation server and your answers to the survey. The evaluation regulation of the University of Heidelberg details that we have to share all raw data with HeiQUALITY, which is the central quality management office of the university. They will also utilize your data to examine the lecture quality of our field of study. Apart from that, we relay aggregated reports to the Studienkommission, your lecturer and your tutor."
+    },
+    "landingpage.integrity.header":{
+        "de":"Integrität",
+        "en":"Integrity"
+    },
+    "landingpage.integrity.body":{
+        "de":"Damit die Professoren auch sinnvolle Berichte bekommen, müssen wir sicherstellen, dass die Evaluation nicht manipuliert werden kann. Daher ist die Teilnahme an dieser Umfrage nur über anonymisierte TANs möglich. Über die Übungsgruppenverwaltung oder Moodle werden diese TANs dann an alle Studierenden verteilt. Es können also nur Leute die Umfrage ausfüllen, die in dieser Veranstaltung auch eingeschrieben sind. Nach dem Klick auf „Evaluation abschicken“ wird die TAN für ungültig erklärt, daher kann jeder Studierende die Umfrage nur einmal ausfüllen.",
+        "en":"We have to make sure the evaluation cannot be manipulated in order to ensure the lecturers receive meaningful reports. Because of that, you can only participate in the survey by using an anonymised TAN. They will be distributed to all students using the Übungsgruppenverwaltung or Moodle. This approach ensures that only students who are registered for the course can complete the survey. Clicking on \"submit evaluation\" invalidates your TAN. This guarantees that every student can only fill out the survey once."
+    },
+    "landingpage.reliability.header":{
+        "de":"Verlässlichkeit",
+        "en":"Reliability"
+    },
+    "landingpage.reliability.body":{
+        "de":"Wir wollen im Online-Semester insbesondere Studierenden mit schlechter Internetverbindung die Möglichkeit geben, die Evaluation auszufüllen. Daher erklären wir deine TAN erst für ungültig, wenn du auf „Evaluation abschicken“ drückst. Bis dahin kannst du über den Link in der Übungsgruppenverwaltung oder Moodle jederzeit auf die Evaluationsseite zugreifen. Aus Anonymitätsgründen speichern wir allerdings nicht zwischendurch deine Ergebnisse.",
+        "en":"During the online semester we also want to provide the opportunity to students with a bad internet connection to fill out evaluation forms. Our system only invalidates your TAN once you click on \"submit evaluation\". Until then, you can use the link in the Übungsgruppenverwaltung or Moodle to access the evaluation website at any time during the evaluation week. However, we do not store any information you have filled in until the point of connection loss due to anonymity concerns."
+    },
+    "landingpage.usedlibraries":
+    {
+        "de":"Rechliche Hinweise zu den verwendeten Bibliotheken",
+        "en":"legal informations regarding used libraries"
     }
 }

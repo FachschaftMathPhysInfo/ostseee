@@ -49,6 +49,7 @@ import { EmptyForm } from 'ostseee-web-common';
 import translate from './lib/translate';
 import LicensePage from './components/LicensePage';
 import { getLanguage } from './selectors/language';
+import LandingPage from './components/LandingPage';
 function App() {
 
   
@@ -146,6 +147,9 @@ function App() {
          </Route>
          <Route path="/licenses/:bibliothek">
           <LicensePage ></LicensePage>
+         </Route>
+         <Route path="/">
+           <LandingPage></LandingPage>
          </Route>
       </Switch>
       {/* <FacultiesOverView

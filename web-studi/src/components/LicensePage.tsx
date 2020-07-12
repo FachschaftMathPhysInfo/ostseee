@@ -26,7 +26,7 @@ export default () =>{
     let licenseText = license?.licenseText.split('\n').map ((item, i) => <p key={i}>{item}</p>);
     return (
   <EuiPage>
-    <EuiPageSideBar><h3>Bibliotheken</h3><ul>{licenses.map(software=>(<li key={software}><EuiCustomLink to={`/licenses/${software}`}>{software}</EuiCustomLink></li>))}</ul></EuiPageSideBar>
+    <EuiPageSideBar><h3>Bibliotheken</h3><ul>{licenses.map(software=>(<li key={software}><EuiCustomLink to={`/licenses/${software}`}>{software.replaceAll("-sl-","/")}</EuiCustomLink></li>))}</ul></EuiPageSideBar>
     <EuiPageBody component="div">
       <EuiPageHeader>
         <EuiPageHeaderSection>

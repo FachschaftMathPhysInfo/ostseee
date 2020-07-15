@@ -9,10 +9,13 @@ import (
 	"strings"
 	"text/template"
 
+	"gopkg.in/russross/blackfriday.v2"
+
 	"github.com/antihax/optional"
 	"github.com/fachschaftmathphys/ostseee/client/openapi"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	bflatex "gitlab.com/ambrevar/blackfriday-latex"
 )
 
 var Locale = "de"
@@ -26,7 +29,16 @@ func getNames(arr []openapi.Prof) string {
 }
 func lesc(s string) string {
 	//BUG(henrik): Write replacements
-	return strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(s, "\\", ""), "%", "\\%"), "&", "\\&"), "#", "\\#")
+	extensions := blackfriday.CommonExtensions | blackfriday.Titleblock
+	renderer := &bflatex.Renderer{
+		Author:    "John Doe",
+		Languages: "english,french",
+		Flags:     bflatex.TOC,
+	}
+	md := blackfriday.New(blackfriday.WithRenderer(renderer), blackfriday.WithExtensions(extensions))
+
+	//fmt.Println(blackfriday.Run([]byte(s), blackfriday.WithRenderer(renderer)))
+	return string(string(renderer.Render(md.Parse([]byte(s))))) //strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(s, "\\", ""), "%", "\\%"), "&", "\\&"), "#", "\\#")
 }
 
 func getTutor(courseId, tutorId string) openapi.Tutor {

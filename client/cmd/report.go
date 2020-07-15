@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
+	"time"
 
 	"github.com/antihax/optional"
 	"github.com/fachschaftmathphys/ostseee/client/openapi"
@@ -139,6 +140,10 @@ var ReportTutorCmd = &cobra.Command{
 		trd.Tutor, _, _ = apiClient.DefaultApi.CoursesCourseIdTutorsTutorIdGet(ctx, courseId, tutorId)
 		trd.Term, _, _ = apiClient.DefaultApi.TermsTermIdGet(ctx, trd.Course.TermId)
 		trd.Module, _, _ = apiClient.DefaultApi.ModulesModuleIdGet(ctx, trd.Course.ModuleId)
+		trd.Faculty, _, err = apiClient.DefaultApi.FacultiesFacultyIdGet(ctx, trd.Module.FacultyId)
+		if err != nil {
+			log.Println(err)
+		}
 		trd.TutorReport, _, _ = apiClient.DefaultApi.CoursesCourseIdTutorsTutorIdReportGet(ctx, courseId, tutorId)
 		cPs, _, _ := apiClient.DefaultApi.CourseprofsGet(ctx, &openapi.CourseprofsGetOpts{CourseId: optional.NewString(courseId)})
 		trd.CourseProfs = make([]openapi.Prof, len(cPs))
@@ -187,6 +192,10 @@ var ReportCourseCmd = &cobra.Command{
 			log.Println(err)
 		}
 		trd.Module, _, err = apiClient.DefaultApi.ModulesModuleIdGet(ctx, trd.Course.ModuleId)
+		if err != nil {
+			log.Println(err)
+		}
+		trd.Faculty, _, err = apiClient.DefaultApi.FacultiesFacultyIdGet(ctx, trd.Module.FacultyId)
 		if err != nil {
 			log.Println(err)
 		}
@@ -255,7 +264,15 @@ var ReportCourseProfCmd = &cobra.Command{
 		if err != nil {
 			log.Println(err)
 		}
+		trd.Faculty, _, err = apiClient.DefaultApi.FacultiesFacultyIdGet(ctx, trd.Module.FacultyId)
+		if err != nil {
+			log.Println(err)
+		}
+		start := time.Now()
 		trd.CourseProfReport, _, err = apiClient.DefaultApi.CourseprofsCourseProfIdReportGet(ctx, courseprofId)
+		end := time.Now()
+
+		log.Println("Took:", end.Sub(start).Seconds())
 		if err != nil {
 			log.Println(err)
 		}

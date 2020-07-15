@@ -94,6 +94,10 @@ func init() {
 	CoursesGenerateInvitationsCmd.PersistentFlags().String("base_url", "https://eval.mathphys.info/questionaire/", "base URL of the system")
 	CoursesGenerateInvitationsCmd.PersistentFlags().Bool("force", false, "whether to overwrite data.")
 	MailCmd.PersistentFlags().String("smtp", "localhost:1025", "SMTP server used for mailing")
+
+	MailParticipantsCmd.PersistentFlags().String("begin", "2020-07-12T22:00:00.000Z", "begin of the evaluation")
+	MailParticipantsCmd.PersistentFlags().String("end", "2020-07-19T21:59:59.000Z", "end of the evaluation")
+	MailParticipantsCmd.PersistentFlags().String("base_url", "https://eval.mathphys.info/questionaire/", "base URL of the system")
 	ReportCmd.PersistentFlags().StringVar(&Locale, "locale", "de", "Locale to render")
 	viper.BindPFlag("scheme", rootCmd.PersistentFlags().Lookup("scheme"))
 	viper.BindPFlag("host", rootCmd.PersistentFlags().Lookup("host"))
@@ -109,6 +113,11 @@ func init() {
 	viper.BindPFlag("platform_url", CoursesGenerateInvitationsCmd.PersistentFlags().Lookup("platform_url"))
 	viper.BindPFlag("base_url", CoursesGenerateInvitationsCmd.PersistentFlags().Lookup("base_url"))
 	viper.BindPFlag("force", CoursesGenerateInvitationsCmd.PersistentFlags().Lookup("force"))
+
+	viper.BindPFlag("begin", MailParticipantsCmd.PersistentFlags().Lookup("begin"))
+	viper.BindPFlag("end", MailParticipantsCmd.PersistentFlags().Lookup("end"))
+	viper.BindPFlag("base_url", MailParticipantsCmd.PersistentFlags().Lookup("base_url"))
+
 	rootCmd.AddCommand(versionCmd)
 	termsCmd.AddCommand(termsListCmd)
 	rootCmd.AddCommand(termsCmd)
@@ -117,6 +126,7 @@ func init() {
 	ReportCmd.AddCommand(ReportCourseProfCmd)
 	rootCmd.AddCommand(ReportCmd)
 	MailCmd.AddCommand(MailTermCmd)
+	MailCmd.AddCommand(MailParticipantsCmd)
 	FormsCmd.AddCommand(FormsValidateCmd)
 	FormsCmd.AddCommand(FormsListCmd)
 	FormsCmd.AddCommand(FormsUpdateCmd)

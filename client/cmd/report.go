@@ -30,7 +30,8 @@ func lesc(s string) string {
 }
 
 func getTutor(courseId, tutorId string) openapi.Tutor {
-	res, _, _ := NewAPIClient().DefaultApi.CoursesCourseIdTutorsTutorIdGet(context.TODO(), courseId, tutorId)
+	ctx := context.WithValue(context.TODO(), openapi.ContextBasicAuth, openapi.BasicAuth{UserName: viper.GetString("basic_user"), Password: viper.GetString("basic_pw")})
+	res, _, _ := NewAPIClient().DefaultApi.CoursesCourseIdTutorsTutorIdGet(ctx, courseId, tutorId)
 	return res
 }
 func add(a, b float32) float32 {

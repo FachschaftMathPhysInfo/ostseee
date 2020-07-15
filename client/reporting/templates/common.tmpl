@@ -1,7 +1,4 @@
 ≤≤ define "result" ≥≥
-    ≤≤if or (eq (len .Values)  0) (eq (countValues .Values) "0") ≥≥
-    \paragraph{≤≤ i18n_map .Label ≥≥} ≤≤ i18n "unanswered" ≥≥
-    ≤≤ else ≥≥
     ≤≤if and (eq .Visualizer  "list") (gt (len .Values) 0) ≥≥
     \paragraph{≤≤ i18n "comments" ≥≥}
     \begin{itemize}
@@ -11,6 +8,9 @@
     \end{itemize}
     ≤≤else≥≥
     ≤≤ end ≥≥
+    ≤≤if or (eq (len .Values)  0) (eq (countValues .Values) "0") ≥≥
+    \paragraph{≤≤ i18n_map .Label ≥≥} ≤≤ i18n "unanswered" ≥≥
+    ≤≤ else ≥≥
     ≤≤ if eq .Visualizer "horizontal_bars"≥≥
     \begin{tikzpicture}
 \globalQuestion{

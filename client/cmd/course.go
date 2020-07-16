@@ -124,3 +124,42 @@ var CoursesTutorUploadCmd = &cobra.Command{
 		}
 	},
 }
+
+var CoursesStatsCmd = &cobra.Command{
+	Use:   "stats",
+	Short: "stats all courses",
+	Args:  cobra.NoArgs,
+	Run: func(cmd *cobra.Command, args []string) {
+		ctx := context.WithValue(cmd.Context(), openapi.ContextBasicAuth, openapi.BasicAuth{UserName: viper.GetString("basic_user"), Password: viper.GetString("basic_pw")})
+		client := NewAPIClient()
+		courses, _, err := client.DefaultApi.CoursesGet(ctx)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		log.Println(viper.GetTime("begin"))
+		log.Println(viper.GetTime("end"))
+		total := 0
+		summe := 0
+		fmt.Println("| Name | Used | Total | Percentage |")
+		fmt.Println("| ---- | --- | ---- | -- |")
+		for _, f := range courses {
+			m, _, _ := client.DefaultApi.ModulesModuleIdGet(ctx, f.ModuleId)
+
+			invs, _, err := client.DefaultApi.CoursesCourseIdInvitationsGet(ctx, f.Id, viper.GetTime("begin"), viper.GetTime("end"))
+			if err != nil {
+				log.Println(m.Name, err)
+			}
+			used := 0
+			for _, inv := range invs {
+				if inv.Used {
+					used++
+				}
+			}
+			fmt.Printf("| %s | %d | %d | %.2f |\n", m.Name, used, len(invs), 100*float32(used)/float32(len(invs)))
+			summe += len(invs)
+			total += used
+		}
+		fmt.Println("| ---- | --- | ---- | --- |")
+		fmt.Printf("| Summe | %d | %d | %.2f |\n", total, summe, 100*float32(total)/float32(summe))
+	},
+}

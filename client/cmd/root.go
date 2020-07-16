@@ -37,6 +37,8 @@ func NewAPIClient() *openapi.APIClient {
 	cfg.Scheme = viper.GetString("scheme")
 	cfg.Host = viper.GetString("host")
 	cfg.BasePath = viper.GetString("basepath")
+	//Ask for token
+	cfg.AddDefaultHeader("Authorization2", "Bearer: ")
 	client := openapi.NewAPIClient(cfg)
 	return client
 }
@@ -85,8 +87,10 @@ func init() {
 	rootCmd.PersistentFlags().String("scheme", "https", "Transport scheme")
 	rootCmd.PersistentFlags().String("host", "eval.mathphys.info", "Host of ostseee")
 	rootCmd.PersistentFlags().String("basepath", "v1", "BasePath")
-	rootCmd.PersistentFlags().String("basic_user", "admin", "Used to login")
+	rootCmd.PersistentFlags().String("basic_user", "admin", "Used to login for basic auth protection")
 	rootCmd.PersistentFlags().String("basic_pw", "password", "Used to login (password)")
+	rootCmd.PersistentFlags().String("user", "admin", "Used to login")
+	rootCmd.PersistentFlags().String("pw", "password", "Used to login (password)")
 
 	CoursesGenerateInvitationsCmd.PersistentFlags().String("begin", "2020-07-12T22:00:00.000Z", "begin of the evaluation")
 	CoursesGenerateInvitationsCmd.PersistentFlags().String("end", "2020-07-19T21:59:59.000Z", "end of the evaluation")
@@ -105,6 +109,8 @@ func init() {
 
 	viper.BindPFlag("basic_user", rootCmd.PersistentFlags().Lookup("basic_user"))
 	viper.BindPFlag("basic_pw", rootCmd.PersistentFlags().Lookup("basic_pw"))
+	viper.BindPFlag("user", rootCmd.PersistentFlags().Lookup("user"))
+	viper.BindPFlag("pw", rootCmd.PersistentFlags().Lookup("pw"))
 
 	viper.BindPFlag("smtp", MailCmd.PersistentFlags().Lookup("smtp"))
 

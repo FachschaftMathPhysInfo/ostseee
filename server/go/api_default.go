@@ -864,3 +864,15 @@ func (ev *EvalAPI) StatusGet(c *gin.Context) {
 	status.Counts = ev.EvalService.GetCounts()
 	c.JSON(http.StatusOK, status)
 }
+
+func (ev *EvalAPI) CreateUserPost(c *gin.Context) {
+	var user User
+	c.Bind(&user)
+	user, err := ev.EvalService.CreateUser(user.UserName, user.FirstName, user.LastName, user.Password)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.Status(http.StatusNoContent)
+}

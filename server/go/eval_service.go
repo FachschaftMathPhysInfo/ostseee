@@ -675,9 +675,9 @@ func (ev *EvalService) FindUserByNameAndPW(name, pw string) User {
 	return ev.EvalRepository.FindUserByNameAndPW(name, pw)
 }
 
-func (ev* EvalService) CreateUser(name, firstname,lastname, pw string) (User,error){
+func (ev *EvalService) CreateUser(name, firstname, lastname, pw string) (User, error) {
 	if name == "" || pw == "" {
-		return User{},fmt.Errorf("missing some important information.")
+		return User{}, fmt.Errorf("missing some important information.")
 	}
-	return ev.
+	return ev.EvalRepository.CreateUser(name, firstname, lastname, pw)
 }

@@ -509,6 +509,7 @@ func (ev *EvalRepository) StddevPerQuestion(questionId uuid.UUID) float32 {
 		return res[0].Freq
 	}
 	return 0
+}
 func (ev *EvalRepository) FindUserByName(name string) User {
 	var filter User
 	var user User

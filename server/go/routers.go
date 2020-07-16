@@ -376,6 +376,12 @@ func NewRouter(Db *gorm.DB) *gin.Engine {
 			"/v1/terms/:termId/report",
 			evalAPI.TermsTermIdReportGet,
 		},
+		{
+			"CreateUsersPost",
+			http.MethodPost,
+			"/v1/users",
+			evalAPI.CreateUserPost,
+		},
 	}
 
 	router := gin.New()
@@ -405,9 +411,10 @@ type login struct {
 // User demo
 type User struct {
 	UserName     string `gorm:"primary_key;"`
-	FirstName    string
-	LastName     string
+	FirstName    string `json:"firstname"`
+	LastName     string `json:"lastname"`
 	PasswordHash string `json:"-"`
+	Password     string `gorm:"-"`
 }
 
 var identityKey = "id"
@@ -430,7 +437,11 @@ func initJWT(evalAPI *EvalAPI) *jwt.GinJWTMiddleware {
 		},
 		IdentityHandler: func(c *gin.Context) interface{} {
 			claims := jwt.ExtractClaims(c)
-			return evalAPI.EvalService.FindUserByName(claims[identityKey].(string))
+			user := evalAPI.EvalService.FindUserByName(claims[identityKey].(string))
+			if claims[identityKey].(string) == os.Getenv("ADMIN_USER_ID") {
+				user.UserName = os.Getenv("ADMIN_USER_ID")
+			}
+			return user
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
 			var loginVals login
@@ -439,12 +450,13 @@ func initJWT(evalAPI *EvalAPI) *jwt.GinJWTMiddleware {
 			}
 			userID := loginVals.Username
 			password := loginVals.Password
+			user := evalAPI.EvalService.FindUserByName(userID)
 			//BUG(henrik): Replace with db lookup!
-			if userID == os.Getenv("ADMIN_USER_ID") && password == os.Getenv("ADMIN_USER_PASSWORD") {
+			if _, ok := os.LookupEnv("ADMIN_USER_ID"); sha1Hash(password) == user.PasswordHash || (ok && (userID == os.Getenv("ADMIN_USER_ID") && password == os.Getenv("ADMIN_USER_PASSWORD"))) {
 				return &User{
 					UserName:  userID,
-					LastName:  "Admin",
-					FirstName: "John",
+					LastName:  user.LastName,
+					FirstName: user.FirstName,
 				}, nil
 			}
 
@@ -452,7 +464,7 @@ func initJWT(evalAPI *EvalAPI) *jwt.GinJWTMiddleware {
 		},
 		Authorizator: func(data interface{}, c *gin.Context) bool {
 			//BUG(henrik): Replace with db/casbin lookup!
-			if v, ok := data.(*User); ok && v.UserName == os.Getenv("ADMIN_USER_ID") {
+			if v, ok := data.(User); v.UserName == os.Getenv("ADMIN_USER_ID") || (ok && v.UserName != "") {
 				return true
 			}
 

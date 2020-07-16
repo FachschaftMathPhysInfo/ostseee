@@ -472,7 +472,7 @@ func initJWT(evalAPI *EvalAPI) *jwt.GinJWTMiddleware {
 		// - "query:<name>"
 		// - "cookie:<name>"
 		// - "param:<name>"
-		TokenLookup: "header: Authorization, query: token, cookie: jwt",
+		TokenLookup: "header: Authorization2",
 		// TokenLookup: "query:token",
 		// TokenLookup: "cookie:token",
 

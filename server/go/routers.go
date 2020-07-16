@@ -383,7 +383,7 @@ func NewRouter(Db *gorm.DB) *gin.Engine {
 	addRoutes(router, unsecuredRoutes)
 	router.Use(gin.Logger()) //Logger for secured lines
 	if _, jwtEnabled := os.LookupEnv("JWT_ENABLED"); jwtEnabled {
-		authMiddleware := initJWT()
+		authMiddleware := initJWT(&evalAPI)
 		router.POST("/v1/login", authMiddleware.LoginHandler)
 		router.GET("/v1/refresh_token", authMiddleware.RefreshHandler)
 		router.Use(authMiddleware.MiddlewareFunc())
@@ -404,14 +404,15 @@ type login struct {
 
 // User demo
 type User struct {
-	UserName  string
-	FirstName string
-	LastName  string
+	UserName     string `gorm:"primary_key;"`
+	FirstName    string
+	LastName     string
+	PasswordHash string `json:"-"`
 }
 
 var identityKey = "id"
 
-func initJWT() *jwt.GinJWTMiddleware {
+func initJWT(evalAPI *EvalAPI) *jwt.GinJWTMiddleware {
 	// the jwt middleware
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:       "Evaluation",
@@ -429,9 +430,7 @@ func initJWT() *jwt.GinJWTMiddleware {
 		},
 		IdentityHandler: func(c *gin.Context) interface{} {
 			claims := jwt.ExtractClaims(c)
-			return &User{
-				UserName: claims[identityKey].(string),
-			}
+			return evalAPI.EvalService.FindUserByName(claims[identityKey].(string))
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
 			var loginVals login
@@ -483,7 +482,6 @@ func initJWT() *jwt.GinJWTMiddleware {
 		// TimeFunc provides the current time. You can override it to use another time value. This is useful for testing or if your server uses a different time zone than your tokens.
 		TimeFunc: time.Now,
 	})
-
 	if err != nil {
 		log.Fatal("JWT Error:" + err.Error())
 	}

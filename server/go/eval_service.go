@@ -662,3 +662,22 @@ func (ev *EvalService) SendInvitations(id uuid.UUID, begin, end string, baseUrl,
 	err = dec.Decode(&status)
 	return status, err
 }
+func (ev *EvalService) FindUserByName(name string) User {
+	if name == "" {
+		return User{}
+	}
+	return ev.EvalRepository.FindUserByName(name)
+}
+func (ev *EvalService) FindUserByNameAndPW(name, pw string) User {
+	if name == "" || pw == "" {
+		return User{}
+	}
+	return ev.EvalRepository.FindUserByNameAndPW(name, pw)
+}
+
+func (ev* EvalService) CreateUser(name, firstname,lastname, pw string) (User,error){
+	if name == "" || pw == "" {
+		return User{},fmt.Errorf("missing some important information.")
+	}
+	return ev.
+}

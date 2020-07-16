@@ -509,4 +509,33 @@ func (ev *EvalRepository) StddevPerQuestion(questionId uuid.UUID) float32 {
 		return res[0].Freq
 	}
 	return 0
+func (ev *EvalRepository) FindUserByName(name string) User {
+	var filter User
+	var user User
+	filter.UserName = name
+	ev.DB.Where(&filter).First(&user)
+	return user
+}
+
+func (ev *EvalRepository) FindUserByNameAndPW(name, password string) User {
+	var filter User
+	var user User
+	filter.UserName = name
+	filter.PasswordHash = sha1Hash(password)
+	ev.DB.Where(&filter).First(&user)
+	return user
+}
+
+func (ev *EvalRepository) CreateUser(name, firstname, lastname, password string) (User, error) {
+	var user = User{
+		UserName:     name,
+		FirstName:    firstname,
+		LastName:     lastname,
+		PasswordHash: sha1Hash(password),
+	}
+	errs := ev.DB.Save(&user).GetErrors()
+	if len(errs) > 0 {
+		return User{}, errs[len(errs)-1]
+	}
+	return user, nil
 }

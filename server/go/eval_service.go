@@ -167,6 +167,17 @@ func (ev *EvalService) FindOrGenerateCourseInvitations(courseId uuid.UUID, begin
 	if err != nil {
 		return []Invitation{}, err
 	}
+	if len(invs) < int(course.NumberOfStudents) {
+		//create new ones
+		invs2 := make([]Invitation, int(course.NumberOfStudents)-len(invs))
+		var i int
+		log.Println("Generating", begin, end)
+		for i = 0; i < int(course.NumberOfStudents)-len(invs); i++ {
+			inv := Invitation{ValidBegin: begin, ValidEnd: end, CourseId: courseId, Used: false}
+			invs2[i] = ev.EvalRepository.SaveInvitation(inv)
+		}
+		return invs2, nil
+	}
 	if len(invs) != int(course.NumberOfStudents) {
 		log.Println("len(invs)!=course.NumberOfStudents")
 		if anyInvitationUsed(invs) {

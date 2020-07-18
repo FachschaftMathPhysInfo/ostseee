@@ -3,10 +3,13 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/smtp"
 	"net/textproto"
 	"strings"
+	"time"
 
 	"github.com/antihax/optional"
 	"github.com/fachschaftmathphys/ostseee/client/openapi"
@@ -159,6 +162,114 @@ var MailTermCmd = &cobra.Command{
 			}
 		}
 		fmt.Println(term.Name)
+	},
+}
+
+var MailParticipantsCmd = &cobra.Command{
+	Use:   "participants",
+	Short: "Emails information to all participants in course. Third arg is your name",
+	Args:  cobra.ExactArgs(3),
+	Run: func(cmd *cobra.Command, args []string) {
+		courseId := args[0]
+		name := args[2]
+		fmt.Println(courseId)
+		h := hermes.Hermes{
+			// Optional Theme
+			// Theme: new(Default)
+			Product: hermes.Product{
+				// Appears in header & footer of e-mails
+				Name: name,
+				Link: "https://mathphys.stura.uni-heidelberg.de/w/evaluation-und-lehrpreis/",
+				// Optional product logo
+				Logo:        "https://mathphys.stura.uni-heidelberg.de/w/wp-content/uploads/2020/07/evallogo.png",
+				Copyright:   "(c) 2020 Evaluationsteam der Fachschaft MathPhysInfo im Auftrag der Fakultät für Physik und Astronomie",
+				TroubleText: "Wenn der {ACTION}-Button nicht funktioniert, nutze folgenden Link:",
+			},
+		}
+		ctx := context.WithValue(cmd.Context(), openapi.ContextBasicAuth, openapi.BasicAuth{UserName: viper.GetString("basic_user"), Password: viper.GetString("basic_pw")})
+		client := NewAPIClient()
+		course, _, err := client.DefaultApi.CoursesCourseIdGet(ctx, courseId)
+		if err != nil {
+			fmt.Println("error:", err)
+			return
+		}
+		invs, _, err := client.DefaultApi.CoursesCourseIdInvitationsGet(ctx, course.Id, viper.GetTime("begin"), viper.GetTime("end"))
+		if err != nil {
+			fmt.Println("error:", err)
+			return
+		}
+		tns, _ := ioutil.ReadFile(args[1])
+		participants := strings.Split(string(tns), "\n")
+		rand.Seed(time.Now().UnixNano())
+		rand.Shuffle(len(participants), func(i, j int) { participants[i], participants[j] = participants[j], participants[i] })
+		if len(invs) < len(participants) {
+			log.Println(len(invs), len(participants))
+			log.Panic("too few invitations")
+		}
+		module, _, _ := client.DefaultApi.ModulesModuleIdGet(ctx, course.ModuleId)
+		for i, tn := range participants {
+
+			courseProfs, _, err := client.DefaultApi.CourseprofsGet(ctx, &openapi.CourseprofsGetOpts{CourseId: optional.NewString(courseId)})
+			if err != nil {
+				log.Panic(err)
+			}
+			if len(courseProfs) == 0 {
+				log.Println("Warning: No Profs", courseId)
+				log.Println(module.Name)
+			}
+			mails := make([]string, 1)
+			mails[0] = tn
+			names := make([]string, len(courseProfs))
+			profs := make([]openapi.Prof, len(courseProfs))
+			for i, cp := range courseProfs {
+				profs[i], _, _ = client.DefaultApi.ProfsProfIdGet(ctx, cp.ProfId)
+				names[i] = profs[i].Lastname
+			}
+			greeting := "Sehr geehrte TeilnehmerIn,"
+			intros := []string{"In der Woche vom 13. Juli soll eine Online-Evaluation an der Fakultät für Physik und Astronomie durchgeführt werden."}
+			signature := "Viele Grüße"
+			outros := []string{"Vielen Dank für Deine Teilnahme.", "Eine Zuordnung zwischen Link und Abgabe ist nicht möglich. Deine Emailadresse wurde nur für dieses Anschreiben verwendet und dannach gelöscht.", "Solltest Du weitere Fragen haben, schreibe uns doch eine Email evaluation@mathphys.stura.uni-heidelberg.de."}
+			if course.Language == "en" {
+				intros = []string{
+					"During the week of the 13th of July an online evaluation will take place at the department of physics and astronomy. Use the following link (useable between 0:00 13th July and 23:59 19th of July) to evaluate the lecture " + module.Name + " by " + strings.Join(names, ", ") + "."}
+				outros = []string{"Thank you for participating. If you have further questions, write us an email evaluation@mathphys.stura.uni-heidelberg.de."}
+				signature = "Kind regards"
+				greeting = "Dear participant,"
+			}
+			email := hermes.Email{
+				Body: hermes.Body{
+					Intros:    intros,
+					Title:     greeting,
+					Signature: signature,
+					Actions: []hermes.Action{{
+						Instructions: "Benutze folgenden Link (verwendbar im Zeitraum vom 13. Juli 0:00 bis 19. Juli 23:59), um die Veranstaltung " + module.Name + " bei " + strings.Join(names, ", ") + " zu evaluieren:",
+						Button: hermes.Button{
+							Color: "#990000", // Optional action button color
+							Text:  "Evaluation durchführen",
+							Link:  viper.GetString("base_url") + invs[i].Id,
+						},
+					}},
+					Outros: outros,
+				},
+			}
+			emailText, _ := h.GeneratePlainText(email)
+			emailBody, _ := h.GenerateHTML(email)
+			var a smtp.Auth
+			e := &emailTool.Email{
+				To:      mails,
+				From:    "evaluation@mathphys.stura.uni-heidelberg.de",
+				Subject: "Evaluation SoSe 2020 " + module.Name,
+				Text:    []byte(emailText),
+				HTML:    []byte(emailBody),
+				Headers: textproto.MIMEHeader{},
+			}
+			errorMail := e.Send(viper.GetString("smtp"), a)
+			if errorMail != nil {
+				fmt.Println("Mail", module.Name, " konnte nicht gesandt werden:", errorMail.Error())
+				log.Println(tn)
+			}
+		}
+
 	},
 }
 

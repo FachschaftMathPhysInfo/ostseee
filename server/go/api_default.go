@@ -182,7 +182,7 @@ func (ev *EvalAPI) CoursesCourseIdInvitationsGet(c *gin.Context) {
 	}
 	invitations, err := ev.EvalService.FindOrGenerateCourseInvitations(id, timespan.Begin, timespan.End)
 	if err != nil {
-		c.Status(http.StatusBadRequest)
+		c.JSON(http.StatusBadRequest, err)
 		return
 	}
 	c.JSON(http.StatusOK, invitations)

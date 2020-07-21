@@ -52,13 +52,15 @@ func add(a, b float32) float32 {
 }
 
 var translations = map[string](map[string]string){
-	"by":                map[string]string{"de": "bei", "en": "by"},
-	"tex_lang":          map[string]string{"de": "ngerman", "en": "english"},
-	"comments":          map[string]string{"de": "Kommentare", "en": "Comments"},
-	"answers":           map[string]string{"de": "Antworten", "en": "answers"},
-	"abstinentions":     map[string]string{"de": "keine Angabe", "en": "n.A."},
-	"unanswered":        map[string]string{"de": "keine Antworten", "en": "no answers"},
-	"tutorium_overview": map[string]string{"de": "Tutor  & Seite", "en": "Tutor  & Page"},
+	"by":                      map[string]string{"de": "bei", "en": "by"},
+	"tex_lang":                map[string]string{"de": "ngerman", "en": "english"},
+	"comments":                map[string]string{"de": "Kommentare", "en": "Comments"},
+	"answers":                 map[string]string{"de": "Antworten", "en": "answers"},
+	"abstinentions":           map[string]string{"de": "keine Angabe", "en": "n.A."},
+	"unanswered":              map[string]string{"de": "keine Antworten", "en": "no answers"},
+	"tutorium_overview":       map[string]string{"de": "Tutor  & Seite", "en": "Tutor  & Page"},
+	"questions_about":         map[string]string{"de": "Fragen zu", "en": "Questions regarding"},
+	"questions_concerning_ex": map[string]string{"de": "Fragen zu den Tutorien", "en": "Questions regarding exercise groups"},
 }
 
 func i18n(s string) string {
@@ -263,6 +265,7 @@ var ReportCourseProfCmd = &cobra.Command{
 			Faculty          openapi.Faculty
 			Course           openapi.Course
 			CourseProfs      []openapi.Prof
+			CourseProf       openapi.Prof
 			Tutors           []openapi.Tutor
 		}
 		apiClient := NewAPIClient()
@@ -272,6 +275,7 @@ var ReportCourseProfCmd = &cobra.Command{
 		if err != nil {
 			fmt.Println(err)
 		}
+		trd.CourseProf, _, _ = apiClient.DefaultApi.ProfsProfIdGet(ctx, courseProf.ProfId)
 		trd.Course, _, err = apiClient.DefaultApi.CoursesCourseIdGet(ctx, courseProf.CourseId)
 		if err != nil {
 			log.Println(err)
@@ -336,6 +340,7 @@ var ReportCourseProfsCmd = &cobra.Command{
 				Faculty          openapi.Faculty
 				Course           openapi.Course
 				CourseProfs      []openapi.Prof
+				CourseProf       openapi.Prof
 				Tutors           []openapi.Tutor
 			}
 
@@ -345,6 +350,7 @@ var ReportCourseProfsCmd = &cobra.Command{
 			if err != nil {
 				fmt.Println(err)
 			}
+			trd.CourseProf, _, _ = apiClient.DefaultApi.ProfsProfIdGet(ctx, courseProf.ProfId)
 			trd.Course, _, err = apiClient.DefaultApi.CoursesCourseIdGet(ctx, courseProf.CourseId)
 			if err != nil {
 				log.Println(err)

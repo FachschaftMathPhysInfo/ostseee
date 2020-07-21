@@ -131,6 +131,7 @@ func init() {
 	ReportCmd.AddCommand(ReportTutorCmd)
 	ReportCmd.AddCommand(ReportCourseCmd)
 	ReportCmd.AddCommand(ReportCourseProfCmd)
+	ReportCmd.AddCommand(ReportCourseProfsCmd)
 	rootCmd.AddCommand(ReportCmd)
 	MailCmd.AddCommand(MailTermCmd)
 	MailCmd.AddCommand(MailParticipantsCmd)

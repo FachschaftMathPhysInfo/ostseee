@@ -10,10 +10,13 @@ import (
 	"text/template"
 	"time"
 
+	"gopkg.in/russross/blackfriday.v2"
+
 	"github.com/antihax/optional"
 	"github.com/fachschaftmathphys/ostseee/client/openapi"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	bflatex "gitlab.com/ambrevar/blackfriday-latex"
 )
 
 var Locale = "de"
@@ -27,11 +30,21 @@ func getNames(arr []openapi.Prof) string {
 }
 func lesc(s string) string {
 	//BUG(henrik): Write replacements
-	return strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(s, "\\", ""), "%", "\\%"), "&", "\\&"), "#", "\\#")
+	extensions := blackfriday.CommonExtensions | blackfriday.Titleblock
+	renderer := &bflatex.Renderer{
+		Author:    "John Doe",
+		Languages: "english,french",
+		Flags:     bflatex.TOC,
+	}
+	md := blackfriday.New(blackfriday.WithRenderer(renderer), blackfriday.WithExtensions(extensions))
+	res := string(string(renderer.Render(md.Parse([]byte(strings.ReplaceAll(s, ">", "¿>"))))))
+	//fmt.Println(blackfriday.Run([]byte(s), blackfriday.WithRenderer(renderer)))
+	return strings.ReplaceAll(res, "¿>", ">") //strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(s, "\\", ""), "%", "\\%"), "&", "\\&"), "#", "\\#")
 }
 
 func getTutor(courseId, tutorId string) openapi.Tutor {
-	res, _, _ := NewAPIClient().DefaultApi.CoursesCourseIdTutorsTutorIdGet(context.TODO(), courseId, tutorId)
+	ctx := context.WithValue(context.TODO(), openapi.ContextBasicAuth, openapi.BasicAuth{UserName: viper.GetString("basic_user"), Password: viper.GetString("basic_pw")})
+	res, _, _ := NewAPIClient().DefaultApi.CoursesCourseIdTutorsTutorIdGet(ctx, courseId, tutorId)
 	return res
 }
 func add(a, b float32) float32 {
@@ -39,20 +52,32 @@ func add(a, b float32) float32 {
 }
 
 var translations = map[string](map[string]string){
-	"by":                map[string]string{"de": "bei", "en": "by"},
-	"tex_lang":          map[string]string{"de": "ngerman", "en": "english"},
-	"comments":          map[string]string{"de": "Kommentare", "en": "Comments"},
-	"answers":           map[string]string{"de": "Antworten", "en": "answers"},
-	"abstinentions":     map[string]string{"de": "keine Angabe", "en": "n.A."},
-	"unanswered":        map[string]string{"de": "keine Antworten", "en": "no answers"},
-	"tutorium_overview": map[string]string{"de": "Tutor  & Seite", "en": "Tutor  & Page"},
+	"by":                      map[string]string{"de": "bei", "en": "by"},
+	"tex_lang":                map[string]string{"de": "ngerman", "en": "english"},
+	"comments":                map[string]string{"de": "Kommentare", "en": "Comments"},
+	"answers":                 map[string]string{"de": "Antworten", "en": "answers"},
+	"abstinentions":           map[string]string{"de": "keine Angabe", "en": "n.A."},
+	"unanswered":              map[string]string{"de": "keine Antworten", "en": "no answers"},
+	"tutorium_overview":       map[string]string{"de": "Tutor  & Seite", "en": "Tutor  & Page"},
+	"questions_about":         map[string]string{"de": "Fragen zu", "en": "Questions regarding"},
+	"questions_concerning_ex": map[string]string{"de": "Fragen zu den Tutorien", "en": "Questions regarding exercise groups"},
+	"no_of_students":          map[string]string{"de": "Anzahl angeschriebener Studierende", "en": "Number of Students"},
+	"no_of_questionnaires":    map[string]string{"de": "Anzahl abgegebener Fragebögen", "en": "Number of questionnaires submitted"},
+	"overview_stats":          map[string]string{"de": "Übersicht", "en": "Overview"},
 }
 
 func i18n(s string) string {
 	return translations[s][Locale]
 }
 func i18n_map(s map[string]string) string {
-	return lesc(s[Locale])
+	res, ok := s[Locale]
+	if !ok {
+		res, ok = s["en"]
+	}
+	if !ok {
+		res, ok = s["de"]
+	}
+	return lesc(res)
 }
 func answers(arr []openapi.ResultPair) string {
 	names := make([]string, len(arr))
@@ -239,10 +264,12 @@ var ReportCourseProfCmd = &cobra.Command{
 		type CourseProfReportRendering struct {
 			CourseProfReport openapi.CourseProfReport
 			Term             openapi.Term
+			Stats            openapi.CourseStats
 			Module           openapi.Module
 			Faculty          openapi.Faculty
 			Course           openapi.Course
 			CourseProfs      []openapi.Prof
+			CourseProf       openapi.Prof
 			Tutors           []openapi.Tutor
 		}
 		apiClient := NewAPIClient()
@@ -252,7 +279,12 @@ var ReportCourseProfCmd = &cobra.Command{
 		if err != nil {
 			fmt.Println(err)
 		}
+		trd.CourseProf, _, _ = apiClient.DefaultApi.ProfsProfIdGet(ctx, courseProf.ProfId)
 		trd.Course, _, err = apiClient.DefaultApi.CoursesCourseIdGet(ctx, courseProf.CourseId)
+		if err != nil {
+			log.Println(err)
+		}
+		trd.Stats, _, err = apiClient.DefaultApi.CoursesCourseIdStatsGet(ctx, courseProf.CourseId)
 		if err != nil {
 			log.Println(err)
 		}
@@ -289,6 +321,81 @@ var ReportCourseProfCmd = &cobra.Command{
 		t.ExecuteTemplate(file, "course_prof_report", &trd)
 	},
 	Args: cobra.MinimumNArgs(1),
+}
+
+var ReportCourseProfsCmd = &cobra.Command{
+	Use:   "course_profs",
+	Short: "generates all course_profs reports ",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println(args)
+		ctx := context.WithValue(cmd.Context(), openapi.ContextBasicAuth, openapi.BasicAuth{UserName: viper.GetString("basic_user"), Password: viper.GetString("basic_pw")})
+		apiClient := NewAPIClient()
+		courseProfsAll, _, _ := apiClient.DefaultApi.CourseprofsGet(ctx, &openapi.CourseprofsGetOpts{})
+		for _, cp := range courseProfsAll {
+			courseprofId := cp.Id
+			outputFile := courseprofId + ".tex"
+
+			t, err := template.New("course_prof_report").Delims("≤≤", "≥≥").Funcs(funcMap).ParseFiles("./reporting/templates/tutor_report.tmpl", "./reporting/templates/preamble.tmpl",
+				"./reporting/templates/preface.tmpl", "./reporting/templates/tutor.tmpl", "./reporting/templates/common.tmpl", "./reporting/templates/course.tmpl",
+				"./reporting/templates/course_prof.tmpl", "./reporting/templates/course_report.tmpl", "./reporting/templates/course_prof_report.tmpl")
+			if err != nil {
+				fmt.Println(err)
+			}
+			type CourseProfReportRendering struct {
+				CourseProfReport openapi.CourseProfReport
+				Term             openapi.Term
+				Module           openapi.Module
+				Faculty          openapi.Faculty
+				Course           openapi.Course
+				CourseProfs      []openapi.Prof
+				CourseProf       openapi.Prof
+				Tutors           []openapi.Tutor
+			}
+
+			trd := CourseProfReportRendering{}
+			file, _ := os.Create(outputFile)
+			courseProf, _, err := apiClient.DefaultApi.CourseprofsCourseProfIdGet(ctx, courseprofId)
+			if err != nil {
+				fmt.Println(err)
+			}
+			trd.CourseProf, _, _ = apiClient.DefaultApi.ProfsProfIdGet(ctx, courseProf.ProfId)
+			trd.Course, _, err = apiClient.DefaultApi.CoursesCourseIdGet(ctx, courseProf.CourseId)
+			if err != nil {
+				log.Println(err)
+			}
+			trd.Term, _, err = apiClient.DefaultApi.TermsTermIdGet(ctx, trd.Course.TermId)
+			if err != nil {
+				log.Println(err)
+			}
+			trd.Module, _, err = apiClient.DefaultApi.ModulesModuleIdGet(ctx, trd.Course.ModuleId)
+			if err != nil {
+				log.Println(err)
+			}
+			trd.Faculty, _, err = apiClient.DefaultApi.FacultiesFacultyIdGet(ctx, trd.Module.FacultyId)
+			if err != nil {
+				log.Println(err)
+			}
+			start := time.Now()
+			trd.CourseProfReport, _, err = apiClient.DefaultApi.CourseprofsCourseProfIdReportGet(ctx, courseprofId)
+			end := time.Now()
+
+			log.Println("Took:", end.Sub(start).Seconds())
+			if err != nil {
+				log.Println(err)
+			}
+			trd.Tutors, _, err = apiClient.DefaultApi.CoursesCourseIdTutorsGet(ctx, courseProf.CourseId)
+			if err != nil {
+				log.Println(err)
+			}
+			cPs, _, _ := apiClient.DefaultApi.CourseprofsGet(ctx, &openapi.CourseprofsGetOpts{CourseId: optional.NewString(courseProf.CourseId)})
+			trd.CourseProfs = make([]openapi.Prof, len(cPs))
+			for i, cp := range cPs {
+				trd.CourseProfs[i], _, _ = apiClient.DefaultApi.ProfsProfIdGet(ctx, cp.ProfId)
+				trd.CourseProfs[i].Id = cp.Id
+			}
+			t.ExecuteTemplate(file, "course_prof_report", &trd)
+		}
+	},
 }
 
 var ReportCmd = &cobra.Command{

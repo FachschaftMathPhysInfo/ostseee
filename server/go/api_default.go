@@ -864,3 +864,13 @@ func (ev *EvalAPI) StatusGet(c *gin.Context) {
 	status.Counts = ev.EvalService.GetCounts()
 	c.JSON(http.StatusOK, status)
 }
+
+func (ev *EvalAPI) CourseCourseIdStatsGet(c *gin.Context) {
+	id, err := uuid.FromString(c.Param("courseId"))
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	stats := ev.EvalService.GetCourseStats(id)
+	c.JSON(http.StatusOK, stats)
+}

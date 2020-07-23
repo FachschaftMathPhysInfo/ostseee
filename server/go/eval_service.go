@@ -673,3 +673,7 @@ func (ev *EvalService) SendInvitations(id uuid.UUID, begin, end string, baseUrl,
 	err = dec.Decode(&status)
 	return status, err
 }
+
+func (ev *EvalService) GetCourseStats(courseId uuid.UUID) CourseStats {
+	return CourseStats{Questionnaires: int32(ev.EvalRepository.CountOfQuestionaires(courseId))}
+}

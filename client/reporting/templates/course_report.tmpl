@@ -19,7 +19,7 @@
 \selectlanguage{≤≤ i18n "tex_lang" ≥≥}
 ≤≤ template "course" .CourseReport ≥≥
  ≤≤ if gt (len .CourseReport.TutorReports) 0≥≥
- \subsection*{Fragen zu den Tutorien}
+ \subsection{≤≤i18n "questions_concerning_ex"≥≥}
  ≤≤ template "tutor_overview" .Tutors≥≥
  ≤≤ range .CourseReport.TutorReports ≥≥
     ≤≤ template "tutor" . ≥≥

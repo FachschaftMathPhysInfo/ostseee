@@ -21,7 +21,7 @@
 ≤≤ template "course_prof" .CourseProfReport ≥≥
 ≤≤ template "course" .CourseProfReport.CourseReport ≥≥
  ≤≤ if gt (len .CourseProfReport.CourseReport.TutorReports) 0≥≥
- \subsection*{≤≤i18n "questions_concerning_ex"≥≥}
+ \subsection{≤≤i18n "questions_concerning_ex"≥≥}
  ≤≤ template "tutor_overview" .Tutors≥≥
  ≤≤ range .CourseProfReport.CourseReport.TutorReports ≥≥
     ≤≤ template "tutor" . ≥≥

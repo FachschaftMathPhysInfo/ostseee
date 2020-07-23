@@ -744,6 +744,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/ThirdPartySendStatus'
           description: OK
+  /courses/{courseId}/stats:
+    get:
+      parameters:
+      - description: ID of the course
+        explode: false
+        in: path
+        name: courseId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseStats'
+          description: OK
   /courses/{courseId}/invitations:
     get:
       parameters:
@@ -3893,6 +3911,14 @@ components:
         overwritten:
           type: integer
         notchanged:
+          type: integer
+      type: object
+    CourseStats:
+      example:
+        questionnaires: 0
+      properties:
+        questionnaires:
+          description: number of questionnaires in the system concerning this course.
           type: integer
       type: object
     Status_counts:

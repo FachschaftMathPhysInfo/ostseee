@@ -44,6 +44,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**CoursesCourseIdInvitationsSendPost**](docs/DefaultApi.md#coursescourseidinvitationssendpost) | **Post** /courses/{courseId}/invitations/send | 
 *DefaultApi* | [**CoursesCourseIdPatch**](docs/DefaultApi.md#coursescourseidpatch) | **Patch** /courses/{courseId} | Change a course by ID
 *DefaultApi* | [**CoursesCourseIdReportGet**](docs/DefaultApi.md#coursescourseidreportget) | **Get** /courses/{courseId}/report | Get a course report
+*DefaultApi* | [**CoursesCourseIdStatsGet**](docs/DefaultApi.md#coursescourseidstatsget) | **Get** /courses/{courseId}/stats | 
 *DefaultApi* | [**CoursesCourseIdTutorsGet**](docs/DefaultApi.md#coursescourseidtutorsget) | **Get** /courses/{courseId}/tutors | 
 *DefaultApi* | [**CoursesCourseIdTutorsPost**](docs/DefaultApi.md#coursescourseidtutorspost) | **Post** /courses/{courseId}/tutors | 
 *DefaultApi* | [**CoursesCourseIdTutorsTutorIdDelete**](docs/DefaultApi.md#coursescourseidtutorstutoriddelete) | **Delete** /courses/{courseId}/tutors/{tutorId} | Deletes a tutor by ID
@@ -88,6 +89,7 @@ Class | Method | HTTP request | Description
  - [CourseProf](docs/CourseProf.md)
  - [CourseProfReport](docs/CourseProfReport.md)
  - [CourseReport](docs/CourseReport.md)
+ - [CourseStats](docs/CourseStats.md)
  - [EmptyForm](docs/EmptyForm.md)
  - [Faculty](docs/Faculty.md)
  - [Form](docs/Form.md)

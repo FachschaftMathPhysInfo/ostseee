@@ -17,9 +17,10 @@
 ≤≤ template "preface" ≥≥
 \kurskopf{≤≤ lesc .Module.Name ≥≥}{ ≤≤ getNames .CourseProfs ≥≥ }{0}{≤≤.Course.Id ≥≥}{≤≤i18n "by"≥≥}
 \selectlanguage{≤≤ i18n "tex_lang" ≥≥}
+
 ≤≤ template "course" .CourseReport ≥≥
  ≤≤ if gt (len .CourseReport.TutorReports) 0≥≥
- \subsection{≤≤i18n "questions_concerning_ex"≥≥}
+ \section{≤≤i18n "questions_concerning_ex"≥≥}
  ≤≤ template "tutor_overview" .Tutors≥≥
  ≤≤ range .CourseReport.TutorReports ≥≥
     ≤≤ template "tutor" . ≥≥

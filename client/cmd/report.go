@@ -61,6 +61,9 @@ var translations = map[string](map[string]string){
 	"tutorium_overview":       map[string]string{"de": "Tutor  & Seite", "en": "Tutor  & Page"},
 	"questions_about":         map[string]string{"de": "Fragen zu", "en": "Questions regarding"},
 	"questions_concerning_ex": map[string]string{"de": "Fragen zu den Tutorien", "en": "Questions regarding exercise groups"},
+	"no_of_students":          map[string]string{"de": "Anzahl angeschriebener Studierende", "en": "Number of Students"},
+	"no_of_questionnaires":    map[string]string{"de": "Anzahl abgegebener Fragebögen", "en": "Number of questionnaires submitted"},
+	"overview_stats":          map[string]string{"de": "Übersicht", "en": "Overview"},
 }
 
 func i18n(s string) string {
@@ -261,6 +264,7 @@ var ReportCourseProfCmd = &cobra.Command{
 		type CourseProfReportRendering struct {
 			CourseProfReport openapi.CourseProfReport
 			Term             openapi.Term
+			Stats            openapi.CourseStats
 			Module           openapi.Module
 			Faculty          openapi.Faculty
 			Course           openapi.Course
@@ -277,6 +281,10 @@ var ReportCourseProfCmd = &cobra.Command{
 		}
 		trd.CourseProf, _, _ = apiClient.DefaultApi.ProfsProfIdGet(ctx, courseProf.ProfId)
 		trd.Course, _, err = apiClient.DefaultApi.CoursesCourseIdGet(ctx, courseProf.CourseId)
+		if err != nil {
+			log.Println(err)
+		}
+		trd.Stats, _, err = apiClient.DefaultApi.CoursesCourseIdStatsGet(ctx, courseProf.CourseId)
 		if err != nil {
 			log.Println(err)
 		}

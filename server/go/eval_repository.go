@@ -510,3 +510,14 @@ func (ev *EvalRepository) StddevPerQuestion(questionId uuid.UUID) float32 {
 	}
 	return 0
 }
+
+// CountTutor counts the number the tutor is named, question ID can be null, if question is unique
+func (ev *EvalRepository) CountTutor(questionId uuid.UUID, objectId uuid.UUID) int {
+	var filter SingleAnswer
+	//filter.QuestionId = questionId
+	//filter.Concerns = objectId
+	filter.Value = objectId.String()
+	var count int
+	ev.DB.Table("single_answers").Where(&filter).Count(&count)
+	return count
+}

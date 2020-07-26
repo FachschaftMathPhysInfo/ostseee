@@ -64,6 +64,10 @@ var translations = map[string](map[string]string){
 	"no_of_students":          map[string]string{"de": "Anzahl angeschriebener Studierende", "en": "Number of Students"},
 	"no_of_questionnaires":    map[string]string{"de": "Anzahl abgegebener Fragebögen", "en": "Number of questionnaires submitted"},
 	"overview_stats":          map[string]string{"de": "Übersicht", "en": "Overview"},
+	"comment_notice": map[string]string{"de": "{ \\small\\emph{Hinweis: } Jeder Kommentar ist eine individuelle Meinung und sollte immer im Verhältnis zu der Anzahl der Studierenden gesehen werden.}",
+		"en": "{ \\small\\emph{Note: } Each comment is an individual opinion and should be considered in relation to the total number of students.}"},
+	"too_few": map[string]string{"de": "{ \\small\\emph{Hinweis: } Da weniger als 5 Fragebögen abgegeben wurden, konnte diese Veranstaltung nicht ausgewertet werden.}",
+		"en": "{ \\small\\emph{Note: } Because less than 5 questionnaires were submitted and in order to retain the anonymity of the participants, these results were excluded. }"},
 }
 
 func i18n(s string) string {
@@ -140,12 +144,12 @@ var ReportTutorCmd = &cobra.Command{
 		fmt.Println(args)
 		tutorId := args[1]
 		courseId := args[0]
-		outputFile := tutorId + ".pdf"
+		outputFile := tutorId + ".tex"
 		if len(args) > 2 {
 			outputFile = args[2]
 		}
 
-		t, err := template.New("tutor_report").Delims("≤≤", "≥≥").Funcs(funcMap).ParseFiles("./reporting/templates/tutor_report.tmpl", "./reporting/templates/preamble.tmpl", "./reporting/templates/preface.tmpl", "./reporting/templates/tutor.tmpl", "./reporting/templates/common.tmpl")
+		t, err := template.New("tutor_report").Delims("≤≤", "≥≥").Funcs(funcMap).ParseFiles("./reporting/templates/tutor_report.tmpl", "./reporting/templates/preamble.tmpl", "./reporting/templates/preface.tmpl", "./reporting/templates/tutor.tmpl", "./reporting/templates/too_few.tmpl", "./reporting/templates/common.tmpl")
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -169,7 +173,12 @@ var ReportTutorCmd = &cobra.Command{
 		if err != nil {
 			log.Println(err)
 		}
-		trd.TutorReport, _, _ = apiClient.DefaultApi.CoursesCourseIdTutorsTutorIdReportGet(ctx, courseId, tutorId)
+		trd.TutorReport, _, err = apiClient.DefaultApi.CoursesCourseIdTutorsTutorIdReportGet(ctx, courseId, tutorId)
+		if err != nil {
+			log.Println(err)
+			t.ExecuteTemplate(file, "too_few", &trd)
+			return
+		}
 		cPs, _, _ := apiClient.DefaultApi.CourseprofsGet(ctx, &openapi.CourseprofsGetOpts{CourseId: optional.NewString(courseId)})
 		trd.CourseProfs = make([]openapi.Prof, len(cPs))
 		for i, cp := range cPs {
@@ -257,7 +266,7 @@ var ReportCourseProfCmd = &cobra.Command{
 
 		t, err := template.New("course_prof_report").Delims("≤≤", "≥≥").Funcs(funcMap).ParseFiles("./reporting/templates/tutor_report.tmpl", "./reporting/templates/preamble.tmpl",
 			"./reporting/templates/preface.tmpl", "./reporting/templates/tutor.tmpl", "./reporting/templates/common.tmpl", "./reporting/templates/course.tmpl",
-			"./reporting/templates/course_prof.tmpl", "./reporting/templates/course_report.tmpl", "./reporting/templates/course_prof_report.tmpl")
+			"./reporting/templates/course_prof.tmpl", "./reporting/templates/course_report.tmpl", "./reporting/templates/too_few.tmpl", "./reporting/templates/course_prof_report.tmpl")
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -300,14 +309,6 @@ var ReportCourseProfCmd = &cobra.Command{
 		if err != nil {
 			log.Println(err)
 		}
-		start := time.Now()
-		trd.CourseProfReport, _, err = apiClient.DefaultApi.CourseprofsCourseProfIdReportGet(ctx, courseprofId)
-		end := time.Now()
-
-		log.Println("Took:", end.Sub(start).Seconds())
-		if err != nil {
-			log.Println(err)
-		}
 		trd.Tutors, _, err = apiClient.DefaultApi.CoursesCourseIdTutorsGet(ctx, courseProf.CourseId)
 		if err != nil {
 			log.Println(err)
@@ -318,6 +319,17 @@ var ReportCourseProfCmd = &cobra.Command{
 			trd.CourseProfs[i], _, _ = apiClient.DefaultApi.ProfsProfIdGet(ctx, cp.ProfId)
 			trd.CourseProfs[i].Id = cp.Id
 		}
+		start := time.Now()
+		trd.CourseProfReport, _, err = apiClient.DefaultApi.CourseprofsCourseProfIdReportGet(ctx, courseprofId)
+		end := time.Now()
+
+		log.Println("Took:", end.Sub(start).Seconds())
+		if err != nil {
+			log.Println(err)
+			t.ExecuteTemplate(file, "too_few", &trd)
+			return
+		}
+
 		t.ExecuteTemplate(file, "course_prof_report", &trd)
 	},
 	Args: cobra.MinimumNArgs(1),
@@ -337,7 +349,7 @@ var ReportCourseProfsCmd = &cobra.Command{
 
 			t, err := template.New("course_prof_report").Delims("≤≤", "≥≥").Funcs(funcMap).ParseFiles("./reporting/templates/tutor_report.tmpl", "./reporting/templates/preamble.tmpl",
 				"./reporting/templates/preface.tmpl", "./reporting/templates/tutor.tmpl", "./reporting/templates/common.tmpl", "./reporting/templates/course.tmpl",
-				"./reporting/templates/course_prof.tmpl", "./reporting/templates/course_report.tmpl", "./reporting/templates/course_prof_report.tmpl")
+				"./reporting/templates/course_prof.tmpl", "./reporting/templates/course_report.tmpl", "./reporting/templates/course_prof_report.tmpl", "./reporting/templates/too_few.tmpl")
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -382,6 +394,9 @@ var ReportCourseProfsCmd = &cobra.Command{
 			log.Println("Took:", end.Sub(start).Seconds())
 			if err != nil {
 				log.Println(err)
+				log.Println("Fehler")
+				t.ExecuteTemplate(file, "too_few", &trd)
+				return
 			}
 			trd.Tutors, _, err = apiClient.DefaultApi.CoursesCourseIdTutorsGet(ctx, courseProf.CourseId)
 			if err != nil {

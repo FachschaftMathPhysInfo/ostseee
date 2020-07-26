@@ -324,6 +324,15 @@ func (ev *EvalRepository) DeleteAllInvitationsOfCourse(courseId uuid.UUID) error
 	return nil
 }
 
+func (ev *EvalRepository) DeleteAllQuestionairesAndSingleAnswersOfCourse(courseId uuid.UUID) error {
+	if courseId == uuid.Nil {
+		return fmt.Errorf("nil is not allowed")
+	}
+	ev.DB.Where("questionaire_id in ?", ev.DB.Table("questionaires").Select("id").Where("course_id = ?", courseId).SubQuery()).Delete(&SingleAnswer{})
+	ev.DB.Where("course_id = ?", courseId).Delete(Questionaire{})
+	return nil
+}
+
 //SaveInvitation upserts a term, i.e. if a invitation with this id exists it will be created.
 func (ev *EvalRepository) SaveInvitation(invitation Invitation) Invitation {
 	ev.DB.Save(&invitation)

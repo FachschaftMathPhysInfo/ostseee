@@ -68,6 +68,8 @@ func (ev *EvalService) FindCourse(id uuid.UUID) (Course, error) {
 	return ev.EvalRepository.FindCourse(id)
 }
 func (ev *EvalService) DeleteCourse(id uuid.UUID) error {
+	ev.EvalRepository.DeleteAllInvitationsOfCourse(id)
+	ev.EvalRepository.DeleteAllQuestionairesAndSingleAnswersOfCourse(id)
 	return ev.EvalRepository.DeleteCourse(id)
 }
 func (ev *EvalService) SaveCourse(course Course) (Course, error) {

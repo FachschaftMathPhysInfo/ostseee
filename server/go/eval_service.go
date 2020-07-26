@@ -483,7 +483,7 @@ func (ev *EvalService) GenerateTutorReport(courseId, tutorId uuid.UUID) (TutorRe
 	if err != nil {
 		return TutorReport{}, err
 	}
-	if ev.EvalRepository.CountTutor(uuid.Nil, tutorId) < MIN_QUESTIONAIRES { //TODO(henrik): Factor in Tutor,
+	if ev.EvalRepository.CountOfQuestionaires(courseId) < MIN_QUESTIONAIRES { //TODO(henrik): Factor in Tutor,
 		return TutorReport{}, fmt.Errorf("less than %d questionaires", MIN_QUESTIONAIRES)
 	}
 	tutor, err := ev.EvalRepository.FindTutor(courseId, tutorId)

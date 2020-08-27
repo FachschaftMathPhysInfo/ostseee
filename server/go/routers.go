@@ -72,6 +72,12 @@ func NewRouter(Db *gorm.DB) *gin.Engine {
 			"/v1/",
 			Index,
 		},
+		{
+			"StatusGet",
+			http.MethodGet,
+			"/v1/status",
+			evalAPI.StatusGet,
+		},
 
 		{
 			"CourseprofsCourseProfIdDelete",
@@ -128,7 +134,12 @@ func NewRouter(Db *gorm.DB) *gin.Engine {
 			"/v1/courses/:courseId",
 			evalAPI.CoursesCourseIdGet,
 		},
-
+		{
+			"CoursesCourseIdInvitationsSendPost",
+			http.MethodPost,
+			"/v1/courses/:courseId/invitations/send",
+			evalAPI.CoursesCourseIdInvitationsSendPost,
+		},
 		{
 			"CoursesCourseIdInvitationsGet",
 			http.MethodGet,
@@ -365,10 +376,18 @@ func NewRouter(Db *gorm.DB) *gin.Engine {
 			"/v1/terms/:termId/report",
 			evalAPI.TermsTermIdReportGet,
 		},
+		{
+			"CourseCourseIdCourseStatsGet",
+			http.MethodGet,
+			"/v1/courses/:courseId/stats",
+			evalAPI.CourseCourseIdStatsGet,
+		},
 	}
 
-	router := gin.Default()
+	router := gin.New()
+	router.Use(gin.Recovery())
 	addRoutes(router, unsecuredRoutes)
+	router.Use(gin.Logger()) //Logger for secured lines
 	if _, jwtEnabled := os.LookupEnv("JWT_ENABLED"); jwtEnabled {
 		authMiddleware := initJWT()
 		router.POST("/v1/login", authMiddleware.LoginHandler)

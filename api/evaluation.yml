@@ -6,6 +6,15 @@ info:
 servers:
   - url: https://eval.mathphys.info/v1
 paths:
+  /status:
+      get:
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Status'
   /faculties:
     get:
       responses:
@@ -544,6 +553,45 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TutorReport'
+  /courses/{courseId}/invitations/send:
+    parameters:
+      - in: path
+        name: courseId
+        schema:
+          type: string
+        required: true
+        description:  ID of the course
+    post:
+      requestBody:
+        description: Upload results into system.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ThirdPartySendSettings'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThirdPartySendStatus'
+  /courses/{courseId}/stats:
+    parameters:
+      - in: path
+        name: courseId
+        schema:
+          type: string
+        required: true
+        description:  ID of the course
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseStats'
   /courses/{courseId}/invitations:
     parameters:
       - in: path
@@ -1043,6 +1091,18 @@ components:
         visualizer:
           type: string
           description: indicate, how result is displayed.
+        avg:
+          type: number
+          description: If applicable return the average of this field
+        stddev:
+          type: number
+          description: If applicable return the standard deviation of this answer
+        avgQuestion:
+          type: number
+          description: If applicable return the average of this question globally.
+        stddevQuestion:
+          type: number
+          description: If applicable return the standard deviation  of this question globally.
         notApplicableCount:
           type: number
           description: gives the number of not applicable.
@@ -1133,3 +1193,78 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CourseProfReport'
+    Status:
+      type: object
+      properties:
+        generated:
+          type: string
+          format: date-time
+        counts:
+          type: object
+          properties:
+            invitations:
+              type: integer
+            terms:
+              type: number
+            tutors:
+              type: number
+            options:
+              type: number
+            profs:
+              type: number
+            courseprofs:
+              type: number
+            courses:
+              type: number
+            questionaires:
+              type: number
+            singleanswers:
+              type: number
+        sysstats:
+          type: object
+          properties:
+            ram:
+              type: number
+            ram10:
+              type: number
+            cpu:
+              type: number
+            cpu10:
+              type: number
+    ThirdPartySendSettings:
+      type: object
+      properties:
+        begin:
+          type: string
+        end:
+          type: string
+        plattformUrl:
+          type: string
+          description: The URl of the Plattform to be contacted
+        baseUrl:
+          type: string
+          description: The URl of the the eval system, should end with /
+        force:
+          type: integer
+          description: non zero values are meant to force
+    ThirdPartySendStatus:
+      type: object
+      properties:
+        errno:
+          type: integer
+        vid:
+          type: integer
+        participants:
+          type: integer
+        assigned:
+          type: integer
+        overwritten:
+          type: integer
+        notchanged:
+          type: integer
+    CourseStats:
+      type: object
+      properties:
+        questionnaires:
+          type: integer
+          description: number of questionnaires in the system concerning this course.

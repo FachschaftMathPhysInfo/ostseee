@@ -64,6 +64,7 @@ import FormNew from './components/FormNew';
 import TutorDetail from './components/TutorDetail';
 import TutorEdit from './components/TutorEdit';
 import { logOut } from './lib/session';
+import StatPage from './components/StatPage';
 
 
 function App({store}) {
@@ -255,8 +256,7 @@ function App({store}) {
         </Route>
         {/* default */}
         <Route path="/">
-          willkommen
-          <EuiCustomLink to={`/profs/${32}`}>Hier</EuiCustomLink>
+          <StatPage></StatPage>
         </Route>
       </Switch>
       </EuiPageBody>

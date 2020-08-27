@@ -35,8 +35,16 @@ const TutorsEditor = ({ courseId }) => {
     if (isPending ) {
         return <>Loading</>
     }
+    if(tutors?.length==0){
+        return (<><>No Tutors</>
+        <EuiPanel betaBadgeLabel={"Neuer Tutor"}>
+        <TutorEditor courseId={courseId} onComplete={()=>{reload()}}></TutorEditor>
+        </EuiPanel>
+        </>
+        )
+    }
     return (<><ul>
-        {tutors?.map((t => <li key={t.id}><EuiCustomLink to={`/courses/${courseId}/tutors/${t.id}`}>{t.name}</EuiCustomLink>
+        {tutors?.map((t => <li key={t.id}><EuiCustomLink to={`/courses/${courseId}/tutors/${t.id}`}>{t.name} ({t.censored?"zensiert":"unzensiert"})</EuiCustomLink>
             <EuiButtonIcon onClick={(e) => {
                 //@ts-ignore
                 if (window.confirm("Remove?")) {

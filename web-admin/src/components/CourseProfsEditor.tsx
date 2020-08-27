@@ -34,7 +34,7 @@ const CourseProfsEditor = ({ courseId }) => {
     }
     const [{ isPending: is3 }, reloadProfs] = useRequest(profsGet())
     const profs: Array<EuiSuggestItemProps> = useSelector(getProfs)?.filter((p:Prof)=>{
-        return (courseProfs.findIndex((o:CourseProf)=>o.profId==p.id)==-1)&&`${p.lastname}, ${p.firstname}`.includes(typeahead)
+        return (courseProfs.findIndex((o:CourseProf)=>o?.profId==p.id)==-1)&&`${p.lastname}, ${p.firstname}`.includes(typeahead)
     }).map((prof: Prof) => {
         return {
             label: `${prof.lastname}, ${prof.firstname}`,
@@ -48,6 +48,16 @@ const CourseProfsEditor = ({ courseId }) => {
         return <>Loading</>
     }
     console.log(profs)
+    if(courseProfs.length==0){
+        return (<><>No Profs</>
+            <EuiSuggest
+            status={"loading"}
+            //@ts-ignore
+            onInputChange={(e) => {setTypeahead(e.value)}}
+            onItemClick={onItemClick}
+            suggestions={profs}
+        /></>)
+    }
     return (<><ul>
         {courseProfs?.map((cp => <li key={cp.id}><ProfDisplay id={cp.profId}></ProfDisplay>
             <EuiButtonIcon onClick={(e) => {

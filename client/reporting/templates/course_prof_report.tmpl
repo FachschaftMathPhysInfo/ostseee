@@ -1,0 +1,41 @@
+≤≤ define "course_prof_report"≥≥
+\documentclass[pagesize,halfparskip-,headsepline,cleardoubleempty,table]{scrbook}
+\def\tightlist{} % for pandoc
+  \title{Lehrevaluation ≤≤ lesc .Module.Name ≥≥}
+  \subtitle{im ≤≤ lesc .Term.Name ≥≥}
+  
+  \author{≤≤ lesc .Faculty.Name ≥≥}
+\newcommand{\facultylong}{≤≤ lesc .Faculty.Name≥≥}
+\newcommand{\termlong}{≤≤ lesc .Term.Name ≥≥}
+\newcommand{\termshort}{≤≤ lesc .Term.Name ≥≥}
+≤≤ template "preamble" "ngerman,english"≥≥
+\selectlanguage{≤≤i18n "tex_lang"≥≥}
+\date{\today}
+\begin{document}
+\selectlanguage{≤≤i18n "tex_lang"≥≥}
+\maketitle
+≤≤ template "preface" ≥≥
+%\setcounter{tocdepth}{3}
+%\tableofcontents
+\kurskopf{≤≤ lesc .Module.Name ≥≥}{ ≤≤ getNames .CourseProfs ≥≥ }{0}{≤≤.Course.Id ≥≥}{≤≤i18n "by"≥≥}
+\selectlanguage{≤≤ i18n "tex_lang" ≥≥}
+\section{≤≤i18n "overview_stats"≥≥}
+
+\begin{tabular}{ l r }
+ ≤≤i18n "no_of_students"≥≥ &  ≤≤ .Course.NumberOfStudents≥≥ \\   
+ ≤≤i18n "no_of_questionnaires"≥≥ &  ≤≤ .Stats.Questionnaires ≥≥ \\ 
+\end{tabular}
+
+    \section{≤≤i18n "questions_about"≥≥ ≤≤.CourseProf.Firstname≥≥ ≤≤.CourseProf.Lastname≥≥}
+≤≤ template "course_prof" .CourseProfReport ≥≥
+≤≤ template "course" .CourseProfReport.CourseReport ≥≥
+ ≤≤ if gt (len .CourseProfReport.CourseReport.TutorReports) 0≥≥
+ \section{≤≤i18n "questions_concerning_ex"≥≥}
+ ≤≤ template "tutor_overview" .Tutors≥≥
+ ≤≤ range .CourseProfReport.CourseReport.TutorReports ≥≥
+    ≤≤ template "tutor" . ≥≥
+ ≤≤ end ≥≥
+ ≤≤end≥≥
+\end{document}
+
+≤≤ end ≥≥

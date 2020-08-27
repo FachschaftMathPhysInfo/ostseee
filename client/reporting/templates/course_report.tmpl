@@ -1,23 +1,26 @@
 ≤≤ define "course_report"≥≥
 \documentclass[pagesize,halfparskip-,headsepline,cleardoubleempty,table]{scrbook}
 \def\tightlist{} % for pandoc
-  \title{Lehrevaluation ≤≤ .Module.Name ≥≥}
-  \subtitle{im ≤≤ .Term.Name ≥≥}
+  \title{Lehrevaluation ≤≤ lesc .Module.Name ≥≥}
+  \subtitle{im ≤≤ lesc .Term.Name ≥≥}
   \date{\today}
-  \author{≤≤ .Faculty.Name ≥≥}
-\newcommand{\facultylong}{≤≤ .Faculty.Name≥≥}
-\newcommand{\termlong}{≤≤ .Term.Name ≥≥}
-\newcommand{\termshort}{≤≤ .Term.Name ≥≥}
+  \author{≤≤ lesc .Faculty.Name ≥≥}
+\newcommand{\facultylong}{≤≤ lesc .Faculty.Name≥≥}
+\newcommand{\termlong}{≤≤ lesc .Term.Name ≥≥}
+\newcommand{\termshort}{≤≤ lesc .Term.Name ≥≥}
 ≤≤ template "preamble" "ngerman,english"≥≥
 \selectlanguage{≤≤i18n "tex_lang"≥≥}
 \begin{document}
 \maketitle
+%\setcounter{tocdepth}{3}
+%\tableofcontents
 ≤≤ template "preface" ≥≥
 \kurskopf{≤≤ lesc .Module.Name ≥≥}{ ≤≤ getNames .CourseProfs ≥≥ }{0}{≤≤.Course.Id ≥≥}{≤≤i18n "by"≥≥}
 \selectlanguage{≤≤ i18n "tex_lang" ≥≥}
+
 ≤≤ template "course" .CourseReport ≥≥
  ≤≤ if gt (len .CourseReport.TutorReports) 0≥≥
- \subsection*{Fragen zu den Tutorien}
+ \section{≤≤i18n "questions_concerning_ex"≥≥}
  ≤≤ template "tutor_overview" .Tutors≥≥
  ≤≤ range .CourseReport.TutorReports ≥≥
     ≤≤ template "tutor" . ≥≥

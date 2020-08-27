@@ -6,14 +6,14 @@ import {  Form } from 'ostseee-web-common';
 import { formGet } from '../query-configs/forms';
 import { getForm } from '../selectors/forms';
 
-const FormDisplay = ({id})=>{
-    const [data, second] = useRequest(formGet(id));
-    const form :Form= useSelector(getForm(id))
+const FormDisplay = ({formId})=>{
+    const [data, second] = useRequest(formGet(formId));
+    const form :Form= useSelector(getForm(formId))
     if(data.isPending||form==undefined){
         return (<>Loading</>)
     }
     return (
-    <EuiCustomLink to={`/forms/${id}`}>{form.name}</EuiCustomLink>
+    <EuiCustomLink to={`/forms/${formId}`}>{form.name}</EuiCustomLink>
     )
 }
 export default FormDisplay

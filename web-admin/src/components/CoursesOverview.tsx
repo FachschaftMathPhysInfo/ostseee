@@ -9,6 +9,12 @@ import {
   EuiInMemoryTable,
   EuiButtonIcon,
   SortDirection,
+  EuiPageContent,
+  EuiPageContentHeader,
+  EuiPageContentHeaderSection,
+  EuiTitle,
+  EuiButton,
+  EuiPageContentBody,
 } from "@elastic/eui";
 
 import { getQueries } from '../lib/store';
@@ -20,6 +26,7 @@ import ModuleDisplay from './ModuleDisplay'
 import TermDisplay from './TermDisplay';
 import CourseProfsDisplay from './CourseProfsDisplay';
 import EuiCustomLink from '../EuiCustomLink';
+import { useHistory } from 'react-router';
 
 const CoursesOverview = props => {
   useRequest(courseQueryConfigs.coursesGet());
@@ -53,6 +60,7 @@ const CoursesOverview = props => {
     {
       field: 'numberOfStudents', 
       name: '# Students',
+      sortable: true,
       truncateText: true
     },
     {
@@ -68,6 +76,7 @@ const CoursesOverview = props => {
     {
       field: 'thirdPartyKey', 
       name: '3rd-Party Key',
+      sortable: true,
       truncateText: true
     },
     {
@@ -88,15 +97,28 @@ const CoursesOverview = props => {
       direction: SortDirection.ASC,
     },
   };
-
+  const history = useHistory()
   return (
-    <>
-      <EuiInMemoryTable
+    <EuiPageContent >
+            <EuiPageContentHeader>
+                <EuiPageContentHeaderSection>
+                <EuiTitle>
+                  <h1>Veranstaltung</h1>
+                  </EuiTitle></EuiPageContentHeaderSection>
+                <EuiPageContentHeaderSection>
+                <EuiButton fill iconType="plusInCircle"  
+              onClick={() => history.push("/courses/new")}>
+        Neue Veranstaltung anlegen
+      </EuiButton> 
+                   </EuiPageContentHeaderSection>
+            </EuiPageContentHeader>
+            <EuiPageContentBody>
+            <EuiInMemoryTable
         items={Courses}  // adjust for server request
         columns={columns}
         sorting = {sorting}
-      />
-    </>
+        /> </EuiPageContentBody>
+        </EuiPageContent>
   );
 };
 

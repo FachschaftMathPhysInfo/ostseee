@@ -5,7 +5,7 @@ import { useRequest, useMutation } from "redux-query-react";
 import { courseGet } from "../query-configs/courses";
 import { useSelector } from 'react-redux'
 import { Course } from "ostseee-web-common";
-import { EuiPageContent, EuiPageContentHeader, EuiPageContentHeaderSection, EuiTitle, EuiPageContentBody, EuiText, EuiTextAlign, EuiDatePickerRange, EuiDatePicker, EuiButton, EuiCode, EuiFieldText, EuiFormRow } from "@elastic/eui";
+import { EuiPageContent, EuiPageContentHeader, EuiPageContentHeaderSection, EuiTitle, EuiPageContentBody, EuiText, EuiTextAlign, EuiDatePickerRange, EuiDatePicker, EuiButton, EuiCode, EuiFieldText, EuiFormRow, EuiForm, EuiSpacer } from "@elastic/eui";
 import ModuleDisplay from "./ModuleDisplay";
 import TermDisplay from "./TermDisplay";
 import CourseProfsDisplay from "./CourseProfsDisplay";
@@ -18,20 +18,13 @@ import TermSelect from "./TermSelect";
 import { getCourse } from "../selectors/courses";
 import CourseProfsEditor from "./CourseProfsEditor";
 import TutorsEditor from "./TutorsEditor";
+import InvitationsManager from "./InvitationsManager";
 const CourseDetail = props => {
     let { courseId } = useParams();
     const [{ isPending }] = useRequest(courseGet(courseId));
     const course: Course = useSelector(getCourse(courseId))
     //@ts-ignore
     const [{ isPending: isPending2, status }, getInvitations] = useMutation((begin, end) => { return invitationGet(courseId, begin, end) });
-    const [beginDate,handleChangeBegin] = useState(moment());
-
-    const [endDate,handleChangeEnd] = useState(moment().add(11,'d'));
-    const invitations = useSelector(state=>(state.entities.InvitationById||{})[courseId])||[]
-    //@ts-ignore
-    var invs: InvitationList= {}
-    const [baseUrl, setbaseUrl] = useState("https://eval.mathphys.info/questionaire/")
-    
     const history= useHistory()
     if (isPending) {
         return (<>Loading</>)
@@ -39,11 +32,6 @@ const CourseDetail = props => {
     if (course == undefined) {
         return <>course</>
     }
-    invs.baseUrl = baseUrl
-    invs.invitations = invitations.map(i=>i.id)
-    invs.begin= beginDate.toISOString()
-    invs.end = endDate.toISOString()
-    invs.thirdPartyKey= course.thirdPartyKey
     return (
         <EuiPageContent >
             <EuiPageContentHeader>
@@ -57,46 +45,18 @@ const CourseDetail = props => {
                 </EuiPageContentHeaderSection>
             </EuiPageContentHeader>
             <EuiPageContentBody>
-                <EuiTextAlign textAlign="left">
+                <EuiForm>
                     <b># Students:</b><code>{course.numberOfStudents}</code><br></br>
-                    <b>Form:</b>
+                    <b>Form:<FormDisplay formId={course.formId}></FormDisplay></b>
                     <EuiFormRow label="Profs">
                     <CourseProfsEditor courseId={courseId}></CourseProfsEditor>
                     </EuiFormRow>
-                    <EuiFormRow label="Zeitraum">
-                    <EuiDatePickerRange
-                        startDateControl={
-                            <EuiDatePicker
-                                selected={beginDate}
-                                onChange={handleChangeBegin}
-                                startDate={beginDate}
-                                endDate={endDate}
-                                isInvalid={beginDate > endDate}
-                                aria-label="Start date"
-                                showTimeSelect
-                            />
-                        }
-                        endDateControl={
-                            <EuiDatePicker
-                                selected={endDate}
-                                onChange={handleChangeEnd}
-                                startDate={beginDate}
-                                endDate={endDate}
-                                isInvalid={beginDate >endDate}
-                                aria-label="End date"
-                                showTimeSelect
-                            />
-                        }
-                    />
-                    </EuiFormRow>
-                    <EuiFormRow label="BaseURL">
-
-                    <EuiFieldText type="url" value={baseUrl} onChange={(e)=>setbaseUrl(e.target.value)}></EuiFieldText>
-                    </EuiFormRow>
-                    <EuiButton onClick={(e)=>console.log(getInvitations(beginDate,endDate))}>Lade Invitations</EuiButton>
-                    <EuiCode language="json">{JSON.stringify(invs)}</EuiCode>
-                </EuiTextAlign>
+                    <EuiFormRow label="Tutors">
                 <TutorsEditor courseId={courseId}></TutorsEditor>
+                </EuiFormRow>
+                <EuiSpacer size="l"></EuiSpacer>
+                </EuiForm>
+                    <InvitationsManager courseId={courseId} thirdPartyKey={course.thirdPartyKey}></InvitationsManager>
                 </EuiPageContentBody>
         </EuiPageContent>
     )

@@ -4,7 +4,7 @@ All URIs are relative to *https://eval.mathphys.info/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**CourseprofsCourseProfIdDelete**](DefaultApi.md#CourseprofsCourseProfIdDelete) | **Delete** /courseprofs/{courseProfId} | Deletes a module by ID
+[**CourseprofsCourseProfIdDelete**](DefaultApi.md#CourseprofsCourseProfIdDelete) | **Delete** /courseprofs/{courseProfId} | Deletes a courseProf
 [**CourseprofsCourseProfIdGet**](DefaultApi.md#CourseprofsCourseProfIdGet) | **Get** /courseprofs/{courseProfId} | Get a courseprof by ID
 [**CourseprofsCourseProfIdPatch**](DefaultApi.md#CourseprofsCourseProfIdPatch) | **Patch** /courseprofs/{courseProfId} | Change a courseprof by ID
 [**CourseprofsCourseProfIdReportGet**](DefaultApi.md#CourseprofsCourseProfIdReportGet) | **Get** /courseprofs/{courseProfId}/report | Get a courseProf report
@@ -13,8 +13,10 @@ Method | HTTP request | Description
 [**CoursesCourseIdDelete**](DefaultApi.md#CoursesCourseIdDelete) | **Delete** /courses/{courseId} | Deletes a module by ID
 [**CoursesCourseIdGet**](DefaultApi.md#CoursesCourseIdGet) | **Get** /courses/{courseId} | Get a course by ID
 [**CoursesCourseIdInvitationsGet**](DefaultApi.md#CoursesCourseIdInvitationsGet) | **Get** /courses/{courseId}/invitations | 
+[**CoursesCourseIdInvitationsSendPost**](DefaultApi.md#CoursesCourseIdInvitationsSendPost) | **Post** /courses/{courseId}/invitations/send | 
 [**CoursesCourseIdPatch**](DefaultApi.md#CoursesCourseIdPatch) | **Patch** /courses/{courseId} | Change a course by ID
 [**CoursesCourseIdReportGet**](DefaultApi.md#CoursesCourseIdReportGet) | **Get** /courses/{courseId}/report | Get a course report
+[**CoursesCourseIdStatsGet**](DefaultApi.md#CoursesCourseIdStatsGet) | **Get** /courses/{courseId}/stats | 
 [**CoursesCourseIdTutorsGet**](DefaultApi.md#CoursesCourseIdTutorsGet) | **Get** /courses/{courseId}/tutors | 
 [**CoursesCourseIdTutorsPost**](DefaultApi.md#CoursesCourseIdTutorsPost) | **Post** /courses/{courseId}/tutors | 
 [**CoursesCourseIdTutorsTutorIdDelete**](DefaultApi.md#CoursesCourseIdTutorsTutorIdDelete) | **Delete** /courses/{courseId}/tutors/{tutorId} | Deletes a tutor by ID
@@ -43,6 +45,7 @@ Method | HTTP request | Description
 [**ProfsProfIdPatch**](DefaultApi.md#ProfsProfIdPatch) | **Patch** /profs/{profId} | Change a prof by ID
 [**QuestionaireInvitationIdGet**](DefaultApi.md#QuestionaireInvitationIdGet) | **Get** /questionaire/{invitationId} | 
 [**QuestionaireInvitationIdPost**](DefaultApi.md#QuestionaireInvitationIdPost) | **Post** /questionaire/{invitationId} | 
+[**StatusGet**](DefaultApi.md#StatusGet) | **Get** /status | 
 [**TermsGet**](DefaultApi.md#TermsGet) | **Get** /terms | 
 [**TermsPost**](DefaultApi.md#TermsPost) | **Post** /terms | 
 [**TermsTermIdGet**](DefaultApi.md#TermsTermIdGet) | **Get** /terms/{termId} | Get a term by ID
@@ -55,7 +58,7 @@ Method | HTTP request | Description
 
 > CourseprofsCourseProfIdDelete(ctx, courseProfId)
 
-Deletes a module by ID
+Deletes a courseProf
 
 ### Required Parameters
 
@@ -352,6 +355,39 @@ No authorization required
 [[Back to README]](../README.md)
 
 
+## CoursesCourseIdInvitationsSendPost
+
+> ThirdPartySendStatus CoursesCourseIdInvitationsSendPost(ctx, courseId, thirdPartySendSettings)
+
+
+
+### Required Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**courseId** | **string**| ID of the course | 
+**thirdPartySendSettings** | [**ThirdPartySendSettings**](ThirdPartySendSettings.md)| Upload results into system. | 
+
+### Return type
+
+[**ThirdPartySendStatus**](ThirdPartySendStatus.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## CoursesCourseIdPatch
 
 > Course CoursesCourseIdPatch(ctx, courseId, course)
@@ -402,6 +438,38 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**CourseReport**](CourseReport.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CoursesCourseIdStatsGet
+
+> CourseStats CoursesCourseIdStatsGet(ctx, courseId)
+
+
+
+### Required Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**courseId** | **string**| ID of the course | 
+
+### Return type
+
+[**CourseStats**](CourseStats.md)
 
 ### Authorization
 
@@ -1298,6 +1366,34 @@ No authorization required
 
 - **Content-Type**: application/json
 - **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## StatusGet
+
+> Status StatusGet(ctx, )
+
+
+
+### Required Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**Status**](Status.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)

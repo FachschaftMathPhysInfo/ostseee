@@ -1,0 +1,27 @@
+
+≤≤ define "full_course"≥≥
+\kurskopf{≤≤ lesc (index .CourseProfs 0).Module.Name ≥≥}{ ≤≤ getNames (index .CourseProfs 0).CourseProfs ≥≥ }{0}{≤≤(index .CourseProfs 0).Course.Id ≥≥}{≤≤i18n "by"≥≥}
+\selectlanguage{≤≤ i18n "tex_lang" ≥≥}
+\section{≤≤i18n "overview_stats"≥≥}
+
+\begin{tabular}{ l r }
+ ≤≤i18n "no_of_students"≥≥ &  ≤≤ (index .CourseProfs 0).Course.NumberOfStudents≥≥ \\   
+ ≤≤i18n "no_of_questionnaires"≥≥ &  ≤≤ (index .CourseProfs 0).Stats.Questionnaires ≥≥ \\ 
+\end{tabular}
+≤≤if lt (index .CourseProfs 0).Stats.Questionnaires 5≥≥
+≤≤i18n "too_few"≥≥
+≤≤else≥≥
+≤≤ range .CourseProfs≥≥
+    \section{≤≤i18n "questions_about"≥≥ ≤≤.CourseProf.Firstname≥≥ ≤≤.CourseProf.Lastname≥≥}
+≤≤ template "course_prof" .CourseProfReport ≥≥
+≤≤end≥≥
+≤≤ template "course" (index .CourseProfs 0).CourseProfReport.CourseReport ≥≥
+ ≤≤ if gt (len (index .CourseProfs 0).CourseProfReport.CourseReport.TutorReports) 0≥≥
+ \section{≤≤i18n "questions_concerning_ex"≥≥}
+ ≤≤ template "tutor_overview" (index .CourseProfs 0).Tutors≥≥
+ ≤≤ range (index .CourseProfs 0).CourseProfReport.CourseReport.TutorReports ≥≥
+    ≤≤ template "tutor" . ≥≥
+ ≤≤ end ≥≥
+ ≤≤end≥≥
+ ≤≤end≥≥
+ ≤≤end≥≥

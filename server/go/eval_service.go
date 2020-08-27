@@ -1,9 +1,12 @@
 package openapi
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"log"
 	"math"
+	"net/http"
 	"sort"
 	"strconv"
 	"time"
@@ -65,6 +68,8 @@ func (ev *EvalService) FindCourse(id uuid.UUID) (Course, error) {
 	return ev.EvalRepository.FindCourse(id)
 }
 func (ev *EvalService) DeleteCourse(id uuid.UUID) error {
+	ev.EvalRepository.DeleteAllInvitationsOfCourse(id)
+	ev.EvalRepository.DeleteAllQuestionairesAndSingleAnswersOfCourse(id)
 	return ev.EvalRepository.DeleteCourse(id)
 }
 func (ev *EvalService) SaveCourse(course Course) (Course, error) {
@@ -163,6 +168,17 @@ func (ev *EvalService) FindOrGenerateCourseInvitations(courseId uuid.UUID, begin
 	invs, err := ev.EvalRepository.FindCourseInvitations(courseId)
 	if err != nil {
 		return []Invitation{}, err
+	}
+	if len(invs) < int(course.NumberOfStudents) {
+		//create new ones
+		invs2 := make([]Invitation, int(course.NumberOfStudents)-len(invs))
+		var i int
+		log.Println("Generating", begin, end)
+		for i = 0; i < int(course.NumberOfStudents)-len(invs); i++ {
+			inv := Invitation{ValidBegin: begin, ValidEnd: end, CourseId: courseId, Used: false}
+			invs2[i] = ev.EvalRepository.SaveInvitation(inv)
+		}
+		return invs2, nil
 	}
 	if len(invs) != int(course.NumberOfStudents) {
 		log.Println("len(invs)!=course.NumberOfStudents")
@@ -320,31 +336,33 @@ func (ev *EvalService) ValidateAndSaveQuestionaire(invitationId uuid.UUID, quest
 		if !quest.HasNotApplicableOption && answer.NotApplicable {
 			return fmt.Errorf("not applicable not allowed")
 		}
-		if !quest.IsMulti && !quest.IsComment && len(answer.Values) > 1 {
-			return fmt.Errorf("len(answer.Values)>1 on single choice")
-		}
-		if !quest.IsComment && !quest.HasOtherOption {
-			if !answer.NotApplicable && (quest.Visualizer != "tutor_overview") { //BUG(henrik): add isTutorselect!
-				//check if all values are in options
-				for _, val := range answer.Values {
-					if !contains(quest.Options, val) {
-						return fmt.Errorf("Wrong value supplied to %s: %s", quest.Title["de"], val)
+		if !answer.NotApplicable {
+			if !quest.IsMulti && !quest.IsComment && len(answer.Values) > 1 {
+				return fmt.Errorf("len(answer.Values)>1 on single choice")
+			}
+			if !quest.IsComment && !quest.HasOtherOption {
+				if !answer.NotApplicable && (quest.Visualizer != "tutor_overview") { //BUG(henrik): add isTutorselect!
+					//check if all values are in options
+					for _, val := range answer.Values {
+						if !contains(quest.Options, val) {
+							return fmt.Errorf("Wrong value supplied to %s: %s", quest.Title["de"], val)
+						}
 					}
 				}
 			}
-		}
-		//Check if concerns is valid, does not check
-		if !isIn(answer.Concerns, validUUIDs) {
-			return fmt.Errorf("Answer %s is not concerning to  specific object (Question:%i)", answer.Concerns, quest.Title)
-		}
-		if len(courseProfs) <= 1 || quest.Regards != "lecturer" {
-			delete(questions, answer.QuestionId)
-		} else {
-			// increase count
-			multiPersonMap[answer.QuestionId]++
-			// delete if reached
-			if len(courseProfs) == multiPersonMap[answer.QuestionId] {
+			//Check if concerns is valid, does not check
+			if !isIn(answer.Concerns, validUUIDs) {
+				return fmt.Errorf("Answer %s is not concerning to  specific object (Question:%i)", answer.Concerns, quest.Title)
+			}
+			if len(courseProfs) <= 1 || quest.Regards != "lecturer" {
 				delete(questions, answer.QuestionId)
+			} else {
+				// increase count
+				multiPersonMap[answer.QuestionId]++
+				// delete if reached
+				if len(courseProfs) == multiPersonMap[answer.QuestionId] {
+					delete(questions, answer.QuestionId)
+				}
 			}
 		}
 	}
@@ -438,6 +456,12 @@ func (ev *EvalService) generateResult(question Question, objectId uuid.UUID) (Re
 		return resultpairs[i].Position < resultpairs[j].Position
 	})
 	result.Values = resultpairs
+	if result.Visualizer == "histogram" {
+		result.Avg = ev.EvalRepository.AvgPerConcern(objectId, question.Id)
+		result.AvgQuestion = ev.EvalRepository.AvgPerQuestion(question.Id)
+		result.Stddev = ev.EvalRepository.StddevPerConcern(objectId, question.Id)
+		result.StddevQuestion = ev.EvalRepository.StddevPerQuestion(question.Id)
+	}
 	return result, nil
 }
 func (ev *EvalService) generateResults(questions []Question, objectId uuid.UUID) ([]Result, error) {
@@ -564,7 +588,7 @@ func (ev *EvalService) GenerateCourseProfReport(courseprofId uuid.UUID) (CourseP
 	generatedSections := make([]ResultSection, len(sections))
 	for i, sec := range sections {
 		generatedSections[i].Label = sec.Title
-		generatedSections[i].Results, err = ev.generateResults(sec.Questions, course.Id)
+		generatedSections[i].Results, err = ev.generateResults(sec.Questions, courseprofId)
 		if err != nil {
 			return CourseProfReport{}, err
 		}
@@ -584,7 +608,74 @@ func (ev *EvalService) GetInvitationForLTI(infos LTIInfos) (string, error) {
 	inv, err := ev.EvalRepository.GetInvitationForLTIAssignment(course.Id, infos.UserId)
 	if err != nil {
 		log.Println(err)
-		return "", fmt.Errorf("Some error occured!")
+		return "", err
 	}
 	return inv, nil
+}
+
+func (ev *EvalService) GetCounts() StatusCounts {
+	res := StatusCounts{}
+	res.Courseprofs = ev.EvalRepository.GetCount("course_profs")
+	res.Courses = ev.EvalRepository.GetCount("courses")
+	res.Options = ev.EvalRepository.GetCount("options")
+	res.Questionaires = ev.EvalRepository.GetCount("questionaires")
+	res.Singleanswers = ev.EvalRepository.GetCount("single_answers")
+	res.Terms = ev.EvalRepository.GetCount("terms")
+	res.Tutors = ev.EvalRepository.GetCount("tutors")
+	res.Invitations = ev.EvalRepository.GetCount("invitations")
+	return res
+}
+
+type SendStatus struct {
+	ErrNo        int    `json:"errno"`
+	Vid          string `json:"vid"`
+	Participants int    `json:"participants"`
+	Assigned     int    `json:"assigned"`
+	Overwritten  int    `json:"overwritten"`
+	NotChanged   int    `json:"notchanged"`
+}
+type Data struct {
+	BaseUrl       string   `json:"baseUrl"`
+	Invitations   []string `json:"invitations"`
+	ThirdPartyKey string   `json:"thirdPartyKey"`
+	Begin         string   `json:"begin"`
+	End           string   `json:"end"`
+	Force         int32    `form:"force" json:"force"`
+}
+
+// SendInvitations finds or generates invitations and send them to the plattform
+func (ev *EvalService) SendInvitations(id uuid.UUID, begin, end string, baseUrl, url string, force int32) (SendStatus, error) {
+	course, err := ev.EvalRepository.FindCourse(id)
+	if err != nil {
+		return SendStatus{}, err
+	}
+	invs, err := ev.FindOrGenerateCourseInvitations(id, begin, end)
+	if err != nil {
+		return SendStatus{}, err
+	}
+	invitations := make([]string, len(invs))
+	for idx, i := range invs {
+		invitations[idx] = i.Id.String()
+	}
+	var data Data
+	data.BaseUrl = baseUrl
+	data.Begin = begin
+	data.End = end
+	data.ThirdPartyKey = course.ThirdPartyKey
+	data.Invitations = invitations
+	data.Force = force
+	jsonData, _ := json.Marshal(&data)
+	resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonData))
+	if err != nil {
+		return SendStatus{}, err
+	}
+	defer resp.Body.Close()
+	dec := json.NewDecoder(resp.Body)
+	var status SendStatus
+	err = dec.Decode(&status)
+	return status, err
+}
+
+func (ev *EvalService) GetCourseStats(courseId uuid.UUID) CourseStats {
+	return CourseStats{Questionnaires: int32(ev.EvalRepository.CountOfQuestionaires(courseId))}
 }

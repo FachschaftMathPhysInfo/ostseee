@@ -13,10 +13,12 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	lti "github.com/henrixapp/go-lti"
 	uuid "github.com/satori/go.uuid"
+	"github.com/shirou/gopsutil/mem"
 )
 
 type EvalAPI struct {
@@ -180,10 +182,37 @@ func (ev *EvalAPI) CoursesCourseIdInvitationsGet(c *gin.Context) {
 	}
 	invitations, err := ev.EvalService.FindOrGenerateCourseInvitations(id, timespan.Begin, timespan.End)
 	if err != nil {
-		c.Status(http.StatusBadRequest)
+		c.JSON(http.StatusBadRequest, err)
 		return
 	}
 	c.JSON(http.StatusOK, invitations)
+}
+
+// CoursesCourseIdInvitationsSendPost -
+func (ev *EvalAPI) CoursesCourseIdInvitationsSendPost(c *gin.Context) {
+	type Settings struct {
+		Begin        string `form:"begin" json:"begin"`
+		End          string `form:"end" json:"end"`
+		BaseUrl      string `form:"baseUrl" json:"baseUrl"`
+		PlattformUrl string `form:"plattformUrl" json:"plattformUrl"`
+		Force        int32  `form:"force" json:"force"`
+	}
+	var settings Settings
+	c.Bind(&settings)
+	log.Println(settings)
+	id, err := uuid.FromString(c.Param("courseId"))
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	status, err := ev.EvalService.SendInvitations(id, settings.Begin, settings.End, settings.BaseUrl, settings.PlattformUrl, settings.Force)
+	if err != nil {
+		log.Println(err)
+		c.String(http.StatusBadRequest, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, status)
 }
 
 // CoursesCourseIdPatch - Change a course by ID
@@ -466,7 +495,18 @@ func (ev *EvalAPI) FormsFormIdGet(c *gin.Context) {
 
 // FormsFormIdPatch - Change a form by ID
 func (ev *EvalAPI) FormsFormIdPatch(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	id := c.Params.ByName("formId")
+	uid, err := uuid.FromString(id)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	var form Form
+	c.Bind(&form)
+	form.Id = uid
+	//BUG(henrik): check for errors!
+	f := ev.EvalService.EvalRepository.SaveForm(form)
+	c.JSON(http.StatusOK, f)
 }
 
 // FormsGet -
@@ -813,4 +853,24 @@ func (ev *EvalAPI) LTILaunch(c *gin.Context) {
 		//returnUrl, _ := ltiRequest.CreateReturnURL()
 		c.String(http.StatusBadRequest, "Couldn't validate your request.")
 	}
+}
+
+func (ev *EvalAPI) StatusGet(c *gin.Context) {
+	var status Status
+	status.Generated = time.Now()
+	v, _ := mem.VirtualMemory()
+	status.Sysstats.Ram = float32(v.Total / 1024 / 1024)
+	status.Sysstats.Ram10 = float32(v.Used / 1024 / 1024)
+	status.Counts = ev.EvalService.GetCounts()
+	c.JSON(http.StatusOK, status)
+}
+
+func (ev *EvalAPI) CourseCourseIdStatsGet(c *gin.Context) {
+	id, err := uuid.FromString(c.Param("courseId"))
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	stats := ev.EvalService.GetCourseStats(id)
+	c.JSON(http.StatusOK, stats)
 }

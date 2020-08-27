@@ -10,7 +10,7 @@
 package openapi
 // Form struct for Form
 type Form struct {
-	Id string `json:"id"`
+	Id string `json:"id,omitempty"`
 	Name string `json:"name"`
 	TermId string `json:"termId"`
 	AbstractForm AbstractForm `json:"abstractForm"`

@@ -1,0 +1,26 @@
+≤≤ define "too_few"≥≥
+\documentclass[pagesize,halfparskip-,headsepline,cleardoubleempty,table]{scrbook}
+\def\tightlist{} % for pandoc
+  \title{Lehrevaluation ≤≤ lesc .Module.Name ≥≥}
+  \subtitle{im ≤≤ lesc .Term.Name ≥≥}
+  
+  \author{≤≤ lesc .Faculty.Name ≥≥}
+\newcommand{\facultylong}{≤≤ lesc .Faculty.Name≥≥}
+\newcommand{\termlong}{≤≤ lesc .Term.Name ≥≥}
+\newcommand{\termshort}{≤≤ lesc .Term.Name ≥≥}
+≤≤ template "preamble" "ngerman,english"≥≥
+\selectlanguage{≤≤i18n "tex_lang"≥≥}
+\date{\today}
+\begin{document}
+\selectlanguage{≤≤i18n "tex_lang"≥≥}
+\maketitle
+≤≤ template "preface" ≥≥
+%\setcounter{tocdepth}{3}
+%\tableofcontents
+\kurskopf{≤≤ lesc .Module.Name ≥≥}{ ≤≤ getNames .CourseProfs ≥≥ }{0}{≤≤.Course.Id ≥≥}{≤≤i18n "by"≥≥}
+\selectlanguage{≤≤ i18n "tex_lang" ≥≥}
+≤≤i18n "too_few"≥≥
+
+\end{document}
+
+≤≤ end ≥≥

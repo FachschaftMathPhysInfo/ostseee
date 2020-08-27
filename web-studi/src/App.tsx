@@ -47,6 +47,9 @@ import {useSelector} from 'react-redux'
 import { getAnswersCount, getLastSectionAnswered } from './selectors/answers';
 import { EmptyForm } from 'ostseee-web-common';
 import translate from './lib/translate';
+import LicensePage from './components/LicensePage';
+import { getLanguage } from './selectors/language';
+import LandingPage from './components/LandingPage';
 function App() {
 
   
@@ -63,12 +66,11 @@ function App() {
       iconType: logoEn,
     },
   ];
-  const [languageSelected, setSelectedLanguageId] = useState('de');
-  const [idToSelectedLanguageMap, setIdToSelectedLanguageMap] = useState({'de':true});
+  const languageSelected = useSelector(getLanguage);
+  const idToSelectedLanguageMap = {[languageSelected]:true};
   const onChangeLanguage = (languageId:string) => {
     //@ts-ignore
     store.dispatch(changeLanguage(languageId))
-    setSelectedLanguageId(languageId);
   };
    const emptyForm:EmptyForm= useSelector(getEmptyForm)
    const total = emptyForm?.abstractForm.pages.map(p=>p.sections.map(s=>s.questions.map(q=>q.regards=="lecturer"?emptyForm.profs?.length:1).reduce((pv,cv)=>pv+cv,0)).reduce((pv,cv)=>pv+cv,0)).reduce((pv,cv)=>pv+cv,0)
@@ -142,6 +144,12 @@ function App() {
       <Switch>
         <Route path="/questionaire/:questionaireId">
           <Questionaire lang={"de"}></Questionaire>
+         </Route>
+         <Route path="/licenses/:bibliothek">
+          <LicensePage ></LicensePage>
+         </Route>
+         <Route path="/">
+           <LandingPage></LandingPage>
          </Route>
       </Switch>
       {/* <FacultiesOverView

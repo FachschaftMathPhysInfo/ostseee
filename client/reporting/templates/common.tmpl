@@ -1,16 +1,17 @@
 ≤≤ define "result" ≥≥
-    ≤≤if eq (len .Values)  0 ≥≥
-    \paragraph{≤≤ i18n_map .Label ≥≥} ≤≤ i18n "unanswered" ≥≥
-    ≤≤ else ≥≥
     ≤≤if and (eq .Visualizer  "list") (gt (len .Values) 0) ≥≥
-    \paragraph{≤≤ i18n "comments" ≥≥}
+    \subsubsection{≤≤ i18n_map .Label ≥≥}
+    ≤≤ i18n "comment_notice" ≥≥
     \begin{itemize}
     ≤≤ range .Values ≥≥
     \item ≤≤ lesc .Value ≥≥
     ≤≤ end ≥≥
     \end{itemize}
     ≤≤else≥≥
-    ≤≤ end ≥≥
+    
+    ≤≤if or (eq (len .Values)  0) (eq (countValues .Values) "0") ≥≥
+    \paragraph{≤≤ i18n_map .Label ≥≥} ≤≤ i18n "unanswered" ≥≥
+    ≤≤ else ≥≥
     ≤≤ if eq .Visualizer "horizontal_bars"≥≥
     \begin{tikzpicture}
 \globalQuestion{
@@ -32,9 +33,12 @@
 }
 \singleHistogramPoleLeft{≤≤  lesc (i18n_map (index .Values 0).Label)  ≥≥}
 \singleHistogramHist{≤≤ toPercentage .Values≥≥}
-≤≤/*\singleHistogramErr{<%=sa%>}{<%=ss%>}*/≥≥
+≤≤if eq .Visualizer "histogram" ≥≥
+\singleHistogramErr{≤≤(add .Avg 1) ≥≥}{≤≤.Stddev≥≥}[≤≤(add .AvgQuestion 1)≥≥][≤≤.StddevQuestion≥≥] 
+≤≤ end ≥≥
 \singleHistogramPoleRight{≤≤ lesc (i18n_map (last .Values ).Label) ≥≥}
 \end{tikzpicture}
+    ≤≤ end ≥≥
     ≤≤ end ≥≥
     ≤≤ end ≥≥
 ≤≤ end ≥≥
@@ -54,7 +58,7 @@
     \endhead
 
   ≤≤ range . ≥≥
-    \hyperref[≤≤.Id≥≥]{≤≤.Name≥≥}
+    \hyperref[≤≤.Id≥≥]{≤≤lesc .Name≥≥}
 	& \pageref{≤≤.Id≥≥} \\
   ≤≤end≥≥
   \hline

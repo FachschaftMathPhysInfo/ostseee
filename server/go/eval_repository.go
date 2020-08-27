@@ -324,6 +324,15 @@ func (ev *EvalRepository) DeleteAllInvitationsOfCourse(courseId uuid.UUID) error
 	return nil
 }
 
+func (ev *EvalRepository) DeleteAllQuestionairesAndSingleAnswersOfCourse(courseId uuid.UUID) error {
+	if courseId == uuid.Nil {
+		return fmt.Errorf("nil is not allowed")
+	}
+	ev.DB.Where("questionaire_id in ?", ev.DB.Table("questionaires").Select("id").Where("course_id = ?", courseId).SubQuery()).Delete(&SingleAnswer{})
+	ev.DB.Where("course_id = ?", courseId).Delete(Questionaire{})
+	return nil
+}
+
 //SaveInvitation upserts a term, i.e. if a invitation with this id exists it will be created.
 func (ev *EvalRepository) SaveInvitation(invitation Invitation) Invitation {
 	ev.DB.Save(&invitation)
@@ -456,9 +465,68 @@ func (ev *EvalRepository) GetInvitationForLTIAssignment(courseId uuid.UUID, user
 	var inv Invitation
 	ev.DB.Joins("LEFT JOIN lti_assignments t2 ON invitations.ID = t2.invitation_id WHERE t2.invitation_id IS NULL AND invitations.course_id = ? ", courseId).First(&inv)
 	if inv.Id == uuid.Nil {
-		return "", fmt.Errorf("not enough unused invitations")
+		return "", fmt.Errorf("not enough unused invitations. the evaluation has not begun")
 	}
 	filter.InvitationId = inv.Id
 	ev.DB.Save(&filter)
 	return inv.Id.String(), nil
+}
+
+func (ev *EvalRepository) GetCount(tablename string) int32 {
+	var count int
+	ev.DB.Table(tablename).Count(&count)
+	return int32(count)
+}
+
+func (ev *EvalRepository) AvgPerConcern(objectId, questionId uuid.UUID) float32 {
+	type Result struct {
+		Freq float32
+	}
+	var res []Result
+	ev.DB.Table("single_answers").Where("not_applicable <> True AND question_id = ? AND concerns = ?", questionId, objectId).Select("avg(CAST(coalesce(NULLIF(value, ''), '0') AS integer)) as freq").Scan(&res)
+	return res[0].Freq
+}
+
+func (ev *EvalRepository) AvgPerQuestion(questionId uuid.UUID) float32 {
+	type Result struct {
+		Freq float32
+	}
+	var res []Result
+	ev.DB.Table("single_answers").Where("not_applicable <> True AND question_id = ? ", questionId).Select("avg(CAST(coalesce(NULLIF(value, ''), '0') AS integer)) as freq").Scan(&res)
+	return res[0].Freq
+}
+
+func (ev *EvalRepository) StddevPerConcern(objectId, questionId uuid.UUID) float32 {
+	type Result struct {
+		Freq float32
+	}
+	var res []Result
+	ev.DB.Table("single_answers").Where("not_applicable <> True AND question_id = ? AND concerns = ?", questionId, objectId).Select("stddev_samp(CAST(coalesce(NULLIF(value, ''), '0') AS integer)) as freq").Scan(&res)
+	if len(res) > 0 {
+		return res[0].Freq
+	}
+	return 0
+}
+
+func (ev *EvalRepository) StddevPerQuestion(questionId uuid.UUID) float32 {
+	type Result struct {
+		Freq float32
+	}
+	var res []Result
+	ev.DB.Table("single_answers").Where("not_applicable <> True AND question_id = ? ", questionId).Select("stddev_samp(CAST(coalesce(NULLIF(value, ''), '0') AS integer)) as freq").Scan(&res)
+	if len(res) > 0 {
+		return res[0].Freq
+	}
+	return 0
+}
+
+// CountTutor counts the number the tutor is named, question ID can be null, if question is unique
+func (ev *EvalRepository) CountTutor(questionId uuid.UUID, objectId uuid.UUID) int {
+	var filter SingleAnswer
+	//filter.QuestionId = questionId
+	//filter.Concerns = objectId
+	filter.Value = objectId.String()
+	var count int
+	ev.DB.Table("single_answers").Where(&filter).Count(&count)
+	return count
 }

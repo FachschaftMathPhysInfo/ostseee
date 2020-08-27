@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | **string** |  | 
+**Id** | **string** |  | [optional] 
 **Name** | **string** |  | 
 **TermId** | **string** |  | 
 **AbstractForm** | [**AbstractForm**](AbstractForm.md) |  | 

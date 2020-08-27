@@ -49,12 +49,21 @@ import {
     Questionaire,
     QuestionaireFromJSON,
     QuestionaireToJSON,
+    Status,
+    StatusFromJSON,
+    StatusToJSON,
     Term,
     TermFromJSON,
     TermToJSON,
     TermReport,
     TermReportFromJSON,
     TermReportToJSON,
+    ThirdPartySendSettings,
+    ThirdPartySendSettingsFromJSON,
+    ThirdPartySendSettingsToJSON,
+    ThirdPartySendStatus,
+    ThirdPartySendStatusFromJSON,
+    ThirdPartySendStatusToJSON,
     Tutor,
     TutorFromJSON,
     TutorToJSON,
@@ -101,6 +110,11 @@ export interface CoursesCourseIdInvitationsGetRequest {
     courseId: string;
     begin: Date;
     end: Date;
+}
+
+export interface CoursesCourseIdInvitationsSendPostRequest {
+    courseId: string;
+    thirdPartySendSettings: ThirdPartySendSettings;
 }
 
 export interface CoursesCourseIdPatchRequest {
@@ -234,7 +248,7 @@ export interface TermsTermIdReportGetRequest {
 
 
 /**
- * Deletes a module by ID
+ * Deletes a courseProf
  */
 function courseprofsCourseProfIdDeleteRaw<T>(requestParameters: CourseprofsCourseProfIdDeleteRequest, requestConfig: runtime.TypedQueryConfig<T, void> = {}): QueryConfig<T> {
     if (requestParameters.courseProfId === null || requestParameters.courseProfId === undefined) {
@@ -272,7 +286,7 @@ function courseprofsCourseProfIdDeleteRaw<T>(requestParameters: CourseprofsCours
 }
 
 /**
-* Deletes a module by ID
+* Deletes a courseProf
 */
 export function courseprofsCourseProfIdDelete<T>(requestParameters: CourseprofsCourseProfIdDeleteRequest, requestConfig?: runtime.TypedQueryConfig<T, void>): QueryConfig<T> {
     return courseprofsCourseProfIdDeleteRaw(requestParameters, requestConfig);
@@ -671,6 +685,56 @@ function coursesCourseIdInvitationsGetRaw<T>(requestParameters: CoursesCourseIdI
 */
 export function coursesCourseIdInvitationsGet<T>(requestParameters: CoursesCourseIdInvitationsGetRequest, requestConfig?: runtime.TypedQueryConfig<T, Array<Invitation>>): QueryConfig<T> {
     return coursesCourseIdInvitationsGetRaw(requestParameters, requestConfig);
+}
+
+/**
+ */
+function coursesCourseIdInvitationsSendPostRaw<T>(requestParameters: CoursesCourseIdInvitationsSendPostRequest, requestConfig: runtime.TypedQueryConfig<T, ThirdPartySendStatus> = {}): QueryConfig<T> {
+    if (requestParameters.courseId === null || requestParameters.courseId === undefined) {
+        throw new runtime.RequiredError('courseId','Required parameter requestParameters.courseId was null or undefined when calling coursesCourseIdInvitationsSendPost.');
+    }
+
+    if (requestParameters.thirdPartySendSettings === null || requestParameters.thirdPartySendSettings === undefined) {
+        throw new runtime.RequiredError('thirdPartySendSettings','Required parameter requestParameters.thirdPartySendSettings was null or undefined when calling coursesCourseIdInvitationsSendPost.');
+    }
+
+    let queryParameters = null;
+
+
+    const headerParameters = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+
+    const { meta = {} } = requestConfig;
+
+    const config: QueryConfig<T> = {
+        url: `/courses/{courseId}/invitations/send`.replace(`{${"courseId"}}`, encodeURIComponent(String(requestParameters.courseId))),
+        meta,
+        update: requestConfig.update,
+        queryKey: requestConfig.queryKey,
+        optimisticUpdate: requestConfig.optimisticUpdate,
+        force: requestConfig.force,
+        rollback: requestConfig.rollback,
+        options: {
+            method: 'POST',
+            headers: headerParameters,
+        },
+        body: queryParameters || ThirdPartySendSettingsToJSON(requestParameters.thirdPartySendSettings),
+    };
+
+    const { transform: requestTransform } = requestConfig;
+    if (requestTransform) {
+        config.transform = (body: ResponseBody, text: ResponseBody) => requestTransform(ThirdPartySendStatusFromJSON(body), text);
+    }
+
+    return config;
+}
+
+/**
+*/
+export function coursesCourseIdInvitationsSendPost<T>(requestParameters: CoursesCourseIdInvitationsSendPostRequest, requestConfig?: runtime.TypedQueryConfig<T, ThirdPartySendStatus>): QueryConfig<T> {
+    return coursesCourseIdInvitationsSendPostRaw(requestParameters, requestConfig);
 }
 
 /**
@@ -2073,6 +2137,46 @@ function questionaireInvitationIdPostRaw<T>(requestParameters: QuestionaireInvit
 */
 export function questionaireInvitationIdPost<T>(requestParameters: QuestionaireInvitationIdPostRequest, requestConfig?: runtime.TypedQueryConfig<T, void>): QueryConfig<T> {
     return questionaireInvitationIdPostRaw(requestParameters, requestConfig);
+}
+
+/**
+ */
+function statusGetRaw<T>( requestConfig: runtime.TypedQueryConfig<T, Status> = {}): QueryConfig<T> {
+    let queryParameters = null;
+
+
+    const headerParameters = {};
+
+
+    const { meta = {} } = requestConfig;
+
+    const config: QueryConfig<T> = {
+        url: `/status`,
+        meta,
+        update: requestConfig.update,
+        queryKey: requestConfig.queryKey,
+        optimisticUpdate: requestConfig.optimisticUpdate,
+        force: requestConfig.force,
+        rollback: requestConfig.rollback,
+        options: {
+            method: 'GET',
+            headers: headerParameters,
+        },
+        body: queryParameters,
+    };
+
+    const { transform: requestTransform } = requestConfig;
+    if (requestTransform) {
+        config.transform = (body: ResponseBody, text: ResponseBody) => requestTransform(StatusFromJSON(body), text);
+    }
+
+    return config;
+}
+
+/**
+*/
+export function statusGet<T>( requestConfig?: runtime.TypedQueryConfig<T, Status>): QueryConfig<T> {
+    return statusGetRaw( requestConfig);
 }
 
 /**

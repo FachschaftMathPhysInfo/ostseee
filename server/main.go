@@ -66,6 +66,7 @@ func initDB() *gorm.DB {
 		db.AutoMigrate(&sw.Questionaire{})
 		db.AutoMigrate(&sw.SingleAnswer{})
 		db.AutoMigrate(&sw.LTIAssignment{})
+		db.AutoMigrate(&sw.User{})
 	}
 	if os.Getenv("DB_LOG") == "1" {
 		return db.LogMode(true)

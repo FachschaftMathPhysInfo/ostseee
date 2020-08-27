@@ -873,4 +873,14 @@ func (ev *EvalAPI) CourseCourseIdStatsGet(c *gin.Context) {
 	}
 	stats := ev.EvalService.GetCourseStats(id)
 	c.JSON(http.StatusOK, stats)
+func (ev *EvalAPI) CreateUserPost(c *gin.Context) {
+	var user User
+	c.Bind(&user)
+	user, err := ev.EvalService.CreateUser(user.UserName, user.FirstName, user.LastName, user.Password)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.Status(http.StatusNoContent)
 }

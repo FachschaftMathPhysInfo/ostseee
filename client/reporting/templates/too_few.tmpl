@@ -1,4 +1,4 @@
-≤≤ define "course_prof_report"≥≥
+≤≤ define "too_few"≥≥
 \documentclass[pagesize,halfparskip-,headsepline,cleardoubleempty,table]{scrbook}
 \def\tightlist{} % for pandoc
   \title{Lehrevaluation ≤≤ lesc .Module.Name ≥≥}
@@ -19,23 +19,8 @@
 %\tableofcontents
 \kurskopf{≤≤ lesc .Module.Name ≥≥}{ ≤≤ getNames .CourseProfs ≥≥ }{0}{≤≤.Course.Id ≥≥}{≤≤i18n "by"≥≥}
 \selectlanguage{≤≤ i18n "tex_lang" ≥≥}
-\section{≤≤i18n "overview_stats"≥≥}
+≤≤i18n "too_few"≥≥
 
-\begin{tabular}{ l r }
- ≤≤i18n "no_of_students"≥≥ &  ≤≤ .Course.NumberOfStudents≥≥ \\   
- ≤≤i18n "no_of_questionnaires"≥≥ &  ≤≤ .Stats.Questionnaires ≥≥ \\ 
-\end{tabular}
-
-    \section{≤≤i18n "questions_about"≥≥ ≤≤.CourseProf.Firstname≥≥ ≤≤.CourseProf.Lastname≥≥}
-≤≤ template "course_prof" .CourseProfReport ≥≥
-≤≤ template "course" .CourseProfReport.CourseReport ≥≥
- ≤≤ if gt (len .CourseProfReport.CourseReport.TutorReports) 0≥≥
- \section{≤≤i18n "questions_concerning_ex"≥≥}
- ≤≤ template "tutor_overview" .Tutors≥≥
- ≤≤ range .CourseProfReport.CourseReport.TutorReports ≥≥
-    ≤≤ template "tutor" . ≥≥
- ≤≤ end ≥≥
- ≤≤end≥≥
 \end{document}
 
 ≤≤ end ≥≥

@@ -873,6 +873,7 @@ func (ev *EvalAPI) CourseCourseIdStatsGet(c *gin.Context) {
 	}
 	stats := ev.EvalService.GetCourseStats(id)
 	c.JSON(http.StatusOK, stats)
+}
 func (ev *EvalAPI) CreateUserPost(c *gin.Context) {
 	var user User
 	c.Bind(&user)

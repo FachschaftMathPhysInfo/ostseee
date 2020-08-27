@@ -381,6 +381,7 @@ func NewRouter(Db *gorm.DB) *gin.Engine {
 			http.MethodGet,
 			"/v1/courses/:courseId/stats",
 			evalAPI.CourseCourseIdStatsGet,
+		}, {
 			"CreateUsersPost",
 			http.MethodPost,
 			"/v1/users",

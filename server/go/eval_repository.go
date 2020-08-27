@@ -529,6 +529,7 @@ func (ev *EvalRepository) CountTutor(questionId uuid.UUID, objectId uuid.UUID) i
 	var count int
 	ev.DB.Table("single_answers").Where(&filter).Count(&count)
 	return count
+}
 func (ev *EvalRepository) FindUserByName(name string) User {
 	var filter User
 	var user User

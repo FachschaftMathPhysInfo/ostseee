@@ -376,6 +376,12 @@ func NewRouter(Db *gorm.DB) *gin.Engine {
 			"/v1/terms/:termId/report",
 			evalAPI.TermsTermIdReportGet,
 		},
+		{
+			"CourseCourseIdCourseStatsGet",
+			http.MethodGet,
+			"/v1/courses/:courseId/stats",
+			evalAPI.CourseCourseIdStatsGet,
+		},
 	}
 
 	router := gin.New()

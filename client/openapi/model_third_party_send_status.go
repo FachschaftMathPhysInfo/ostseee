@@ -8,13 +8,12 @@
  */
 
 package openapi
-
 // ThirdPartySendStatus struct for ThirdPartySendStatus
 type ThirdPartySendStatus struct {
-	Errno        int32  `json:"errno,omitempty"`
-	Vid          string `json:"vid,omitempty"`
-	Participants int32  `json:"participants,omitempty"`
-	Assigned     int32  `json:"assigned,omitempty"`
-	Overwritten  int32  `json:"overwritten,omitempty"`
-	Notchanged   int32  `json:"notchanged,omitempty"`
+	Errno int32 `json:"errno,omitempty"`
+	Vid int32 `json:"vid,omitempty"`
+	Participants int32 `json:"participants,omitempty"`
+	Assigned int32 `json:"assigned,omitempty"`
+	Overwritten int32 `json:"overwritten,omitempty"`
+	Notchanged int32 `json:"notchanged,omitempty"`
 }

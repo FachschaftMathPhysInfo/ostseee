@@ -324,6 +324,15 @@ func (ev *EvalRepository) DeleteAllInvitationsOfCourse(courseId uuid.UUID) error
 	return nil
 }
 
+func (ev *EvalRepository) DeleteAllQuestionairesAndSingleAnswersOfCourse(courseId uuid.UUID) error {
+	if courseId == uuid.Nil {
+		return fmt.Errorf("nil is not allowed")
+	}
+	ev.DB.Where("questionaire_id in ?", ev.DB.Table("questionaires").Select("id").Where("course_id = ?", courseId).SubQuery()).Delete(&SingleAnswer{})
+	ev.DB.Where("course_id = ?", courseId).Delete(Questionaire{})
+	return nil
+}
+
 //SaveInvitation upserts a term, i.e. if a invitation with this id exists it will be created.
 func (ev *EvalRepository) SaveInvitation(invitation Invitation) Invitation {
 	ev.DB.Save(&invitation)
@@ -509,4 +518,15 @@ func (ev *EvalRepository) StddevPerQuestion(questionId uuid.UUID) float32 {
 		return res[0].Freq
 	}
 	return 0
+}
+
+// CountTutor counts the number the tutor is named, question ID can be null, if question is unique
+func (ev *EvalRepository) CountTutor(questionId uuid.UUID, objectId uuid.UUID) int {
+	var filter SingleAnswer
+	//filter.QuestionId = questionId
+	//filter.Concerns = objectId
+	filter.Value = objectId.String()
+	var count int
+	ev.DB.Table("single_answers").Where(&filter).Count(&count)
+	return count
 }

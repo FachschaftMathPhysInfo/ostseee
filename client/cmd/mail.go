@@ -110,7 +110,8 @@ var MailTermCmd = &cobra.Command{
 							"2. Select 'external tool' on the left hand side and click 'Add'.",
 							"3. Name your activity 'Evaluation', select 'Evaluation (Physik)' in the drop-down menu 'preconfigured Tool' and save the activity. ",
 
-							" Please notify your participants that there will be an evaluation and that they have to be signed up to take the survey. The questionnaire is only available during the week. As a lecturer you cannot participate.", "If you have additional questions, do not hesitate to contact us."}
+							" Please notify your participants that there will be an evaluation and that they have to be signed up to take the survey. The questionnaire is only available during the week. As a lecturer you cannot participate.",
+							"If you have additional questions, do not hesitate to contact us."}
 					}
 					signature = "Kind regards"
 					greeting = "Dear lecturer(s),"
@@ -158,6 +159,235 @@ var MailTermCmd = &cobra.Command{
 				errorMail := e.Send(viper.GetString("smtp"), a)
 				if errorMail != nil {
 					fmt.Println("Mail", module.Name, " konnte nicht gesandt werden:", errorMail.Error())
+				}
+			}
+		}
+		fmt.Println(term.Name)
+	},
+}
+
+var MailTermResultsCourseCmd = &cobra.Command{
+	Use:   "term_results_course",
+	Short: "Emails information that results are aviable to all profs in specific term. Second arg is your name",
+	Args:  cobra.ExactArgs(2),
+	Run: func(cmd *cobra.Command, args []string) {
+		termId := args[0]
+		name := args[1]
+		fmt.Println(termId)
+		h := hermes.Hermes{
+			// Optional Theme
+			// Theme: new(Default)
+			Product: hermes.Product{
+				// Appears in header & footer of e-mails
+				Name: name,
+				Link: "https://mathphys.stura.uni-heidelberg.de/w/evaluation-und-lehrpreis/",
+				// Optional product logo
+				Logo:        "https://mathphys.stura.uni-heidelberg.de/w/wp-content/uploads/2020/07/evallogo.png",
+				Copyright:   "(c) 2020 Evaluationsteam der Fachschaft MathPhysInfo im Auftrag der Fakultät für Physik und Astronomie",
+				TroubleText: "Wenn der {ACTION}-Button nicht funktioniert, nutze folgenden Link:",
+			},
+		}
+		ctx := context.WithValue(cmd.Context(), openapi.ContextBasicAuth, openapi.BasicAuth{UserName: viper.GetString("basic_user"), Password: viper.GetString("basic_pw")})
+		client := NewAPIClient()
+		term, _, err := client.DefaultApi.TermsTermIdGet(ctx, termId)
+		if err != nil {
+			fmt.Println("error:", err)
+			return
+		}
+		courses, _, err := client.DefaultApi.CoursesGet(ctx)
+		if err != nil {
+			fmt.Println("error:", err)
+			return
+		}
+		for _, c := range courses {
+			if c.TermId == termId {
+				courseProfs, _, err := client.DefaultApi.CourseprofsGet(ctx, &openapi.CourseprofsGetOpts{CourseId: optional.NewString(c.Id)})
+				if err != nil {
+					fmt.Println("error:", err)
+					return
+				}
+
+				module, _, _ := client.DefaultApi.ModulesModuleIdGet(ctx, c.ModuleId)
+				if len(courseProfs) == 0 {
+					log.Println("Warning: No Profs", c.Id)
+					log.Println(module.Name)
+				}
+				mails := make([]string, len(courseProfs))
+				names := make([]string, len(courseProfs))
+				profs := make([]openapi.Prof, len(courseProfs))
+				for i, cp := range courseProfs {
+					profs[i], _, _ = client.DefaultApi.ProfsProfIdGet(ctx, cp.ProfId)
+					mails[i] = profs[i].Email
+					names[i] = profs[i].Lastname
+				}
+				greeting := "Sehr geehrte Dozierende,"
+				intros := []string{"Die Fachschaft hat dieses Semester in Ihrer Veranstaltung " + module.Name + " eine Veranstaltungsumfrage durchgeführt."}
+				outros := []string{"Sollten Sie keine Evaluationsergebnisse angezeigt bekommen, schicken Sie uns bitte eine Mail inklusive Ihrer UniID, damit wir die Zugriffsrechte überprüfen und gegebenenfalls anpassen können.",
+					"Die Tutor*innen finden ihre Ergebnisse ebenfalls in der Übungsgruppenverwaltung, sie wurden darüber per Mail informiert.",
+					"Wenn Sie Anmerkungen, Fragen und Wünsche zur Evaluation haben zögern Sie bitte nicht, uns zu kontaktieren."}
+				signature := "Viele Grüße"
+				if c.Language == "en" {
+					intros = []string{
+						"During the week of the 13th of July an online evaluation took place at the department of physics and astronomy."}
+					signature = "Kind regards"
+					greeting = "Dear lecturer(s),"
+					outros = []string{"If you cannot see your report(s), please email us your uniid and we will resolve this problem.",
+						"Exercise group teachers received a seperate mail announcing the results.",
+						"If you have additional questions, do not hesitate to contact us."}
+				}
+				actions := []hermes.Action{{
+					Instructions: "Die Evaluationsergebnisse finden Sie nun in der Übungsgruppenverwaltung personalisiert zugänglich:",
+					Button: hermes.Button{
+						Color: "#990000", // Optional action button color
+						Text:  "Ergebnisse abrufen",
+						Link:  viper.GetString("download_center"),
+					},
+				}}
+				if c.Language == "en" {
+					actions = []hermes.Action{{
+						Instructions: "You can now access your report via the Übungsgruppenverwaltung:",
+						Button: hermes.Button{
+							Color: "#990000", // Optional action button color
+							Text:  "View results",
+							Link:  viper.GetString("download_center"),
+						},
+					}}
+				}
+				email := hermes.Email{
+					Body: hermes.Body{
+						Intros:    intros,
+						Title:     greeting,
+						Signature: signature,
+						Actions:   actions,
+						Outros:    outros,
+					},
+				}
+				emailText, _ := h.GeneratePlainText(email)
+				emailBody, _ := h.GenerateHTML(email)
+				var a smtp.Auth
+				e := &emailTool.Email{
+					To:      mails,
+					From:    "evaluation@mathphys.stura.uni-heidelberg.de",
+					Cc:      []string{"evaluation@mathphys.stura.uni-heidelberg.de"},
+					Subject: "Evaluation SoSe 2020 " + module.Name,
+					Text:    []byte(emailText),
+					HTML:    []byte(emailBody),
+					Headers: textproto.MIMEHeader{},
+				}
+				errorMail := e.Send(viper.GetString("smtp"), a)
+				if errorMail != nil {
+					fmt.Println("Mail", module.Name, " konnte nicht gesandt werden:", errorMail.Error())
+				}
+			}
+		}
+		fmt.Println(term.Name)
+	},
+}
+
+var MailTermResultsTutorsCmd = &cobra.Command{
+	Use:   "term_results_tutors",
+	Short: "Emails information to all tutors in specific term. Second arg is your name",
+	Args:  cobra.ExactArgs(2),
+	Run: func(cmd *cobra.Command, args []string) {
+		termId := args[0]
+		name := args[1]
+		fmt.Println(termId)
+		h := hermes.Hermes{
+			// Optional Theme
+			// Theme: new(Default)
+			Product: hermes.Product{
+				// Appears in header & footer of e-mails
+				Name: name,
+				Link: "https://mathphys.stura.uni-heidelberg.de/w/evaluation-und-lehrpreis/",
+				// Optional product logo
+				Logo:        "https://mathphys.stura.uni-heidelberg.de/w/wp-content/uploads/2020/07/evallogo.png",
+				Copyright:   "(c) 2020 Evaluationsteam der Fachschaft MathPhysInfo im Auftrag der Fakultät für Physik und Astronomie",
+				TroubleText: "Wenn der {ACTION}-Button nicht funktioniert, nutze folgenden Link:",
+			},
+		}
+		ctx := context.WithValue(cmd.Context(), openapi.ContextBasicAuth, openapi.BasicAuth{UserName: viper.GetString("basic_user"), Password: viper.GetString("basic_pw")})
+		client := NewAPIClient()
+		term, _, err := client.DefaultApi.TermsTermIdGet(ctx, termId)
+		if err != nil {
+			fmt.Println("error:", err)
+			return
+		}
+		courses, _, err := client.DefaultApi.CoursesGet(ctx)
+		if err != nil {
+			fmt.Println("error:", err)
+			return
+		}
+		for _, c := range courses {
+			if c.TermId == termId {
+
+				tutors, _, err := client.DefaultApi.CoursesCourseIdTutorsGet(ctx, c.Id)
+				if err != nil {
+					fmt.Println("error:", err)
+					return
+				}
+
+				module, _, _ := client.DefaultApi.ModulesModuleIdGet(ctx, c.ModuleId)
+				mails := make([]string, 1)
+
+				greeting := "Liebe Tutorin, lieber Tutor,"
+				intros := []string{"Die Fachschaft hat dieses Semester in der Veranstaltung " + module.Name + " eine Veranstaltungsumfrage durchgeführt , im Rahmen dessen wurden auch die Tutorien evaluiert."}
+				outros := []string{"Sollten Sie keine Evaluationsergebnisse angezeigt bekommen, schicken Sie uns bitte eine Mail inklusive Ihrer UniID, damit wir die Zugriffsrechte überprüfen und gegebenenfalls anpassen können.",
+					"Wenn Sie Anmerkungen, Fragen und Wünsche zur Evaluation haben zögern Sie bitte nicht, uns zu kontaktieren."}
+				signature := "Viele Grüße"
+				if c.Language == "en" {
+					intros = []string{
+						"During the week of the 13th of July an online evaluation took place at the department of physics and astronomy."}
+					signature = "Kind regards"
+					greeting = "Dear tutor,"
+					outros = []string{"If you cannot see your report(s), please email us your uniid and we will resolve this problem.",
+						"If you have additional questions, do not hesitate to contact us."}
+				}
+				actions := []hermes.Action{{
+					Instructions: "Die Evaluationsergebnisse finden Sie nun in der Übungsgruppenverwaltung personalisiert zugänglich:",
+					Button: hermes.Button{
+						Color: "#990000", // Optional action button color
+						Text:  "Ergebnisse abrufen",
+						Link:  viper.GetString("download_center"),
+					},
+				}}
+				if c.Language == "en" {
+					actions = []hermes.Action{{
+						Instructions: "You can now access your report via the Übungsgruppenverwaltung:",
+						Button: hermes.Button{
+							Color: "#990000", // Optional action button color
+							Text:  "View results",
+							Link:  viper.GetString("download_center"),
+						},
+					}}
+				}
+				email := hermes.Email{
+					Body: hermes.Body{
+						Intros:    intros,
+						Title:     greeting,
+						Signature: signature,
+						Actions:   actions,
+						Outros:    outros,
+					},
+				}
+				emailText, _ := h.GeneratePlainText(email)
+				emailBody, _ := h.GenerateHTML(email)
+				for i := range tutors {
+					mails[0] = tutors[i].Email
+
+					var a smtp.Auth
+					e := &emailTool.Email{
+						To:      mails,
+						From:    "evaluation@mathphys.stura.uni-heidelberg.de",
+						Cc:      []string{"evaluation@mathphys.stura.uni-heidelberg.de"},
+						Subject: "Evaluation SoSe 2020 " + module.Name,
+						Text:    []byte(emailText),
+						HTML:    []byte(emailBody),
+						Headers: textproto.MIMEHeader{},
+					}
+					errorMail := e.Send(viper.GetString("smtp"), a)
+					if errorMail != nil {
+						fmt.Println("Mail", module.Name, "an ", tutors[i].Name, " konnte nicht gesandt werden:", errorMail.Error())
+					}
 				}
 			}
 		}

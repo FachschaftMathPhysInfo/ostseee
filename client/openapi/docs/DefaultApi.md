@@ -16,6 +16,7 @@ Method | HTTP request | Description
 [**CoursesCourseIdInvitationsSendPost**](DefaultApi.md#CoursesCourseIdInvitationsSendPost) | **Post** /courses/{courseId}/invitations/send | 
 [**CoursesCourseIdPatch**](DefaultApi.md#CoursesCourseIdPatch) | **Patch** /courses/{courseId} | Change a course by ID
 [**CoursesCourseIdReportGet**](DefaultApi.md#CoursesCourseIdReportGet) | **Get** /courses/{courseId}/report | Get a course report
+[**CoursesCourseIdStatsGet**](DefaultApi.md#CoursesCourseIdStatsGet) | **Get** /courses/{courseId}/stats | 
 [**CoursesCourseIdTutorsGet**](DefaultApi.md#CoursesCourseIdTutorsGet) | **Get** /courses/{courseId}/tutors | 
 [**CoursesCourseIdTutorsPost**](DefaultApi.md#CoursesCourseIdTutorsPost) | **Post** /courses/{courseId}/tutors | 
 [**CoursesCourseIdTutorsTutorIdDelete**](DefaultApi.md#CoursesCourseIdTutorsTutorIdDelete) | **Delete** /courses/{courseId}/tutors/{tutorId} | Deletes a tutor by ID
@@ -437,6 +438,38 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**CourseReport**](CourseReport.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CoursesCourseIdStatsGet
+
+> CourseStats CoursesCourseIdStatsGet(ctx, courseId)
+
+
+
+### Required Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**courseId** | **string**| ID of the course | 
+
+### Return type
+
+[**CourseStats**](CourseStats.md)
 
 ### Authorization
 

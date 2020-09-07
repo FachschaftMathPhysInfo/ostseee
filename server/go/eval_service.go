@@ -68,6 +68,8 @@ func (ev *EvalService) FindCourse(id uuid.UUID) (Course, error) {
 	return ev.EvalRepository.FindCourse(id)
 }
 func (ev *EvalService) DeleteCourse(id uuid.UUID) error {
+	ev.EvalRepository.DeleteAllInvitationsOfCourse(id)
+	ev.EvalRepository.DeleteAllQuestionairesAndSingleAnswersOfCourse(id)
 	return ev.EvalRepository.DeleteCourse(id)
 }
 func (ev *EvalService) SaveCourse(course Course) (Course, error) {
@@ -672,4 +674,8 @@ func (ev *EvalService) SendInvitations(id uuid.UUID, begin, end string, baseUrl,
 	var status SendStatus
 	err = dec.Decode(&status)
 	return status, err
+}
+
+func (ev *EvalService) GetCourseStats(courseId uuid.UUID) CourseStats {
+	return CourseStats{Questionnaires: int32(ev.EvalRepository.CountOfQuestionaires(courseId))}
 }

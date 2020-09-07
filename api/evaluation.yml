@@ -576,6 +576,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ThirdPartySendStatus'
+  /courses/{courseId}/stats:
+    parameters:
+      - in: path
+        name: courseId
+        schema:
+          type: string
+        required: true
+        description:  ID of the course
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseStats'
   /courses/{courseId}/invitations:
     parameters:
       - in: path
@@ -1246,3 +1262,9 @@ components:
           type: integer
         notchanged:
           type: integer
+    CourseStats:
+      type: object
+      properties:
+        questionnaires:
+          type: integer
+          description: number of questionnaires in the system concerning this course.

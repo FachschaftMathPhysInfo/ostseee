@@ -51,6 +51,8 @@ Method | HTTP request | Description
 [**TermsTermIdGet**](DefaultApi.md#TermsTermIdGet) | **Get** /terms/{termId} | Get a term by ID
 [**TermsTermIdPatch**](DefaultApi.md#TermsTermIdPatch) | **Patch** /terms/{termId} | Change a term by ID
 [**TermsTermIdReportGet**](DefaultApi.md#TermsTermIdReportGet) | **Get** /terms/{termId}/report | Get a term report
+[**UsersGet**](DefaultApi.md#UsersGet) | **Get** /users | 
+[**UsersPost**](DefaultApi.md#UsersPost) | **Post** /users | 
 
 
 
@@ -1550,6 +1552,66 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## UsersGet
+
+> []User UsersGet(ctx, )
+
+
+
+### Required Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**[]User**](User.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## UsersPost
+
+> User UsersPost(ctx, user)
+
+
+
+### Required Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**user** | [**User**](User.md)| Add an user to the ostseee system | 
+
+### Return type
+
+[**User**](User.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)

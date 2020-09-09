@@ -885,3 +885,13 @@ func (ev *EvalAPI) CreateUserPost(c *gin.Context) {
 	}
 	c.Status(http.StatusNoContent)
 }
+
+func (ev *EvalAPI) UsersGet(c *gin.Context) {
+	users, err := ev.EvalService.FindUsers()
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(http.StatusOK, users)
+}

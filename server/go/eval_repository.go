@@ -530,6 +530,11 @@ func (ev *EvalRepository) CountTutor(questionId uuid.UUID, objectId uuid.UUID) i
 	ev.DB.Table("single_answers").Where(&filter).Count(&count)
 	return count
 }
+func (ev *EvalRepository) FindUsers() ([]User, error) {
+	var users []User
+	ev.DB.Find(&users) //no need to filter the password hash
+	return users, nil
+}
 func (ev *EvalRepository) FindUserByName(name string) User {
 	var filter User
 	var user User

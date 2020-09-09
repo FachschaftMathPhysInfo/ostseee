@@ -698,3 +698,7 @@ func (ev *EvalService) CreateUser(name, firstname, lastname, pw string) (User, e
 	}
 	return ev.EvalRepository.CreateUser(name, firstname, lastname, pw)
 }
+
+func (ev *EvalService) FindUsers() ([]User, error) {
+	return ev.EvalRepository.FindUsers()
+}

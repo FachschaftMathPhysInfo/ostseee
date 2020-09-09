@@ -7,6 +7,32 @@ info:
 servers:
 - url: https://eval.mathphys.info/v1
 paths:
+  /users:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/User'
+                type: array
+          description: OK
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        description: Add an user to the ostseee system
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: OK
   /status:
     get:
       responses:
@@ -3912,6 +3938,27 @@ components:
           type: integer
         notchanged:
           type: integer
+      type: object
+    User:
+      example:
+        firstName: firstName
+        lastName: lastName
+        password: password
+        userName: userName
+        passwordHash: passwordHash
+      properties:
+        userName:
+          description: login name
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        passwordHash:
+          type: string
+        password:
+          description: login name
+          type: string
       type: object
     CourseStats:
       example:

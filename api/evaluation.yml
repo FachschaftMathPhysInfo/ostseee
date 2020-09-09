@@ -6,6 +6,32 @@ info:
 servers:
   - url: https://eval.mathphys.info/v1
 paths:
+  /users:
+      get:
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/User'
+      post:
+        requestBody:
+          description: Add an user to the ostseee system
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User' #TODO(henrik) missing id?
+        responses:
+          '200':
+            description: OK
+            content: 
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/User'
   /status:
       get:
         responses:
@@ -1262,6 +1288,21 @@ components:
           type: integer
         notchanged:
           type: integer
+    User:
+      type: object
+      properties:
+        userName:
+          type: string
+          description:  login name
+        firstName:
+          type: string
+        lastName:
+          type: string
+        passwordHash:
+          type: string
+        password:
+          type: string
+          description:  login name
     CourseStats:
       type: object
       properties:

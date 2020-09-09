@@ -15,6 +15,8 @@ import (
 	"os"
 	"time"
 
+	"strings"
+
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -381,7 +383,14 @@ func NewRouter(Db *gorm.DB) *gin.Engine {
 			http.MethodGet,
 			"/v1/courses/:courseId/stats",
 			evalAPI.CourseCourseIdStatsGet,
-		}, {
+		},
+		{
+			"UsersGet",
+			http.MethodGet,
+			"/v1/users",
+			evalAPI.UsersGet,
+		},
+		{
 			"CreateUsersPost",
 			http.MethodPost,
 			"/v1/users",
@@ -451,6 +460,7 @@ func initJWT(evalAPI *EvalAPI) *jwt.GinJWTMiddleware {
 		Authenticator: func(c *gin.Context) (interface{}, error) {
 			var loginVals login
 			if err := c.ShouldBind(&loginVals); err != nil {
+				log.Println(err)
 				return "", jwt.ErrMissingLoginValues
 			}
 			userID := loginVals.Username
@@ -470,6 +480,9 @@ func initJWT(evalAPI *EvalAPI) *jwt.GinJWTMiddleware {
 		Authorizator: func(data interface{}, c *gin.Context) bool {
 			//BUG(henrik): Replace with db/casbin lookup!
 			if v, ok := data.(User); v.UserName == os.Getenv("ADMIN_USER_ID") || (ok && v.UserName != "") {
+				if strings.Contains(c.Request.URL.Path, "/users") && c.Request.Method == http.MethodPost && v.UserName != os.Getenv("ADMIN_USER_ID") {
+					return false
+				}
 				return true
 			}
 

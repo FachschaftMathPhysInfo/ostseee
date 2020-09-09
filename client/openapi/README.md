@@ -79,6 +79,8 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**TermsTermIdGet**](docs/DefaultApi.md#termstermidget) | **Get** /terms/{termId} | Get a term by ID
 *DefaultApi* | [**TermsTermIdPatch**](docs/DefaultApi.md#termstermidpatch) | **Patch** /terms/{termId} | Change a term by ID
 *DefaultApi* | [**TermsTermIdReportGet**](docs/DefaultApi.md#termstermidreportget) | **Get** /terms/{termId}/report | Get a term report
+*DefaultApi* | [**UsersGet**](docs/DefaultApi.md#usersget) | **Get** /users | 
+*DefaultApi* | [**UsersPost**](docs/DefaultApi.md#userspost) | **Post** /users | 
 
 
 ## Documentation For Models
@@ -113,6 +115,7 @@ Class | Method | HTTP request | Description
  - [ThirdPartySendStatus](docs/ThirdPartySendStatus.md)
  - [Tutor](docs/Tutor.md)
  - [TutorReport](docs/TutorReport.md)
+ - [User](docs/User.md)
 
 
 ## Documentation For Authorization

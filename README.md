@@ -20,7 +20,7 @@ OrdnungsSystemToolzurSicherenEchtzeitEvaluation
 
 ### CommandLine Client
 
-For Documentation on the client checkout its [README](client/README.md)
+For Documentation on the client checkout its [README](client/Readme.md)
 
 ### Web-Admin Docs
 

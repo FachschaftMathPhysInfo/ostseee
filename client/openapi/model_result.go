@@ -25,5 +25,7 @@ type Result struct {
 	StddevQuestion float32 `json:"stddevQuestion,omitempty"`
 	// gives the number of not applicable.
 	NotApplicableCount float32 `json:"notApplicableCount,omitempty"`
+	// Shortcode of the question
+	Shortcode string `json:"shortcode,omitempty"`
 	Values []ResultPair `json:"values,omitempty"`
 }

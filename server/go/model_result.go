@@ -16,6 +16,7 @@ type Result struct {
 
 	// indicate, how result is displayed.
 	Visualizer string `json:"visualizer,omitempty"`
+	Shortcode  string `json:"shortcode,omitempty"`
 
 	Values             []ResultPair `json:"values,omitempty"`
 	NotApplicableCount int          `json:"notApplicableCount,omitempty"`

@@ -1132,6 +1132,9 @@ components:
         notApplicableCount:
           type: number
           description: gives the number of not applicable.
+        shortcode:
+          type: string
+          description: Shortcode of the question
         values:
           type: array
           items:

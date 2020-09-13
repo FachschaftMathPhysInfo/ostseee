@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **AvgQuestion** | **float32** | If applicable return the average of this question globally. | [optional] 
 **StddevQuestion** | **float32** | If applicable return the standard deviation  of this question globally. | [optional] 
 **NotApplicableCount** | **float32** | gives the number of not applicable. | [optional] 
+**Shortcode** | **string** | Shortcode of the question | [optional] 
 **Values** | [**[]ResultPair**](ResultPair.md) |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

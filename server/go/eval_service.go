@@ -408,7 +408,7 @@ func filterOption(options []Option, value string, HasOtherOption bool) (map[stri
 }
 
 func (ev *EvalService) generateResult(question Question, objectId uuid.UUID) (Result, error) {
-	result := Result{Visualizer: question.Visualizer}
+	result := Result{Visualizer: question.Visualizer, Shortcode: question.Shortcode}
 	result.Label = question.Title
 	if question.IsComment {
 		answers := ev.EvalRepository.FindAllSingleAnswers(question.Id, objectId)

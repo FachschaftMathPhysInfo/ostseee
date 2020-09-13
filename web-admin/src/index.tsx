@@ -10,21 +10,29 @@ import store, { getQueries } from './lib/store';
 import { Provider } from 'react-redux';
 import { Provider as ReduxQueryProvider } from 'redux-query-react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { Route, Redirect, useParams } from 'react-router';
+import { getSession } from './lib/session';
+import { LoginPage } from './components/LoginPage';
 
+const InnerDisplay = props => {
+  const { path } = useParams()
+  console.log(path)
+  return 
+}
 
 ReactDOM.render(
   <React.StrictMode>
-    
+
     <ThemeProvider theme={euiVars}>
       <Provider store={store}>
         <ReduxQueryProvider queriesSelector={getQueries}>
           <Router >
-          <App store={store}></App>
+            <Route path="/" render={(props)=>{return (getSession() ? (<App store={store}></App>) : (<LoginPage loc={props.location.pathname}></LoginPage>))}} ></Route>
           </Router>
         </ReduxQueryProvider>
       </Provider>
     </ThemeProvider>
-    
+
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -15,6 +15,8 @@ import (
 	"os"
 	"time"
 
+	"strings"
+
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -382,6 +384,18 @@ func NewRouter(Db *gorm.DB) *gin.Engine {
 			"/v1/courses/:courseId/stats",
 			evalAPI.CourseCourseIdStatsGet,
 		},
+		{
+			"UsersGet",
+			http.MethodGet,
+			"/v1/users",
+			evalAPI.UsersGet,
+		},
+		{
+			"CreateUsersPost",
+			http.MethodPost,
+			"/v1/users",
+			evalAPI.CreateUserPost,
+		},
 	}
 
 	router := gin.New()
@@ -389,7 +403,7 @@ func NewRouter(Db *gorm.DB) *gin.Engine {
 	addRoutes(router, unsecuredRoutes)
 	router.Use(gin.Logger()) //Logger for secured lines
 	if _, jwtEnabled := os.LookupEnv("JWT_ENABLED"); jwtEnabled {
-		authMiddleware := initJWT()
+		authMiddleware := initJWT(&evalAPI)
 		router.POST("/v1/login", authMiddleware.LoginHandler)
 		router.GET("/v1/refresh_token", authMiddleware.RefreshHandler)
 		router.Use(authMiddleware.MiddlewareFunc())
@@ -410,14 +424,16 @@ type login struct {
 
 // User demo
 type User struct {
-	UserName  string
-	FirstName string
-	LastName  string
+	UserName     string `gorm:"primary_key;"`
+	FirstName    string `json:"firstname"`
+	LastName     string `json:"lastname"`
+	PasswordHash string `json:"-"`
+	Password     string `gorm:"-"`
 }
 
 var identityKey = "id"
 
-func initJWT() *jwt.GinJWTMiddleware {
+func initJWT(evalAPI *EvalAPI) *jwt.GinJWTMiddleware {
 	// the jwt middleware
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:       "Evaluation",
@@ -435,23 +451,27 @@ func initJWT() *jwt.GinJWTMiddleware {
 		},
 		IdentityHandler: func(c *gin.Context) interface{} {
 			claims := jwt.ExtractClaims(c)
-			return &User{
-				UserName: claims[identityKey].(string),
+			user := evalAPI.EvalService.FindUserByName(claims[identityKey].(string))
+			if claims[identityKey].(string) == os.Getenv("ADMIN_USER_ID") {
+				user.UserName = os.Getenv("ADMIN_USER_ID")
 			}
+			return user
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
 			var loginVals login
 			if err := c.ShouldBind(&loginVals); err != nil {
+				log.Println(err)
 				return "", jwt.ErrMissingLoginValues
 			}
 			userID := loginVals.Username
 			password := loginVals.Password
+			user := evalAPI.EvalService.FindUserByName(userID)
 			//BUG(henrik): Replace with db lookup!
-			if userID == os.Getenv("ADMIN_USER_ID") && password == os.Getenv("ADMIN_USER_PASSWORD") {
+			if _, ok := os.LookupEnv("ADMIN_USER_ID"); sha1Hash(password) == user.PasswordHash || (ok && (userID == os.Getenv("ADMIN_USER_ID") && password == os.Getenv("ADMIN_USER_PASSWORD"))) {
 				return &User{
 					UserName:  userID,
-					LastName:  "Admin",
-					FirstName: "John",
+					LastName:  user.LastName,
+					FirstName: user.FirstName,
 				}, nil
 			}
 
@@ -459,7 +479,10 @@ func initJWT() *jwt.GinJWTMiddleware {
 		},
 		Authorizator: func(data interface{}, c *gin.Context) bool {
 			//BUG(henrik): Replace with db/casbin lookup!
-			if v, ok := data.(*User); ok && v.UserName == os.Getenv("ADMIN_USER_ID") {
+			if v, ok := data.(User); v.UserName == os.Getenv("ADMIN_USER_ID") || (ok && v.UserName != "") {
+				if strings.Contains(c.Request.URL.Path, "/users") && c.Request.Method == http.MethodPost && v.UserName != os.Getenv("ADMIN_USER_ID") {
+					return false
+				}
 				return true
 			}
 
@@ -479,7 +502,7 @@ func initJWT() *jwt.GinJWTMiddleware {
 		// - "query:<name>"
 		// - "cookie:<name>"
 		// - "param:<name>"
-		TokenLookup: "header: Authorization, query: token, cookie: jwt",
+		TokenLookup: "header: Authorization2",
 		// TokenLookup: "query:token",
 		// TokenLookup: "cookie:token",
 
@@ -489,7 +512,6 @@ func initJWT() *jwt.GinJWTMiddleware {
 		// TimeFunc provides the current time. You can override it to use another time value. This is useful for testing or if your server uses a different time zone than your tokens.
 		TimeFunc: time.Now,
 	})
-
 	if err != nil {
 		log.Fatal("JWT Error:" + err.Error())
 	}

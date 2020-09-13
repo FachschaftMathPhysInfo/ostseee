@@ -1,0 +1,9 @@
+repors
+*.tex
+*.toc
+course_reports/**
+*.pdf
+*.aux
+*.log
+*.json
+*.fls

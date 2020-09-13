@@ -2,8 +2,14 @@ package cmd
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"net/url"
 	"os"
+	"strings"
 
 	"github.com/fachschaftmathphys/ostseee/client/openapi"
 	"github.com/spf13/cobra"
@@ -37,6 +43,27 @@ func NewAPIClient() *openapi.APIClient {
 	cfg.Scheme = viper.GetString("scheme")
 	cfg.Host = viper.GetString("host")
 	cfg.BasePath = viper.GetString("basepath")
+	//Ask for token
+	v := url.Values{"username": {viper.GetString("user")}, "password": {viper.GetString("pw")}}
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s://%s/%s/login", cfg.Scheme, cfg.Host, cfg.BasePath),
+		strings.NewReader(v.Encode()))
+	req.SetBasicAuth(viper.GetString("basic_user"), viper.GetString("basic_pw"))
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	c := &http.Client{}
+	resp, err := c.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	type JWT struct {
+		Expire string `json:"expire"`
+		Code   int    `json:"code"`
+		Token  string `json:"token"`
+	}
+	var jwt JWT
+	json.Unmarshal(body, &jwt)
+	cfg.AddDefaultHeader("Authorization2", "Bearer "+jwt.Token)
 	client := openapi.NewAPIClient(cfg)
 	return client
 }
@@ -85,17 +112,16 @@ func init() {
 	rootCmd.PersistentFlags().String("scheme", "https", "Transport scheme")
 	rootCmd.PersistentFlags().String("host", "eval.mathphys.info", "Host of ostseee")
 	rootCmd.PersistentFlags().String("basepath", "v1", "BasePath")
-	rootCmd.PersistentFlags().String("basic_user", "admin", "Used to login")
+	rootCmd.PersistentFlags().String("basic_user", "admin", "Used to login for basic auth protection")
 	rootCmd.PersistentFlags().String("basic_pw", "password", "Used to login (password)")
+	rootCmd.PersistentFlags().String("user", "admin", "Used to login")
+	rootCmd.PersistentFlags().String("pw", "password", "Used to login (password)")
 
 	CoursesGenerateInvitationsCmd.PersistentFlags().String("begin", "2020-07-12T22:00:00.000Z", "begin of the evaluation")
 	CoursesGenerateInvitationsCmd.PersistentFlags().String("end", "2020-07-19T21:59:59.000Z", "end of the evaluation")
 	CoursesGenerateInvitationsCmd.PersistentFlags().String("platform_url", "", "platform url to send invitations to")
 	CoursesGenerateInvitationsCmd.PersistentFlags().String("base_url", "https://eval.mathphys.info/questionaire/", "base URL of the system")
 	CoursesGenerateInvitationsCmd.PersistentFlags().Bool("force", false, "whether to overwrite data.")
-
-	CoursesStatsCmd.PersistentFlags().String("begin", "2020-07-12T22:00:00.000Z", "begin of the evaluation")
-	CoursesStatsCmd.PersistentFlags().String("end", "2020-07-19T21:59:59.000Z", "end of the evaluation")
 
 	MailCmd.PersistentFlags().String("smtp", "localhost:1025", "SMTP server used for mailing")
 	MailTermResultsCourseCmd.PersistentFlags().String("download_center", "https://uebungen.physik.uni-heidelberg.de/uebungen/evaluation.php", "download center for profs")
@@ -110,14 +136,14 @@ func init() {
 
 	viper.BindPFlag("basic_user", rootCmd.PersistentFlags().Lookup("basic_user"))
 	viper.BindPFlag("basic_pw", rootCmd.PersistentFlags().Lookup("basic_pw"))
+	viper.BindPFlag("user", rootCmd.PersistentFlags().Lookup("user"))
+	viper.BindPFlag("pw", rootCmd.PersistentFlags().Lookup("pw"))
 
 	viper.BindPFlag("smtp", MailCmd.PersistentFlags().Lookup("smtp"))
 
 	viper.BindPFlag("begin", CoursesGenerateInvitationsCmd.PersistentFlags().Lookup("begin"))
 	viper.BindPFlag("end", CoursesGenerateInvitationsCmd.PersistentFlags().Lookup("end"))
 
-	viper.BindPFlag("begin", CoursesStatsCmd.PersistentFlags().Lookup("begin"))
-	viper.BindPFlag("end", CoursesStatsCmd.PersistentFlags().Lookup("end"))
 	viper.BindPFlag("platform_url", CoursesGenerateInvitationsCmd.PersistentFlags().Lookup("platform_url"))
 	viper.BindPFlag("base_url", CoursesGenerateInvitationsCmd.PersistentFlags().Lookup("base_url"))
 	viper.BindPFlag("force", CoursesGenerateInvitationsCmd.PersistentFlags().Lookup("force"))
@@ -151,8 +177,13 @@ func init() {
 	CoursesCmd.AddCommand(CoursesStatsCmd)
 	CoursesCmd.AddCommand(CoursesTutorUploadCmd)
 	CoursesCmd.AddCommand(CoursesGenerateInvitationsCmd)
+
+	AdminUsersCmd.AddCommand(AdminUsersListCmd)
+	AdminUsersCmd.AddCommand(AdminUsersAddCmd)
+	AdminCmd.AddCommand(AdminUsersCmd)
 	rootCmd.AddCommand(CoursesCmd)
 	rootCmd.AddCommand(MailCmd)
+	rootCmd.AddCommand(AdminCmd)
 }
 
 func er(msg interface{}) {

@@ -13,6 +13,7 @@
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "@types/react-router": "^5.1.7",
+    "js-cookie": "^2.2.1",
     "moment": "2.24.0",
     "node-sass": "^4.14.1",
     "ostseee-web-common": "../web-common",

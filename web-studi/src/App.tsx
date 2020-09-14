@@ -107,7 +107,7 @@ function App() {
       itemLayoutAlign="top"
       hasDividers
       fullWidth={true}
-    /><EuiProgress size="s" max={total} value={answersCount} color="primary" position="absolute" /></div>
+    /><EuiProgress size="s" max={total||100} value={answersCount||0} color="primary" position="absolute" /></div>
       ],
       //@ts-ignore
       borders:"none",

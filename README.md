@@ -1,5 +1,28 @@
 # ostseee
-OrdnungsSystemToolzurSicherenEchtzeitEvaluation
+> OrdnungsSystemToolzurSicherenEchtzeitEvaluation
+
+is the fourth version of the seee, but specialized for online evaluations. It uses the seee3 latex classes.
+
+## Key features
+
+* Safe way to evaluate online Courses
+* Invitation based, distribution by third party: Ensure anonymity, while preserving uniqueness
+* Evaluate Courses, Seminars, Lecturers and Exercise groups
+* Multiple Distribution Plattform support:
+    - Primary plattform: *Übungsgruppenverwaltung der Physik* - Automatic push
+    -  Moodle integration/LTI support (one click install)
+    - randomized Email list via cli
+* Easy configurable forms via JSON
+    - Different question types (Single/Multiple choice,Comment, etc)
+    - Multiple Language support for forms and in survey switch
+* Support for public Reports/ censoring
+* Advanced CLI commands:
+    - Mailing to lecturers
+    - Report generation with LaTeX
+    - Stats
+    - Secure upload to thirdparty for providing results
+* In development: Account for evaluators, export to CSV files.
+
 
 ## Running the server in production mode
 

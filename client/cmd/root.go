@@ -87,13 +87,6 @@ var termsListCmd = &cobra.Command{
 		}
 	},
 }
-var termsCmd = &cobra.Command{
-	Use:   "terms",
-	Short: "Commands regarding terms",
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("terms")
-	},
-}
 
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
@@ -122,6 +115,8 @@ func init() {
 	CoursesGenerateInvitationsCmd.PersistentFlags().String("platform_url", "", "platform url to send invitations to")
 	CoursesGenerateInvitationsCmd.PersistentFlags().String("base_url", "https://eval.mathphys.info/questionaire/", "base URL of the system")
 	CoursesGenerateInvitationsCmd.PersistentFlags().Bool("force", false, "whether to overwrite data.")
+
+	TermsExportCmd.PersistentFlags().String("i", "export.json", "Export file definition")
 
 	MailCmd.PersistentFlags().String("smtp", "localhost:1025", "SMTP server used for mailing")
 	MailTermResultsCourseCmd.PersistentFlags().String("download_center", "https://uebungen.physik.uni-heidelberg.de/uebungen/evaluation.php", "download center for profs")
@@ -154,9 +149,13 @@ func init() {
 
 	viper.BindPFlag("download_center", MailTermResultsCourseCmd.PersistentFlags().Lookup("download_center"))
 	viper.BindPFlag("download_center", MailTermResultsTutorsCmd.PersistentFlags().Lookup("download_center"))
+
+	viper.BindPFlag("i", TermsExportCmd.PersistentFlags().Lookup("i"))
+
 	rootCmd.AddCommand(versionCmd)
-	termsCmd.AddCommand(termsListCmd)
-	rootCmd.AddCommand(termsCmd)
+	TermCmd.AddCommand(termsListCmd)
+	TermCmd.AddCommand(TermsExportCmd)
+	rootCmd.AddCommand(TermCmd)
 	ReportCmd.AddCommand(ReportTermCmd)
 	ReportCmd.AddCommand(ReportTutorsCmd)
 	ReportCmd.AddCommand(ReportTutorCmd)

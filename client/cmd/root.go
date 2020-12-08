@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"net/url"
 	"os"
 	"strings"
 
@@ -44,13 +43,27 @@ func NewAPIClient() *openapi.APIClient {
 	cfg.Host = viper.GetString("host")
 	cfg.BasePath = viper.GetString("basepath")
 	//Ask for token
-	v := url.Values{"username": {viper.GetString("user")}, "password": {viper.GetString("pw")}}
+	/*fmt.Println(viper.GetString("username"))
+	v := url.Values{"user": {"admin"}, "password": {}}
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s://%s/%s/login", cfg.Scheme, cfg.Host, cfg.BasePath),
 		strings.NewReader(v.Encode()))
 	req.SetBasicAuth(viper.GetString("basic_user"), viper.GetString("basic_pw"))
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	c := &http.Client{}
+	fmt.Println(v.Encode())
+	resp, err := c.Do(req)*/
+	values := map[string]string{"username": "admin", "password": viper.GetString("pw")}
+	log.Println(values)
+	jsonValue, _ := json.Marshal(values)
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s://%s/%s/login", cfg.Scheme, cfg.Host, cfg.BasePath),
+		strings.NewReader(string(jsonValue)))
+	log.Println(fmt.Sprintf("%s://%s/%s/login", cfg.Scheme, cfg.Host, cfg.BasePath))
+	req.SetBasicAuth(viper.GetString("basic_user"), viper.GetString("basic_pw"))
+	req.Header.Add("Content-Type", "application/json")
+	c := &http.Client{}
 	resp, err := c.Do(req)
+	//resp, err := http.Post(fmt.Sprintf("%s://%s/%s/login", cfg.Scheme, cfg.Host, cfg.BasePath), "application/json", bytes.NewBuffer(jsonValue))
+
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -107,7 +120,7 @@ func init() {
 	rootCmd.PersistentFlags().String("basepath", "v1", "BasePath")
 	rootCmd.PersistentFlags().String("basic_user", "admin", "Used to login for basic auth protection")
 	rootCmd.PersistentFlags().String("basic_pw", "password", "Used to login (password)")
-	rootCmd.PersistentFlags().String("user", "admin", "Used to login")
+	rootCmd.PersistentFlags().String("username", "admin", "Used to login")
 	rootCmd.PersistentFlags().String("pw", "password", "Used to login (password)")
 
 	CoursesGenerateInvitationsCmd.PersistentFlags().String("begin", "2020-07-12T22:00:00.000Z", "begin of the evaluation")
@@ -131,7 +144,7 @@ func init() {
 
 	viper.BindPFlag("basic_user", rootCmd.PersistentFlags().Lookup("basic_user"))
 	viper.BindPFlag("basic_pw", rootCmd.PersistentFlags().Lookup("basic_pw"))
-	viper.BindPFlag("user", rootCmd.PersistentFlags().Lookup("user"))
+	viper.BindPFlag("username", rootCmd.PersistentFlags().Lookup("username"))
 	viper.BindPFlag("pw", rootCmd.PersistentFlags().Lookup("pw"))
 
 	viper.BindPFlag("smtp", MailCmd.PersistentFlags().Lookup("smtp"))

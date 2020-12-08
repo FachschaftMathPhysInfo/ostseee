@@ -430,9 +430,19 @@ var ReportCourseProfsCmd = &cobra.Command{
 	},
 }
 
+func isIn(a string, as []string) bool {
+	for _, s := range as {
+		if a == s {
+			return true
+		}
+	}
+	return false
+}
+
 var ReportTermCmd = &cobra.Command{
-	Use:   "term",
+	Use:   "term <termId> <formIDs ...>",
 	Short: "generates a term report ",
+	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(args)
 		ctx := context.WithValue(cmd.Context(), openapi.ContextBasicAuth, openapi.BasicAuth{UserName: viper.GetString("basic_user"), Password: viper.GetString("basic_pw")})
@@ -440,7 +450,15 @@ var ReportTermCmd = &cobra.Command{
 		t, err := template.New("course_prof_report").Delims("≤≤", "≥≥").Funcs(funcMap).ParseFiles("./reporting/templates/tutor_report.tmpl", "./reporting/templates/full_course.tmpl", "./reporting/templates/term_report.tmpl", "./reporting/templates/preamble.tmpl",
 			"./reporting/templates/preface.tmpl", "./reporting/templates/tutor.tmpl", "./reporting/templates/common.tmpl", "./reporting/templates/course.tmpl",
 			"./reporting/templates/course_prof.tmpl", "./reporting/templates/course_report.tmpl", "./reporting/templates/course_prof_report.tmpl", "./reporting/templates/too_few.tmpl")
-		courses, _, _ := apiClient.DefaultApi.CoursesGet(ctx)
+
+		courses2, _, _ := apiClient.DefaultApi.CoursesGet(ctx)
+		courses := make([]openapi.Course, 0)
+		for _, c := range courses2 {
+			if c.TermId == args[0] {
+				courses = append(courses, c)
+			}
+		}
+		//TODO(henrik): Filter on server
 		type CourseProfReportRendering struct {
 			CourseProfReport openapi.CourseProfReport
 			Term             openapi.Term
@@ -463,57 +481,59 @@ var ReportTermCmd = &cobra.Command{
 		var tr TermRendering
 		tr.Courses = make([]CourseRendering, 0)
 		for _, course := range courses {
-			courseProfsAll, _, _ := apiClient.DefaultApi.CourseprofsGet(ctx, &openapi.CourseprofsGetOpts{CourseId: optional.NewString(course.Id)})
-			cps := make([]CourseProfReportRendering, 0)
-			for _, cp := range courseProfsAll {
-				courseprofId := cp.Id
+			if len(args) == 1 || isIn(course.FormId, args[1:]) {
+				courseProfsAll, _, _ := apiClient.DefaultApi.CourseprofsGet(ctx, &openapi.CourseprofsGetOpts{CourseId: optional.NewString(course.Id)})
+				cps := make([]CourseProfReportRendering, 0)
+				for _, cp := range courseProfsAll {
+					courseprofId := cp.Id
 
-				if err != nil {
-					fmt.Println(err)
-				}
+					if err != nil {
+						fmt.Println(err)
+					}
 
-				trd := CourseProfReportRendering{}
+					trd := CourseProfReportRendering{}
 
-				courseProf, _, err := apiClient.DefaultApi.CourseprofsCourseProfIdGet(ctx, courseprofId)
-				if err != nil {
-					fmt.Println(err)
-				}
-				trd.CourseProf, _, _ = apiClient.DefaultApi.ProfsProfIdGet(ctx, courseProf.ProfId)
-				trd.Course, _, err = apiClient.DefaultApi.CoursesCourseIdGet(ctx, courseProf.CourseId)
-				trd.Stats, _, _ = apiClient.DefaultApi.CoursesCourseIdStatsGet(ctx, courseProf.CourseId)
-				trd.Module, _, err = apiClient.DefaultApi.ModulesModuleIdGet(ctx, trd.Course.ModuleId)
-				if err != nil {
-					log.Println(err)
-				}
-				cPs, _, _ := apiClient.DefaultApi.CourseprofsGet(ctx, &openapi.CourseprofsGetOpts{CourseId: optional.NewString(courseProf.CourseId)})
-				//Locale = trd.Course.Language
-				trd.Term, _, err = apiClient.DefaultApi.TermsTermIdGet(ctx, trd.Course.TermId)
-				if err != nil {
-					log.Println(err)
-				}
+					courseProf, _, err := apiClient.DefaultApi.CourseprofsCourseProfIdGet(ctx, courseprofId)
+					if err != nil {
+						fmt.Println(err)
+					}
+					trd.CourseProf, _, _ = apiClient.DefaultApi.ProfsProfIdGet(ctx, courseProf.ProfId)
+					trd.Course, _, err = apiClient.DefaultApi.CoursesCourseIdGet(ctx, courseProf.CourseId)
+					trd.Stats, _, _ = apiClient.DefaultApi.CoursesCourseIdStatsGet(ctx, courseProf.CourseId)
+					trd.Module, _, err = apiClient.DefaultApi.ModulesModuleIdGet(ctx, trd.Course.ModuleId)
+					if err != nil {
+						log.Println(err)
+					}
+					cPs, _, _ := apiClient.DefaultApi.CourseprofsGet(ctx, &openapi.CourseprofsGetOpts{CourseId: optional.NewString(courseProf.CourseId)})
+					//Locale = trd.Course.Language
+					trd.Term, _, err = apiClient.DefaultApi.TermsTermIdGet(ctx, trd.Course.TermId)
+					if err != nil {
+						log.Println(err)
+					}
 
-				trd.Faculty, _, err = apiClient.DefaultApi.FacultiesFacultyIdGet(ctx, trd.Module.FacultyId)
-				if err != nil {
-					log.Println(err)
-				}
-				start := time.Now()
-				trd.CourseProfReport, _, err = apiClient.DefaultApi.CourseprofsCourseProfIdReportGet(ctx, courseprofId)
-				end := time.Now()
+					trd.Faculty, _, err = apiClient.DefaultApi.FacultiesFacultyIdGet(ctx, trd.Module.FacultyId)
+					if err != nil {
+						log.Println(err)
+					}
+					start := time.Now()
+					trd.CourseProfReport, _, err = apiClient.DefaultApi.CourseprofsCourseProfIdReportGet(ctx, courseprofId)
+					end := time.Now()
 
-				log.Println("Took:", end.Sub(start).Seconds())
-				trd.Tutors, _, _ = apiClient.DefaultApi.CoursesCourseIdTutorsGet(ctx, courseProf.CourseId)
-				if err != nil {
-					log.Println(err)
-				}
+					log.Println("Took:", end.Sub(start).Seconds())
+					trd.Tutors, _, _ = apiClient.DefaultApi.CoursesCourseIdTutorsGet(ctx, courseProf.CourseId)
+					if err != nil {
+						log.Println(err)
+					}
 
-				trd.CourseProfs = make([]openapi.Prof, len(cPs))
-				for i, cp := range cPs {
-					trd.CourseProfs[i], _, _ = apiClient.DefaultApi.ProfsProfIdGet(ctx, cp.ProfId)
-					trd.CourseProfs[i].Id = cp.Id
+					trd.CourseProfs = make([]openapi.Prof, len(cPs))
+					for i, cp := range cPs {
+						trd.CourseProfs[i], _, _ = apiClient.DefaultApi.ProfsProfIdGet(ctx, cp.ProfId)
+						trd.CourseProfs[i].Id = cp.Id
+					}
+					cps = append(cps, trd)
 				}
-				cps = append(cps, trd)
+				tr.Courses = append(tr.Courses, CourseRendering{CourseProfs: cps})
 			}
-			tr.Courses = append(tr.Courses, CourseRendering{CourseProfs: cps})
 		}
 		fileName := args[0]
 		outputFile := fileName + ".tex"

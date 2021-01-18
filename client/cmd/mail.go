@@ -20,7 +20,7 @@ import (
 )
 
 var MailTermCmd = &cobra.Command{
-	Use:   "term",
+	Use:   "term <termID> <name>",
 	Short: "Emails information to all profs in specific term. Second arg is your name",
 	Args:  cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {

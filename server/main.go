@@ -45,6 +45,9 @@ func initDB() *gorm.DB {
 		time.Sleep(500 * time.Millisecond)
 		log.Println(err)
 	}
+	if os.Getenv("DB_LOG") == "1" {
+		db = db.LogMode(true)
+	}
 	if migrateDB, aviable := os.LookupEnv("MIGRATE_DB"); aviable && migrateDB == "1" {
 		db.AutoMigrate(&sw.Faculty{})
 		db.AutoMigrate(&sw.Form{})
@@ -68,9 +71,7 @@ func initDB() *gorm.DB {
 		db.AutoMigrate(&sw.LTIAssignment{})
 		db.AutoMigrate(&sw.User{})
 	}
-	if os.Getenv("DB_LOG") == "1" {
-		return db.LogMode(true)
-	}
+
 	return db
 }
 

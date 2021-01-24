@@ -14,9 +14,9 @@ import uuid "github.com/satori/go.uuid"
 type Answer struct {
 	QuestionaireId uuid.UUID `gorm:"type:uuid;" json:"questionaireId"`
 
-	QuestionId uuid.UUID `gorm:"type:uuid;" json:"questionId"`
+	QuestionId uuid.UUID `gorm:"type:uuid;index:idx_answer" json:"questionId"`
 	//BUG(henrik): Concerns must be integrated into the api
-	Concerns uuid.UUID `gorm:"type:uuid;" json:"concerns"`
+	Concerns uuid.UUID `gorm:"type:uuid;index:idx_answer" json:"concerns"`
 
 	NotApplicable bool `json:"notApplicable"`
 
@@ -26,9 +26,9 @@ type Answer struct {
 type SingleAnswer struct {
 	QuestionaireId uuid.UUID `gorm:"type:uuid;" json:"questionaireId"`
 
-	QuestionId uuid.UUID `gorm:"type:uuid;" json:"questionId"`
+	QuestionId uuid.UUID `gorm:"type:uuid;index:idx_singleanswer" json:"questionId"`
 	//BUG(henrik): Concerns must be integrated into the api
-	Concerns uuid.UUID `gorm:"type:uuid;" json:"concerns"`
+	Concerns uuid.UUID `gorm:"type:uuid;index:idx_singleanswer" json:"concerns"`
 
 	NotApplicable bool `json:"notApplicable"`
 

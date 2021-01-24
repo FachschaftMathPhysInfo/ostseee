@@ -1,5 +1,4 @@
-
-version: '3'
+version: "3"
 networks:
   app-tier:
     driver: bridge
@@ -15,6 +14,7 @@ services:
   ostseee:
     build: server
     image: ostseee:latest
+    restart: always
     container_name: ostseee
     env_file: ./ostsee.env
     networks:
@@ -25,6 +25,7 @@ services:
     build: .
     image: ostseee_proxy:latest
     container_name: ostseee_proxy
+    restart: always
     ports:
       - "127.0.0.1:3081:8081"
       - "127.0.0.1:3082:8082"
